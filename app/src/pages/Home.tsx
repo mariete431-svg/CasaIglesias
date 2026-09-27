@@ -24,6 +24,7 @@ const experience = [
   { year: "2015 — 2019", role: "Graduado en ESO", place: "IES María Guerrero · Collado Villalba", detail: "Educación secundaria obligatoria." },
 ];
 const projects = [
+  { name: "ZONA 4", description: "Web para un gimnasio (proyecto de práctica).", to: "https://mariete431-svg.github.io/zona4/" },
   { name: "Web personal", description: "Diseñada y programada por mí.", to: "#inicio" },
   { name: "Lista de tareas", description: "Organización sencilla para el día a día.", to: "/tareas" },
   { name: "Panel personal", description: "Un espacio para tenerlo todo en orden.", to: "/panel" },
@@ -169,6 +170,8 @@ export default function Home() {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
         return <Reveal key={project.name}><ProjectPreview name={project.name}>{!project.to
           ? <div className="project-row project-inactive">{inner}<span className="project-dash">—</span></div>
+          : project.to.startsWith("http")
+            ? <a className="project-row" href={project.to} target="_blank" rel="noopener noreferrer" aria-label={`${project.name}: ${project.description} (se abre en otra pestaña)`}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
           : project.to.startsWith("#")
             ? <a className="project-row" href={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
             : <Link className="project-row" to={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></Link>}
