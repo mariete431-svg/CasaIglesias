@@ -4,6 +4,7 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { marked } from "marked";
 
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(app, "dist");
@@ -31,6 +32,11 @@ const pages = {
   privacidad: {
     title: "Privacidad y aviso legal — Mario Iglesias",
     description: "Qué datos guarda la web de Mario Iglesias, para qué se usan y cómo pedir que se borren.",
+    index: true,
+  },
+  blog: {
+    title: "Bitácora — Mario Iglesias",
+    description: "Cómo construyo mi web paso a paso: diseño, seguridad, accesibilidad y Google. Qué quería, qué decidí y qué aprendí en cada cambio.",
     index: true,
   },
   tareas: { title: "Lista de tareas — Mario Iglesias", description: "Una lista de tareas sencilla que se guarda en tu navegador.", index: false },
@@ -82,7 +88,7 @@ const personJson = JSON.stringify({
 
 // Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
 // React lo sustituye por la página completa en cuanto carga.
-const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
+const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["blog/", "Bitácora"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
 const fallback = (title, description) => `<div class="seo-fallback">
       <p>ADEJE, TENERIFE</p>
       <h1>${escape(title.split(" — ")[0])}</h1>
@@ -92,17 +98,22 @@ const fallback = (title, description) => `<div class="seo-fallback">
     </div>`;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
-function pageHtml(route, { title, description, index }) {
+const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Bitácora de Mario Iglesias" href="${SITE}blog/feed.xml" />`;
+
+// content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
+function pageHtml(route, { title, description, index, jsonLd, content, ogType }) {
   const url = `${SITE}${route ? `${route}/` : ""}`;
+  const ld = route === "" ? personJson : jsonLd;
   let html = template
+    .replace('<meta property="og:type" content="website" />', `<meta property="og:type" content="${ogType ?? "website"}" />`)
     .replace(/<title>[^<]*<\/title>/, `<title>${escape(title)}</title>`)
     .replace(/(<meta name="description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:title" content=")[^"]*/, `$1${escape(title)}`)
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
     .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
-    .replace("</head>", `${securityMeta}${route === "" ? `\n    <script type="application/ld+json">${personJson}</script>` : ""}\n  </head>`)
-    .replace('<div id="root"></div>', `<div id="root">${fallback(title, description)}</div>`);
+    .replace("</head>", `${securityMeta}${rssLink}${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
+    .replace('<div id="root"></div>', `<div id="root">${content ?? fallback(title, description)}</div>`);
   if (!index) html = html.replace("<head>", '<head>\n    <meta name="robots" content="noindex, nofollow" />');
   return html;
 }
@@ -116,11 +127,113 @@ for (const [route, meta] of Object.entries(pages)) {
 // Página de error: nunca debe aparecer en Google
 writeFileSync(join(dist, "404.html"), pageHtml("", { ...pages[""], title: "Página no encontrada — Mario Iglesias", index: false }));
 
+// ---------- Bitácora (blog) ----------
+// Los artículos son archivos .md en src/content/blog (ver src/lib/blog.ts para el formato)
+const postsDir = join(app, "src", "content", "blog");
+const parsePost = (file) => {
+  const raw = readFileSync(join(postsDir, file), "utf8");
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  const meta = {};
+  for (const line of (match?.[1] ?? "").split(/\r?\n/)) {
+    const i = line.indexOf(":");
+    if (i > 0) meta[line.slice(0, i).trim()] = line.slice(i + 1).trim();
+  }
+  const body = (match?.[2] ?? raw).trim();
+  return {
+    slug: file.replace(/\.md$/, "").replace(/^\d{4}-\d{2}-\d{2}-/, ""),
+    title: meta.titulo ?? "Sin título",
+    date: meta.fecha ?? new Date().toISOString().slice(0, 10),
+    summary: meta.resumen ?? "",
+    tags: (meta.etiquetas ?? "").split(",").map(t => t.trim()).filter(Boolean),
+    html: marked.parse(body, { gfm: true }).replace(/href="\/(?!\/)/g, `href="${BASE}`),
+  };
+};
+const posts = existsSync(postsDir)
+  ? readdirSync(postsDir).filter(f => f.endsWith(".md")).map(parsePost).sort((a, b) => b.date.localeCompare(a.date))
+  : [];
+const day = (date) => date.slice(0, 10);
+const author = { "@type": "Person", "@id": `${SITE}#mario`, name: "Mario Iglesias Martínez", url: SITE };
+
+for (const post of posts) {
+  const route = `blog/${post.slug}`;
+  const folder = join(dist, route);
+  mkdirSync(folder, { recursive: true });
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.summary,
+    datePublished: day(post.date),
+    dateModified: day(post.date),
+    inLanguage: "es",
+    keywords: post.tags.join(", "),
+    url: `${SITE}${route}/`,
+    mainEntityOfPage: `${SITE}${route}/`,
+    image: `${SITE}og-imagen.jpg`,
+    author,
+    publisher: author,
+    isPartOf: { "@type": "Blog", name: "Bitácora de Mario Iglesias", url: `${SITE}blog/` },
+  });
+  const content = `<article class="seo-fallback is-article">
+      <p><a href="${BASE}blog/">BITÁCORA</a> · ${day(post.date)}</p>
+      <h1>${escape(post.title)}</h1>
+      <p>${escape(post.summary)}</p>
+      ${post.html}
+      <p>Escrito por Mario Iglesias con ayuda de Claude.</p>
+    </article>`;
+  writeFileSync(join(folder, "index.html"), pageHtml(route, { title: `${post.title} — Mario Iglesias`, description: post.summary, index: true, jsonLd, content, ogType: "article" }));
+}
+
+// Portada del blog: lista de artículos también dentro del HTML
+{
+  const blogJson = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Bitácora de Mario Iglesias",
+    url: `${SITE}blog/`,
+    inLanguage: "es",
+    author,
+    blogPost: posts.map(p => ({ "@type": "BlogPosting", headline: p.title, datePublished: day(p.date), url: `${SITE}blog/${p.slug}/` })),
+  });
+  const content = `<div class="seo-fallback">
+      <p>BITÁCORA — CÓMO CONSTRUYO MI WEB, PASO A PASO</p>
+      <h1>Bitácora de obra</h1>
+      <p>${escape(pages.blog.description)}</p>
+      <ul>${posts.map(p => `<li><a href="${BASE}blog/${p.slug}/">${escape(p.title)}</a> (${day(p.date)})</li>`).join("")}</ul>
+    </div>`;
+  writeFileSync(join(dist, "blog", "index.html"), pageHtml("blog", { ...pages.blog, jsonLd: blogJson, content }));
+}
+
+// Canal RSS para quien quiera seguir la bitácora
+const rssDate = (date) => new Date(`${day(date)}T${date.slice(11, 16) || "12:00"}:00Z`).toUTCString();
+const cdata = (text) => `<![CDATA[${text.replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;
+mkdirSync(join(dist, "blog"), { recursive: true });
+writeFileSync(join(dist, "blog", "feed.xml"), `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Bitácora de Mario Iglesias</title>
+  <link>${SITE}blog/</link>
+  <atom:link href="${SITE}blog/feed.xml" rel="self" type="application/rss+xml" />
+  <description>${escape(pages.blog.description)}</description>
+  <language>es</language>
+${posts.map(p => `  <item>
+    <title>${escape(p.title)}</title>
+    <link>${SITE}blog/${p.slug}/</link>
+    <guid isPermaLink="true">${SITE}blog/${p.slug}/</guid>
+    <pubDate>${rssDate(p.date)}</pubDate>
+    <description>${escape(p.summary)}</description>
+    <content:encoded>${cdata(p.html)}</content:encoded>
+  </item>`).join("\n")}
+</channel>
+</rss>
+`);
+
 // Mapa del sitio para Google Search Console
 const today = new Date().toISOString().slice(0, 10);
 writeFileSync(join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${Object.entries(pages).filter(([, meta]) => meta.index).map(([route]) => `  <url><loc>${SITE}${route ? `${route}/` : ""}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
+${posts.map(p => `  <url><loc>${SITE}blog/${p.slug}/</loc><lastmod>${day(p.date)}</lastmod></url>`).join("\n")}
 </urlset>
 `);
 

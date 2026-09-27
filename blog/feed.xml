@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Bitácora de Mario Iglesias</title>
+  <link>https://mariete431-svg.github.io/MarioIglesias/blog/</link>
+  <atom:link href="https://mariete431-svg.github.io/MarioIglesias/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Cómo construyo mi web paso a paso: diseño, seguridad, accesibilidad y Google. Qué quería, qué decidí y qué aprendí en cada cambio.</description>
+  <language>es</language>
+  <item>
+    <title>Un blog que se escribe (casi) solo</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/un-blog-que-se-escribe-solo/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/un-blog-que-se-escribe-solo/</guid>
+    <pubDate>Sun, 27 Sep 2026 14:00:00 GMT</pubDate>
+    <description>Cómo funciona esta bitácora: cada cambio que hago en la web se convierte en un artículo, escrito con ayuda de Claude y revisado por mí antes de publicarse. Y por qué la he puesto dentro de mi web y no aparte.</description>
+    <content:encoded><![CDATA[<p>Esta web la estoy construyendo con ayuda de <strong>Claude</strong>, una inteligencia artificial que escribe código conmigo. Cada mejora deja un rastro: qué quería, qué decidimos y por qué. Me pareció una pena que todo eso se quedara escondido, así que nació esta bitácora.</p>
+<h2>Por qué un blog</h2>
+<ul>
+<li><strong>Para aprender en público.</strong> Explicar lo que haces es la mejor forma de entenderlo de verdad.</li>
+<li><strong>Para que quien me conozca vea cómo trabajo</strong>, no solo el resultado final. Un currículum dice lo que has hecho; un blog enseña cómo piensas.</li>
+<li><strong>Para que Google me encuentre.</strong> Cada artículo es una página nueva con contenido propio, y eso ayuda a que la web aparezca al buscar mi nombre.</li>
+</ul>
+<h2>Por qué dentro de mi web y no aparte</h2>
+<p>Podría haberlo puesto en otra dirección, pero todo lo que Google valore del blog <strong>suma a mi web</strong>. Con dos sitios separados, ese valor se repartiría. Además, quien entra a ver mi CV descubre el blog, y al revés.</p>
+<h2>Cómo se escribe &quot;solo&quot;</h2>
+<ol>
+<li><strong>Construimos algo</strong> en la web: un arreglo, una sección nueva, un cambio de diseño.</li>
+<li>En el mismo cambio, Claude <strong>redacta el artículo</strong> a partir del trabajo real: qué problema había, qué opciones había, qué elegimos y qué aprendí.</li>
+<li><strong>Yo lo reviso</strong> junto con el resto del cambio en GitHub. Si no me convence, no se publica.</li>
+<li>Cuando lo acepto, la web se actualiza y <strong>el artículo aparece aquí</strong>, en el <a href="/MarioIglesias/sitemap.xml">mapa del sitio</a> para Google y en el <a href="/MarioIglesias/blog/feed.xml">canal RSS</a> para quien quiera seguirlo.</li>
+</ol>
+<p>Además, una tarea automática revisa cada semana si hubo cambios sin artículo y, si los hay, me propone uno.</p>
+<h2>Las reglas</h2>
+<ul>
+<li><strong>Nada se publica sin mi visto bueno.</strong></li>
+<li><strong>Solo cosas que pasaron de verdad</strong>, con sus fechas.</li>
+<li><strong>Nunca detalles de seguridad sensibles</strong>: ni claves, ni datos de nadie, ni cómo funcionan por dentro las defensas de la web.</li>
+<li><strong>Transparencia:</strong> cada artículo dice que está escrito con ayuda de Claude.</li>
+</ul>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+La inteligencia artificial es una herramienta increíble para construir y para contar lo que construyes, pero la decisión final tiene que ser tuya. Revisar antes de publicar no es opcional.</p>
+</blockquote>
+<p>Si quieres seguir la obra, vuelve de vez en cuando o suscríbete por RSS. Y si algo no se entiende o crees que se podría hacer mejor, <a href="mailto:mariete431@icloud.com">escríbeme</a>.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Auditoría profesional: seguridad, privacidad y un iPhone que imprimía mal</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/auditoria-profesional/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/auditoria-profesional/</guid>
+    <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
+    <description>Pedí una revisión completa de la web, como la haría una empresa, sin cambiar nada. Salieron 18 puntos ordenados por importancia. Estos son los que más me enseñaron y cómo los arreglamos.</description>
+    <content:encoded><![CDATA[<p>Una cosa es que la web <strong>funcione</strong> y otra que esté <strong>bien hecha</strong>. Para saberlo pedí una auditoría completa, primero <strong>sin tocar nada</strong>: solo mirar y apuntar. Salieron 18 puntos, ordenados de más a menos importante. Ninguno era grave, pero varios merecían la pena.</p>
+<h2>Lo más importante primero</h2>
+<p><strong>Guardar el CV en PDF desde el iPhone.</strong> El creador de CV prepara la hoja para imprimir, abre la ventana de impresión y luego deshace la preparación. En el ordenador la ventana espera; en el iPhone, no. Resultado posible: se imprimía la página entera en vez de solo el CV. Ahora la web <strong>espera a que el navegador avise de que ha terminado</strong> antes de deshacer nada.</p>
+<p><strong>Que nadie pueda llenar mi agenda.</strong> Había un límite general de reservas para frenar el spam. El problema: una sola persona con malas intenciones podía agotarlo y dejar la agenda &quot;ocupada&quot; para todos. Lo cambiamos por un <strong>límite por persona</strong>. Para distinguir a cada una, se guarda una huella anónima de su conexión, <strong>nunca la dirección IP</strong>.</p>
+<h2>Privacidad: las letras también cuentan</h2>
+<p>Las letras de la web se descargaban de Google Fonts. Parece inofensivo, pero cada visita <strong>enviaba la IP del visitante a Google</strong>. Ahora las letras están dentro de la propia web: nadie más se entera de quién entra, y además carga más rápido. Lo expliqué en la <a href="/MarioIglesias/privacidad">página de privacidad</a>.</p>
+<h2>Seguridad que no se ve</h2>
+<ul>
+<li>Una <strong>política de seguridad</strong> que solo permite cargar cosas de mi web y de mi base de datos. Si alguien intentara colar un script ajeno, el navegador lo bloquearía.</li>
+<li>Mi web <strong>no se puede meter dentro de otra página</strong> para engañar a quien la usa.</li>
+</ul>
+<h2>Accesibilidad con el teclado</h2>
+<ul>
+<li>El menú del móvil ahora <strong>se cierra con Escape</strong> y, mientras está abierto, el teclado no se escapa a la página de detrás.</li>
+<li>Los desplegables cerrados ya no &quot;atrapan&quot; el foco con enlaces invisibles.</li>
+<li>Un enlace <strong>&quot;Saltar al contenido&quot;</strong> para ir directo a lo importante.</li>
+</ul>
+<h2>Google y velocidad</h2>
+<ul>
+<li>Una <strong>ficha para Google</strong> con mi nombre, a qué me dedico y dónde estoy, en el formato que Google entiende (schema.org).</li>
+<li><strong>Texto real dentro de cada página</strong>, para que los buscadores lo lean aunque no ejecuten JavaScript.</li>
+<li>Las fotos, en formato <strong>WebP</strong>: hasta un 60 % más ligeras.</li>
+<li>Después di de alta la web en <strong>Google Search Console</strong> y envié el mapa del sitio.</li>
+</ul>
+<h2>Y lo que vino después</h2>
+<p>Al ver la web publicada en mi móvil surgieron dos detalles más: las opiniones pasaron a un <strong>cuadro amarillo muy claro</strong> para que destacaran sobre el burdeos, y descubrí que en mi iPhone no pasaban solas. La causa: tengo activado &quot;Reducir movimiento&quot;, y la web las paraba por completo. Ahora pasan siempre, y con esa opción solo cambian con un <strong>fundido suave</strong>.</p>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+Una auditoría sin tocar nada es la mejor forma de empezar: primero entender, luego priorizar, y solo después arreglar. Y probar en tu propio teléfono descubre cosas que ninguna simulación enseña.</p>
+</blockquote>
+<h2>Lo siguiente</h2>
+<p>Para contar todo esto nació esta bitácora. En el siguiente artículo explico cómo funciona y por qué se escribe (casi) sola.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Burdeos, 3D y una puesta de sol: darle vida a la web sin perder la elegancia</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/burdeos-y-3d/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/burdeos-y-3d/</guid>
+    <pubDate>Sun, 27 Sep 2026 10:00:00 GMT</pubDate>
+    <description>&quot;Parece una oficina de abogados.&quot; Con esa frase empezó el rediseño. Cómo pasé de una web blanca y seria a una en burdeos, con movimiento en 3D, una entrada con mi foto de Tenerife y cero objetos volando.</description>
+    <content:encoded><![CDATA[<p>La web estaba bien hecha, pero al mirarla sentía que <strong>le faltaba vida</strong>. Blanca, fina, correcta… demasiado seria. La inspiración la tenía clara: la estética de la marca <strong>Nude Project</strong> y su tienda de Madrid: burdeos, aire <em>old money</em>, pero joven. Y la regla también: <strong>nada de parecer una feria</strong>.</p>
+<h2>Una entrada con mi puesta de sol</h2>
+<p>Al abrir la web, ahora aparece a pantalla completa una foto que hice en Tenerife: el mar dorado al atardecer con una barca. La foto se enfoca, aparece mi nombre y después <strong>se levanta como una tarjeta en 3D</strong>, como cuando cierras una app en el iPhone, dejando ver la portada. Detalles que importan:</p>
+<ul>
+<li>Solo sale <strong>una vez por visita</strong>, y se salta tocando la pantalla o haciendo scroll.</li>
+<li>Hay dos versiones de la foto: una horizontal para ordenador y otra <strong>recortada en vertical para el móvil</strong>. La original pesaba 4,4 MB; las de la web, una fracción.</li>
+<li>Si la conexión es mala, la web entra directamente sin la foto, para no hacer esperar a nadie.</li>
+</ul>
+<h2>Movimiento en 3D al hacer scroll</h2>
+<p>Los bloques <strong>se &quot;ponen de pie&quot;</strong> al entrar en pantalla, la portada se inclina hacia atrás al bajar y las líneas se dibujan solas. Muchos de estos efectos usan una técnica moderna de CSS (<em>animaciones ligadas al scroll</em>) que hace el propio navegador, así que van fluidos también en el móvil. Y si alguien tiene activado &quot;Reducir movimiento&quot; en su teléfono, <strong>la web lo respeta</strong> y cambia los efectos por fundidos suaves.</p>
+<h2>Iterar con lo que se siente, no con lo que se piensa</h2>
+<p>El color fue lo que más vueltas dio:</p>
+<ol>
+<li>Primero, <strong>blanco y amarillo bebé</strong>, con el texto en burdeos muy oscuro. Elegante, pero seguía siendo &quot;una oficina de abogados&quot;.</li>
+<li>Luego añadimos <strong>más amarillo</strong>: etiquetas en píldora, un subrayado de rotulador y una cinta con estrellas ✦. Mejor, pero la página seguía viéndose blanca.</li>
+<li>Probamos que <strong>el fondo cambiara de color</strong> al bajar (blanco, amarillo, burdeos). Llamativo… y demasiado.</li>
+<li>La decisión final: <strong>toda la web en burdeos</strong>, con letras crema y el amarillo solo para los detalles. Ahí sí.</li>
+</ol>
+<p>Algo parecido pasó con un sello redondo que gira. La idea gustó, pero el primero era demasiado grande y en el móvil estorbaba. Acabó siendo <strong>un aro fino</strong>, más pequeño, y oculto en el móvil.</p>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+El diseño se decide mirando, no imaginando. Probar rápido, enseñar el resultado y cambiar lo que no convence es más eficaz que intentar acertar a la primera.</p>
+</blockquote>
+<h2>Que nada se rompa</h2>
+<p>Cambiar todos los colores tiene riesgos que no se ven a primera vista: textos que dejan de leerse, calendarios con el número invisible, la hoja del creador de CV que debe seguir siendo <strong>blanca para imprimirla</strong>… Revisé cada página en iPhone, tablet y ordenador midiendo el contraste de cada texto, y arreglé todo lo que falló.</p>
+<h2>Lo siguiente</h2>
+<p>Con el nuevo estilo publicado, tocaba una revisión más profunda: seguridad, privacidad y Google. Una auditoría &quot;profesional&quot;.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Mi primera auditoría: todo lo que no se ve</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/primera-auditoria/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/primera-auditoria/</guid>
+    <pubDate>Sat, 26 Sep 2026 20:00:00 GMT</pubDate>
+    <description>Una web puede verse bien y aun así fallar en el iPhone, ser difícil de usar con el teclado o no aparecer en Google. Revisé la mía de arriba abajo y esto es lo que cambió.</description>
+    <content:encoded><![CDATA[<p>Con el diseño terminado, hice algo que recomiendo a cualquiera que empiece: <strong>revisar la web como si fuera de otra persona</strong>. Página por página, en móvil y en ordenador, buscando fallos. Salieron muchos más de los que esperaba.</p>
+<h2>Formularios que fallaban sin explicar por qué</h2>
+<p>El formulario de reserva dejaba escribir un nombre de una sola letra o un mensaje larguísimo, pero la base de datos lo rechazaba después, <strong>sin decir por qué</strong>. Lo arreglamos para que el formulario use exactamente los mismos límites que la base de datos y muestre mensajes claros. También añadimos un <strong>campo trampa</strong> invisible: las personas no lo ven, pero los robots que rellenan formularios sí, y así se delatan.</p>
+<h2>El iPhone y el zoom</h2>
+<p>En el iPhone, si un campo de texto tiene letra de menos de 16 píxeles, Safari <strong>amplía la pantalla</strong> al tocarlo, y la página queda descolocada. Solución: letra de 16 píxeles en todos los campos. Pequeño detalle, gran diferencia.</p>
+<h2>Accesibilidad: una web para todo el mundo</h2>
+<ul>
+<li>Todo se puede usar <strong>con el teclado</strong>, con un contorno visible que marca dónde estás.</li>
+<li>Las opiniones que pasan solas <strong>se pueden pausar</strong>, y no interrumpen a quien usa un lector de pantalla.</li>
+<li>Los botones pequeños crecieron para tocarlos cómodamente con el dedo.</li>
+</ul>
+<h2>Aparecer en Google (SEO)</h2>
+<ul>
+<li>Cada página tiene su <strong>título y su descripción</strong> propios.</li>
+<li>Una <strong>imagen para compartir</strong>, que es la que sale al mandar el enlace por WhatsApp o redes.</li>
+<li>Un <strong>mapa del sitio</strong> (<code>sitemap.xml</code>) para que Google encuentre todas las páginas.</li>
+<li>Las páginas privadas (el panel, las tareas) <strong>no salen en Google</strong>.</li>
+</ul>
+<h2>Más rápida</h2>
+<p>La portada pasó a descargar un <strong>33 % menos</strong>: la base de datos, el calendario y algunos efectos solo se cargan cuando hacen falta. Una web rápida se nota, sobre todo con datos móviles.</p>
+<h2>Privacidad y moderación</h2>
+<p>Añadí una <a href="/MarioIglesias/privacidad">página de privacidad</a> que explica qué datos se guardan y para qué. Y los comentarios ahora <strong>quedan pendientes hasta que yo los apruebo</strong>, para evitar spam u ofensas.</p>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+Lo que no se ve también es diseño. Una web accesible, rápida y clara con los datos transmite tanto como una bonita.</p>
+</blockquote>
+<h2>Lo siguiente</h2>
+<p>Con todo en orden por dentro, volví al aspecto: quería una web con <strong>más vida</strong>. Ahí empezó el rediseño en burdeos.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Tres diseños en un día: saber decir &quot;esto no&quot;</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-editorial/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-editorial/</guid>
+    <pubDate>Sat, 26 Sep 2026 15:00:00 GMT</pubDate>
+    <description>Probé un &quot;pequeño universo&quot; en verde, luego un estilo amarillo con efectos 3D, y ninguno era yo. Así llegué a un diseño editorial y elegante, y a una web más fácil de usar.</description>
+    <content:encoded><![CDATA[<p>Tener una web que funciona no es lo mismo que tener una web <strong>que te represente</strong>. El 26 de septiembre cambié el diseño tres veces. Suena a perder el tiempo, pero fue de lo más útil del proyecto.</p>
+<h2>Intento 1: un &quot;pequeño universo&quot;</h2>
+<p>La primera idea fue una portada muy personal: tonos verde bosque y crema, la foto de un atardecer en Tenerife, la historia contada en capítulos, objetos en 3D, un cursor propio y hasta un secreto escondido. Técnicamente era ambicioso… pero al verlo entero, <strong>no era yo</strong>. Demasiadas cosas pasando a la vez.</p>
+<h2>Intento 2: blanco, amarillo y efectos</h2>
+<p>Probamos lo contrario: fondo blanco, amarillo bebé y transiciones en 3D. Tampoco. Era más limpio, pero seguía sin tener personalidad.</p>
+<h2>Intento 3: estilo editorial</h2>
+<p>Lo que sí encajó fue un estilo <strong>editorial, como el de una revista</strong>: una tipografía con serifa elegante (Cormorant Garamond) para los títulos, una muy legible (Inter) para el texto, mucho espacio en blanco y detalles finos. La portada la empecé con <strong>Lovable</strong>, una herramienta que genera webs a partir de una descripción. Cuando se acabaron sus créditos, rehicimos el resto de páginas a mano con el mismo estilo.</p>
+<p>Con ese cambio la web pasó a estar hecha con <strong>React y Vite</strong>, herramientas modernas que permiten reutilizar piezas: la cabecera, los botones o las animaciones se escriben una vez y se usan en todas las páginas.</p>
+<h2>Cuidar lo que ya existía</h2>
+<p>Rehacer el diseño no podía romper nada:</p>
+<ul>
+<li><strong>Los mismos datos:</strong> citas, tareas y comentarios siguieron en la misma base de datos.</li>
+<li><strong>Las direcciones antiguas</strong> (por ejemplo <code>cv.html</code>) redirigen a las nuevas, para que ningún enlace que hubiera enviado se quedara roto.</li>
+</ul>
+<h2>Hacerlo fácil de usar</h2>
+<p>Con el diseño decidido, me fijé en <strong>qué quiero que haga la gente</strong> al entrar: reservar una reunión o crear su currículum con mi herramienta gratuita. Así que:</p>
+<ul>
+<li>Pusimos esos dos botones <strong>siempre a mano</strong> en la cabecera.</li>
+<li>Justo debajo de la portada añadimos un bloque <strong>&quot;Empieza aquí&quot;</strong> con dos desplegables: uno abre el calendario de reservas y el otro presenta el <a href="/MarioIglesias/crear-cv">creador de CV</a>.</li>
+<li>Añadimos las <strong>opiniones</strong> de la gente que ha dejado su comentario, que van pasando solas.</li>
+</ul>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+Decir &quot;esto no me representa&quot; a tiempo ahorra mucho trabajo después. Y un buen diseño empieza por saber qué quieres que haga quien entra.</p>
+</blockquote>
+<h2>Lo siguiente</h2>
+<p>La web ya se veía bien. Pero ¿estaba <strong>bien hecha</strong> por dentro? Para saberlo hice mi primera auditoría completa.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Una agenda de citas de verdad (y por qué la seguridad va primero)</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</guid>
+    <pubDate>Sat, 26 Sep 2026 08:00:00 GMT</pubDate>
+    <description>Pasar de una web que solo se lee a una que guarda datos de otras personas. Cómo monté las reservas con Supabase, un panel privado y avisos por email, y por qué empecé por las reglas de seguridad.</description>
+    <content:encoded><![CDATA[<p>La lista de tareas guardaba los datos en el navegador de cada persona. Pero una <strong>agenda de citas</strong> es otra cosa: si alguien reserva una reunión, esa reserva tiene que llegarme <strong>a mí</strong>. Necesitaba una base de datos en internet.</p>
+<h2>La herramienta: Supabase</h2>
+<p>Elegí <strong>Supabase</strong>, un servicio que te da una base de datos (PostgreSQL), inicio de sesión y funciones en la nube, con un plan gratuito generoso. Para una web personal es ideal: no tengo que mantener ningún servidor.</p>
+<h2>Lo que construimos</h2>
+<ul>
+<li><strong>Reserva por pasos:</strong> eliges día, luego hora y luego dejas tus datos. El calendario <strong>solo enseña los huecos libres</strong>, en hora de Canarias y en bloques de 30 minutos.</li>
+<li><strong>Panel privado:</strong> una página con contraseña donde veo las citas, marco si están confirmadas, bloqueo días de vacaciones y cambio mi horario.</li>
+<li><strong>Aviso por email:</strong> cuando alguien reserva, me llega un correo con sus datos para poder responderle directamente.</li>
+</ul>
+<h2>Por qué empecé por la seguridad</h2>
+<p>Aquí está la decisión más importante de todo el proyecto. En cuanto una web guarda nombres, emails y teléfonos de otras personas, <strong>tienes la responsabilidad de protegerlos</strong>.</p>
+<p>Supabase tiene una herramienta clave para esto: las <strong>reglas por fila</strong> (en inglés, <em>Row Level Security</em>). Con ellas decides, dentro de la propia base de datos, quién puede leer o cambiar cada cosa. Lo configuramos así:</p>
+<ul>
+<li>Los <strong>visitantes</strong> no pueden leer ninguna tabla. Solo pueden hacer dos cosas muy concretas: preguntar qué horas están libres y reservar una.</li>
+<li>Esas dos acciones pasan por <strong>funciones que comprueban los datos</strong>: que el nombre y el correo tengan sentido, que la hora siga libre y que nadie reserve de más.</li>
+<li>Todo lo demás (citas, horario, días bloqueados) <strong>solo lo puede ver el administrador</strong>.</li>
+</ul>
+<p>La ventaja de hacerlo en la base de datos, y no solo en la web, es que <strong>aunque alguien se salte la web</strong> y hable directamente con la base de datos, las reglas siguen ahí.</p>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+La seguridad no se añade al final: se diseña al principio. Y lo más seguro es que el público solo pueda hacer lo mínimo imprescindible.</p>
+</blockquote>
+<h2>Un fallo curioso que tuvimos después</h2>
+<p>Unos días más tarde vi que las opiniones de la web salían vacías… pero solo en mi ordenador. La causa: yo tenía abierta la sesión del panel privado, y para la base de datos yo ya no era un &quot;visitante&quot;, así que las reglas para visitantes no me incluían. La solución fue que las partes públicas de la web usen siempre una conexión de visitante, aunque haya una sesión abierta. Un buen recordatorio de que <strong>probar como un visitante cualquiera</strong> es parte del trabajo.</p>
+<h2>Lo siguiente</h2>
+<p>La agenda funcionaba, pero el diseño de la web no me convencía. Lo cambiamos varias veces hasta dar con uno que sí, y de eso va el siguiente artículo.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Mi primera web: una página y una lista de tareas</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</guid>
+    <pubDate>Sat, 12 Sep 2026 21:00:00 GMT</pubDate>
+    <description>Cómo empezó todo. Una página sencilla para contar quién soy y una lista de tareas que funciona de verdad, sin servidores ni bases de datos.</description>
+    <content:encoded><![CDATA[<p>Llevaba tiempo con ganas de tener un sitio propio en internet. No una red social, sino <strong>un lugar que fuera mío</strong>, donde contar quién soy, qué sé hacer y qué estoy aprendiendo. Así que el 12 de septiembre publiqué la primera versión de esta web.</p>
+<h2>Lo que quería</h2>
+<p>Tres cosas, nada más:</p>
+<ul>
+<li>Una <strong>portada</strong> que me presentara en pocas líneas.</li>
+<li>Una sección de <strong>proyectos</strong>, aunque todavía tuviera pocos.</li>
+<li>Algo que <strong>funcionara de verdad</strong>, no solo texto bonito. Elegí una lista de tareas.</li>
+</ul>
+<h2>Por qué empezar tan pequeño</h2>
+<p>Podría haber intentado hacerlo todo a la vez: reservas, blog, panel de administración… Pero cuando empiezas, lo difícil no es escribir código, es <strong>terminar algo y publicarlo</strong>. Una web pequeña y publicada enseña más que una grande a medias en tu ordenador.</p>
+<h2>Cómo está hecha</h2>
+<p>La primera versión era lo más sencillo posible:</p>
+<ul>
+<li><strong>HTML</strong> para el contenido: títulos, textos, enlaces.</li>
+<li><strong>CSS</strong> para el aspecto: letras, colores, tarjetas de proyectos y que se viera bien en el móvil.</li>
+<li><strong>JavaScript</strong> solo para la lista de tareas.</li>
+</ul>
+<p>La lista guarda las tareas con algo que se llama <code>localStorage</code>: un pequeño espacio que cada navegador reserva para cada web. Las tareas se quedan en tu propio ordenador o móvil, y no le llegan a nadie más. Para una primera herramienta es perfecto: <strong>funciona sin servidores y sin bases de datos</strong>, y no hay datos de nadie que proteger.</p>
+<blockquote>
+<p><strong>Lo que aprendí</strong>
+Publicar pronto es mejor que publicar perfecto. Y guardar datos en el navegador es la forma más sencilla (y más privada) de que una herramienta recuerde cosas.</p>
+</blockquote>
+<h2>Dónde vive la web</h2>
+<p>La web está alojada gratis en <strong>GitHub Pages</strong>. El código está en un repositorio de GitHub y, cada vez que se aprueba un cambio, GitHub publica la versión nueva. Esa forma de trabajar (proponer un cambio, revisarlo y aceptarlo) es la que sigo usando hoy para todo.</p>
+<h2>Lo siguiente</h2>
+<p>Con la base publicada, el siguiente paso era que la web sirviera para algo más que presentarme: que la gente pudiera <strong>pedirme una cita</strong>. Eso ya necesitaba una base de datos de verdad, y te lo cuento en el siguiente artículo.</p>
+]]></content:encoded>
+  </item>
+</channel>
+</rss>

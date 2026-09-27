@@ -14,6 +14,8 @@ const PanelPage = lazy(() => import("@/pages/PanelPage"));
 const BuilderPage = lazy(() => import("@/pages/BuilderPage"));
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
+const BlogPage = lazy(() => import("@/pages/BlogPage"));
+const BlogPostPage = lazy(() => import("@/pages/BlogPostPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 /** Tras cambiar de página: arriba del todo, o a la sección del enlace (#reservar…). */
@@ -60,6 +62,8 @@ export default function App() {
           <Route path="/crear-cv" element={<BuilderPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/privacidad" element={<PrivacyPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         </Suspense>

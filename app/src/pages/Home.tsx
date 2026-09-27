@@ -28,6 +28,7 @@ const projects = [
   { name: "Lista de tareas", description: "Organización sencilla para el día a día.", to: "/tareas" },
   { name: "Panel personal", description: "Un espacio para tenerlo todo en orden.", to: "/panel" },
   { name: "Creador de CV", description: "Una herramienta para presentar tu experiencia.", to: "/crear-cv" },
+  { name: "Bitácora", description: "Cómo construyo esta web, paso a paso.", to: "/blog" },
   { name: "Edición de vídeo", description: "En proceso.", to: "" },
 ];
 

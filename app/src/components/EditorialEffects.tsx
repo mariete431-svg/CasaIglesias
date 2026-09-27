@@ -234,7 +234,7 @@ export function ProfileParallax({ children, direction = 1 }: { children: ReactNo
 export function HeroTitle({ lines = ["Mario", "Iglesias."], id = "hero-title", delay = .25, play = true }: { lines?: string[]; id?: string; delay?: number; play?: boolean }) {
   const reduced = useMotionPreference();
   return <h1 id={id} aria-label={lines.join(" ")}>
-    {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>{Array.from(line).map((character, index) => <span className="hero-letter-mask" key={`${lineIndex}-${index}`}><motion.span className={lineIndex ? "hero-italic" : ""} initial={reduced ? false : { y: "110%" }} animate={play ? { y: "0%" } : undefined} transition={{ delay: delay + lineIndex * .16 + index * .035, duration: .75, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</span></span>)}
+    {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>{Array.from(line).map((character, index) => <span className="hero-letter-mask" key={`${lineIndex}-${index}`}><motion.span className={lineIndex ? "hero-italic" : ""} initial={reduced ? false : { y: "110%" }} animate={play ? { y: "0%" } : undefined} transition={{ delay: delay + lineIndex * .16 + index * .035, duration: .75, ease: [.2, .75, .2, 1] }}>{character === " " ? "\u00a0" : character}</motion.span></span>)}</span></span>)}
   </h1>;
 }
 
