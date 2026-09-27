@@ -6,6 +6,7 @@ import { Reveal } from "@/components/EditorialEffects";
 import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome";
 import { newId, readStored, writeStored } from "@/lib/utils";
 
+const PHOTO_KEY = "mi-cv-foto";
 const DRAFT_KEY = "mario-crear-cv";
 type Education = { id: string; title: string; center: string; dates: string };
 type Job = { id: string; title: string; company: string; dates: string; desc: string };
@@ -40,25 +41,42 @@ function Field({ id, label, value, onChange, placeholder, type = "text", textare
 export default function BuilderPage() {
   usePageTitle("Creador de CV — Mario Iglesias");
   const [cv, setCv] = useState<Draft>(loadDraft);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null>(() => readStored<string | null>(PHOTO_KEY, null));
 
   useEffect(() => { writeStored(DRAFT_KEY, cv); }, [cv]);
+  // La foto también se guarda (ya reducida) para que no se pierda al recargar
+  useEffect(() => { writeStored(PHOTO_KEY, photo); }, [photo]);
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setCv(prev => ({ ...prev, [key]: value }));
   const setEdu = (i: number, key: Exclude<keyof Education, "id">, value: string) => set("education", cv.education.map((e, j) => j === i ? { ...e, [key]: value } : e));
   const setJob = (i: number, key: Exclude<keyof Job, "id">, value: string) => set("jobs", cv.jobs.map((e, j) => j === i ? { ...e, [key]: value } : e));
 
+  // La foto se reduce a 600 px como mucho: se ve nítida en el CV y ocupa poco al guardarla
   const pickPhoto = (file?: File) => {
     if (!file || !file.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onload = () => setPhoto(reader.result as string);
-    reader.readAsDataURL(file);
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 600 / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d")?.drawImage(img, 0, 0, canvas.width, canvas.height);
+      setPhoto(canvas.toDataURL("image/jpeg", .85));
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); alert("No se ha podido abrir esa foto. Prueba con una en formato JPG o PNG."); };
+    img.src = url;
   };
 
+  // En el iPhone la ventana de imprimir no espera: la hoja se deja preparada
+  // hasta que el navegador avisa de que ha terminado ("afterprint")
   const printPreview = () => {
-    document.documentElement.classList.add("printing-cv");
+    const root = document.documentElement;
+    const done = () => { root.classList.remove("printing-cv"); window.removeEventListener("afterprint", done); };
+    root.classList.add("printing-cv");
+    window.addEventListener("afterprint", done);
     window.print();
-    document.documentElement.classList.remove("printing-cv");
   };
 
   const reset = () => {

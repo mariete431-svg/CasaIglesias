@@ -22,25 +22,30 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Cormorant Garamond", Georgia, serif;
 }
+/* Paleta: blanco y amarillo bebé. La "tinta" (textos y botones oscuros) es un burdeos
+   casi negro, el guiño old money. Cambiando estas líneas cambia toda la web. */
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.205 0.011 76);
-  --primary: oklch(0.205 0.011 76);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.983 0.01 91);
-  --secondary-foreground: oklch(0.205 0.011 76);
-  --muted: oklch(0.955 0.008 90);
-  --muted-foreground: oklch(0.51 0.016 78);
-  --accent: oklch(0.958 0.06 98);
-  --accent-foreground: oklch(0.205 0.011 76);
-  --border: oklch(0.89 0.012 88);
-  --input: oklch(0.89 0.012 88);
-  --ring: oklch(0.7 0.08 95);
+  --foreground: oklch(0.255 0.072 14);
+  --primary: oklch(0.255 0.072 14);
+  --primary-foreground: oklch(0.995 0.012 98);
+  --secondary: oklch(0.986 0.024 98);
+  --secondary-foreground: oklch(0.255 0.072 14);
+  --muted: oklch(0.962 0.03 98);
+  --muted-foreground: oklch(0.49 0.04 15);
+  --accent: oklch(0.955 0.075 100);
+  --accent-foreground: oklch(0.255 0.072 14);
+  --border: oklch(0.915 0.03 96);
+  --input: oklch(0.915 0.03 96);
+  --ring: oklch(0.72 0.1 98);
   --destructive: oklch(0.54 0.17 30);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0.011 76);
+  --card-foreground: oklch(0.255 0.072 14);
   --radius: 0.25rem;
-  --gold: oklch(0.78 0.13 96);
+  --gold: oklch(0.88 0.12 100);
+  /* Curvas de movimiento: salida suave tipo Apple */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-soft: cubic-bezier(.2, .7, .2, 1);
 }
 @layer base {
   * { box-sizing: border-box; border-color: var(--border); }
@@ -91,9 +96,6 @@ h2 em,h3 em,h1 em { font-weight: 300; }
 .site-header { transition: transform .55s cubic-bezier(.22,1,.36,1), background .5s, backdrop-filter .5s, border-color .5s; }
 html[data-scrolled="false"] .site-header { background: var(--background); backdrop-filter: none; border-color: transparent; }
 html[data-scrolled="true"][data-header-visible="false"] .site-header { transform: translateY(-105%); }
-.entrance-screen { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--background); pointer-events: none; }
-.entrance-monogram { font: 300 76px/1 var(--font-display); }
-.entrance-line { width: 70px; height: 2px; margin-top: 18px; background: var(--accent); transform-origin: left; }
 .hero, .page-hero { position: relative; isolation: isolate; }
 .hero::before, .page-hero::before { content: ""; position: absolute; z-index: -1; inset: 0 calc((100vw - 100%) / -2); background: radial-gradient(ellipse 54% 75% at 74% 48%, var(--accent) 0%, var(--secondary) 28%, var(--background) 78%); opacity: .55; animation: aurora-breathe 18s ease-in-out infinite alternate; pointer-events: none; }
 .hero::after, .page-hero::after { content: ""; position: absolute; z-index: -1; inset: 0 calc((100vw - 100%) / -2); opacity: .09; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
@@ -103,7 +105,8 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .hero-letter-mask { display: inline-block; overflow: hidden; vertical-align: baseline; padding: .22em .12em .3em; margin: -.22em -.12em -.3em; }
 .hero-letter-mask > span { display: inline-block; }
 .hero-italic { font-style: italic; font-weight: 300; }
-.reveal-mask { will-change: auto; }
+.reveal-mask { will-change: auto; perspective: 1100px; }
+.reveal-mask > .reveal-inner { transform-origin: 50% 100%; }
 .portrait img { transition: filter .7s, transform 1.2s cubic-bezier(.22,1,.36,1); }
 .portrait:hover img { filter: grayscale(0); transform: scale(1.09) !important; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid var(--border); margin-top: 50px; padding-top: 33px; }
@@ -116,7 +119,7 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .career-item:hover,.career-item.is-open { background: var(--secondary); }
 .marquee-band { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 28px 0 32px; background: var(--background); }
 .marquee-track { display: flex; width: max-content; white-space: nowrap; }
-.marquee-track span { font: italic 300 clamp(45px,6vw,90px)/1 var(--font-display); padding-right: .25em; }
+.marquee-track > span { font: italic 300 clamp(45px,6vw,90px)/1 var(--font-display); padding-right: .25em; }
 .project-float { position: fixed; top: 0; left: 0; z-index: 60; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; width: 190px; height: 125px; padding: 15px; background: var(--accent); border: 1px solid var(--border); }
 .project-float span { font-size: 10px; letter-spacing: .14em; }
 .project-float strong { font: italic 400 26px/1 var(--font-display); }
@@ -368,7 +371,7 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
   .page-hero { padding-top: 0; }
   .section-pad { padding: 20px 0; }
   .section-wrap { width: 100%; }
-  .reveal-mask { opacity: 1 !important; transform: none !important; }
+  .reveal-mask, .reveal-inner { opacity: 1 !important; transform: none !important; }
   /* Creador de CV: solo se imprime la hoja de la vista previa */
   html.printing-cv body * { visibility: hidden !important; }
   html.printing-cv .cv-paper, html.printing-cv .cv-paper * { visibility: visible !important; }
@@ -529,3 +532,336 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .legal ul { padding-left: 20px; list-style: disc; }
 .legal li + li { margin-top: 12px; }
 .legal a { text-decoration: underline; text-underline-offset: 3px; }
+
+
+/* =========================================================
+   MOVIMIENTO 3D (entrada con foto, scroll y botones)
+   ========================================================= */
+
+/* Entrada: la puesta de sol a pantalla completa */
+.intro { position: fixed; inset: 0; z-index: 100; overflow: hidden; cursor: pointer; }
+.intro-card { position: absolute; inset: 0; overflow: hidden; background: var(--foreground); will-change: transform; box-shadow: 0 60px 120px -40px oklch(0.255 0.072 14 / .55); }
+.intro-card picture, .intro-card img { display: block; width: 100%; height: 100%; }
+.intro-card img { object-fit: cover; object-position: 50% 45%; will-change: transform, filter; }
+.intro-shade { position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0.255 0.072 14 / .1) 0%, transparent 40%, oklch(0.255 0.072 14 / .55) 100%); }
+.intro-copy { position: absolute; left: 0; right: 0; bottom: clamp(48px, 11vh, 110px); width: min(100% - 96px, 1312px); margin: 0 auto; color: oklch(0.995 0.012 98); }
+.intro-copy p { font: 500 11px/1 var(--font-sans); letter-spacing: .24em; margin: 0 0 22px; }
+.intro-copy h2 { font-size: clamp(64px, 11vw, 176px); line-height: .9; letter-spacing: -.04em; margin: 0; white-space: nowrap; }
+.intro-line { display: block; width: 90px; height: 2px; margin-top: 28px; background: var(--accent); transform-origin: left; }
+@media (max-width: 700px) {
+  .intro-copy { width: calc(100% - 40px); bottom: 64px; }
+  .intro-copy h2 { font-size: clamp(52px, 15.5vw, 80px); white-space: normal; }
+}
+
+/* Botones: respuesta inmediata al pulsar, como en el iPhone */
+a, button { -webkit-tap-highlight-color: transparent; }
+.mobile-cta, .chip, .tag-button, .icon-button { transition-property: transform, background, color, border-color; }
+.hero-actions a:active, .hero-actions button:active, .header-book:active, .mobile-cta:active, .chip:active, .tag-button:active, .icon-button:active, .inline-form button:active, .form-actions button:active, .slots-grid button:active, .confirmation-actions button:active { transform: scale(.97); transition-duration: .1s; }
+.start-toggle:active .start-icon, .start-toggle:active .start-plus { transform: scale(.94); }
+.start-icon { transition: background .4s, border-color .4s, color .4s, transform .5s var(--ease-out); }
+
+/* Cabecera de cristal con un velo amarillo bebé */
+html[data-scrolled="true"] .site-header { background: color-mix(in oklab, var(--secondary) 72%, transparent); backdrop-filter: blur(20px) saturate(170%); -webkit-backdrop-filter: blur(20px) saturate(170%); }
+@media (prefers-reduced-transparency: reduce) { html[data-scrolled="true"] .site-header { background: var(--background); backdrop-filter: none; } }
+
+/* El brillo amarillo de la portada, algo más presente */
+.hero::before, .page-hero::before { opacity: .8; }
+
+/* Retrato: se gira muy poco en 3D al pasar el ratón */
+.portrait { transform-style: preserve-3d; box-shadow: 0 30px 60px -40px oklch(0.255 0.072 14 / .45); }
+
+/* Scroll en 3D sin programación: el navegador lo anima según la posición (va fluido también en móvil).
+   Si el navegador no lo sabe hacer, simplemente se ve todo quieto. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Las líneas finas de cada sección se dibujan al llegar */
+    .section-rule, .facts, .metrics { animation: draw-rule linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    .section-rule { transform-origin: left; }
+    /* Los títulos grandes se levantan desde atrás */
+    .section-pad h2, .start-section h2, .testimonials-intro h2 { animation: stand-up linear both; animation-timeline: view(); animation-range: entry 5% cover 38%; transform-origin: 50% 100%; }
+    /* Filas de listas (trayectoria, proyectos, CV, panel): una tras otra al bajar */
+    .career-item, .project-row, .cv-entry, .progress-item, .week-row, .cv-skills li { animation: row-in linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; transform-origin: 50% 0%; }
+    /* Las tarjetas de competencias y las cifras entran con profundidad */
+    .skill, .stat, .testimonial { animation: card-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* Al salir por arriba, la cinta de texto se aleja un poco */
+    .marquee-band { animation: band-depth linear both; animation-timeline: view(); }
+  }
+}
+@keyframes draw-rule { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes stand-up { from { opacity: .15; transform: perspective(900px) rotateX(38deg) translateY(40px); } to { opacity: 1; transform: none; } }
+@keyframes row-in { from { opacity: 0; transform: perspective(900px) rotateX(-28deg) translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes card-in { from { opacity: .2; transform: perspective(1000px) translateZ(-120px) rotateY(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes band-depth { 0% { transform: perspective(900px) rotateX(24deg) scale(.96); } 35%, 65% { transform: none; } 100% { transform: perspective(900px) rotateX(-24deg) scale(.96); } }
+@media print { .intro { display: none !important; } .reveal-mask { perspective: none !important; } }
+
+/* Opiniones: pasan solas; la barrita marca el tiempo hasta la siguiente */
+.testimonial-body { perspective: 900px; }
+.testimonial-timer { height: 2px; margin-top: 36px; background: var(--border); overflow: hidden; }
+.testimonial-timer span { display: block; height: 100%; background: var(--gold); transform-origin: left; }
+.testimonial-timer + .testimonial-nav { margin-top: 0; border-top: 0; padding-top: 14px; }
+.testimonial-count { font-size: 11px; letter-spacing: .14em; color: var(--muted-foreground); font-variant-numeric: tabular-nums; min-width: 64px; }
+.testimonial-nav .testimonial-pause { margin-left: 0; }
+
+/* =========================================================
+   MÁS VIDA: amarillo con intención, detalles juveniles
+   ========================================================= */
+:root { --marker: oklch(0.93 0.11 100); --butter: oklch(0.965 0.06 100); }
+
+/* Subrayado de rotulador amarillo detrás de las palabras en cursiva */
+h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 88%, transparent 88%) no-repeat 0 0 / 100% 100%; padding: 0 .06em; margin: 0 -.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hero-line-indent { position: relative; }
+.hero-line-indent::after { content: ""; position: absolute; z-index: -1; left: -.04em; right: -.06em; bottom: .16em; height: .2em; background: var(--marker); border-radius: 2px; transform-origin: left; animation: marker-in 1s var(--ease-out) 1.4s both; }
+@keyframes marker-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    h2 em, .start-text strong em { background-size: 0% 100%; animation: marker-draw linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+  }
+}
+@keyframes marker-draw { to { background-size: 100% 100%; } }
+
+/* Etiquetas de sección en píldora amarilla */
+.section-heading .eyebrow { background: var(--accent); color: var(--foreground); padding: 8px 14px 7px; border-radius: 999px; font-weight: 600; letter-spacing: .16em; }
+.section-heading { gap: 18px; }
+
+/* Píldora "Disponible" con un punto que late */
+.status-pill { display: inline-flex; align-items: center; gap: 8px; margin-left: 6px; padding: 6px 12px 5px 10px; border-radius: 999px; background: var(--foreground); color: var(--primary-foreground); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.status-pill i { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+.status-pill i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--gold); animation: ping 1.8s var(--ease-out) infinite; }
+@keyframes ping { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
+
+/* Cinta de texto en amarillo con estrellas */
+.marquee-band { background: var(--accent); border-color: transparent; padding: 22px 0 26px; }
+.marquee-track > span { color: var(--foreground); }
+.marquee-star { display: inline-block; font: normal 400 .42em/1 var(--font-sans); vertical-align: .55em; margin: 0 .55em; color: var(--foreground); }
+
+/* Proyectos: la fila se llena de amarillo al pasar por encima */
+.project-row { position: relative; isolation: isolate; }
+.project-row::before { content: ""; position: absolute; inset: 0 -12px; z-index: -1; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform .5s var(--ease-out); border-radius: 2px; }
+.project-row:hover::before, .project-row:focus-visible::before { transform: scaleY(1); }
+.project-inactive::before { display: none; }
+.project-row:hover .project-number { color: var(--foreground); }
+.project-float { background: var(--foreground); color: var(--primary-foreground); border: 0; border-radius: 14px; }
+
+/* Competencias: número en círculo y tarjeta que se ilumina */
+.skill { position: relative; transition: background .5s, transform .5s var(--ease-out); border-radius: 4px; }
+.skill > .eyebrow { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--foreground); color: var(--primary-foreground); letter-spacing: 0; font-weight: 600; }
+@media (pointer: fine) and (min-width: 901px) { .skill { padding-left: 22px; margin-left: -22px; padding-bottom: 28px; } .skill:hover { background: var(--accent); } }
+
+/* "Hablemos." relleno con la puesta de sol */
+.contact-section h2 { background: url("/tenerife-texto.jpg") 50% 40% / cover; background-image: image-set(url("/tenerife-texto.webp") type("image/webp"), url("/tenerife-texto.jpg") type("image/jpeg")); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact-section h2 span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) { .contact-section h2 { color: var(--foreground); background: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .contact-section h2 { animation: photo-pan linear both; animation-timeline: view(); }
+    /* El retrato pasa de blanco y negro a color al llegar a él */
+    .portrait img { animation: color-in linear both; animation-timeline: view(); animation-range: entry 40% cover 55%; }
+  }
+}
+@keyframes color-in { from { filter: grayscale(1); } to { filter: grayscale(0); } }
+@keyframes photo-pan { from { background-position: 50% 0%; } to { background-position: 50% 100%; } }
+
+/* Botón principal: al pasar por encima se vuelve amarillo con la flecha girando */
+.hero-actions svg, .header-book svg { transition: transform .45s var(--ease-out); }
+.hero-actions a:hover svg, .header-book:hover svg { transform: rotate(45deg); }
+
+/* Cursor: una bolita burdeos que se hace amarilla sobre los enlaces */
+@media (pointer: fine) and (min-width: 901px) { .editorial-cursor { width: 10px; height: 10px; margin: -5px; } .editorial-cursor.is-active { border: 0; box-shadow: 0 10px 30px -12px oklch(0.255 0.072 14 / .5); } .editorial-cursor span { font-weight: 600; letter-spacing: .04em; } }
+
+@media (prefers-reduced-motion: reduce) { .status-pill i::after, .hero-line-indent::after { animation: none; } }
+@media print { .hero-stamp, .status-pill { display: none !important; } }
+@media (max-width: 700px) { .testimonial-dots button { width: 22px; } .testimonial-dots { flex-wrap: nowrap; } .testimonial-count { min-width: 0; } }
+
+/* =========================================================
+   FONDO BURDEOS EN TODA LA WEB
+   ========================================================= */
+/* Las secciones dejan ver el color de la página en lugar de tener su propio fondo */
+.profile-section, .skills-section, .testimonials-section, .reserve-section { background: transparent; }
+.testimonial { background: var(--card); }
+/* Sobre el amarillo, el texto siempre en burdeos */
+.section-heading .eyebrow, .marquee-band, .marquee-track > span, .marquee-star, .project-row:hover, .project-row:focus-visible, .editorial-cursor.is-active, .count-badge { color: var(--ink); }
+.project-row:hover .project-number, .project-row:hover .project-description { color: var(--ink); }
+@media (pointer: fine) and (min-width: 901px) { .skill:hover, .skill:hover p, .skill:hover h3 { color: var(--ink); } }
+
+/* Sello de reserva: fino, de una sola línea; solo en pantallas grandes */
+.hero-stamp { position: absolute; right: 0; bottom: 104px; z-index: 2; }
+.stamp { position: relative; display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%; color: var(--foreground); border: 1px solid color-mix(in oklab, var(--foreground) 22%, transparent); transition: background .45s var(--ease-out), border-color .45s; }
+.stamp > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stamp text { font: 500 11px var(--font-sans); letter-spacing: .2em; fill: currentColor; }
+.stamp-spin { animation: spin 22s linear infinite; }
+.stamp:hover .stamp-spin { animation-duration: 8s; }
+.stamp:hover { background: var(--accent); border-color: transparent; color: var(--ink); }
+.stamp-core { display: grid; place-items: center; width: 30px; height: 30px; transition: transform .5s var(--ease-out); }
+.stamp:hover .stamp-core { transform: rotate(45deg); }
+.stamp-core svg { width: 18px; height: 18px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 1100px) { .hero-stamp { bottom: auto; top: calc(82px + clamp(85px, 14vh, 145px) + 60px); } .stamp { width: 96px; height: 96px; } .stamp text { font-size: 12px; } }
+@media (max-width: 700px) { .hero-stamp { display: none; } }
+
+/* =========================================================
+   MÁS MOVIMIENTO AL HACER SCROLL
+   ========================================================= */
+.reading-progress { height: 3px; background: var(--accent); }
+h2 em { display: inline-block; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Las palabras en cursiva llegan deslizándose desde la derecha mientras se pinta el rotulador */
+    h2 em { animation: marker-draw linear both, glide-in linear both; animation-timeline: view(), view(); animation-range: entry 20% cover 45%, entry 0% cover 40%; }
+    /* Etiquetas de sección: entran desde la izquierda */
+    .section-heading .eyebrow { animation: pill-in linear both; animation-timeline: view(); animation-range: entry 10% cover 25%; }
+    /* Textos: se enfocan al llegar */
+    .profile-details p, .intro-row p, .contact-lead, .cv-text, .hero-subtitle ~ p, .skill p, .testimonials-intro p { animation: focus-in linear both; animation-timeline: view(); animation-range: entry 10% cover 30%; }
+    /* El retrato se descubre de abajo arriba mientras pasa a color */
+    .portrait { animation: uncover linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+    /* "Hablemos." crece al acercarte mientras la foto se desliza */
+    .contact-section h2 { animation: photo-pan linear both, grow-in linear both; animation-timeline: view(), view(); animation-range: normal, entry 0% cover 45%; transform-origin: 0 100%; }
+    /* Las cifras suben desde abajo */
+    .metrics strong, .stat-value, .admin-stats strong { animation: rise-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* Los iconos de "Empieza aquí" giran al llegar */
+    .start-icon { animation: spin-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* El correo se dibuja subrayado */
+    .contact-email { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0% 3px; animation: underline-in linear both; animation-timeline: view(); animation-range: entry 30% cover 50%; }
+  }
+}
+@keyframes glide-in { from { transform: translateX(14vw); } to { transform: none; } }
+@keyframes pill-in { from { opacity: 0; transform: translateX(-40px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes focus-in { from { opacity: 0; filter: blur(8px); transform: translateY(16px); } to { opacity: 1; filter: none; transform: none; } }
+@keyframes uncover { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes grow-in { from { transform: scale(.78); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(50%); } to { opacity: 1; transform: none; } }
+@keyframes spin-in { from { transform: rotate(-120deg) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes underline-in { to { background-size: 100% 3px; } }
+.contact-email { border-bottom-color: transparent; }
+
+/* Botones con un poco de sombra y elevación al pasar por encima */
+@media (pointer: fine) and (min-width: 901px) {
+  .hero-actions a, .hero-actions button { transition: transform .45s var(--ease-out), box-shadow .45s var(--ease-out), color .3s; }
+  .hero-actions a:hover, .hero-actions button:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -16px oklch(0.255 0.072 14 / .5); }
+}
+/* Sobre burdeos, la foto de "Hablemos." se aclara con un baño dorado para que brille */
+.contact-section h2 { background-color: oklch(0.72 0.13 75); background-blend-mode: screen; }
+
+/* =========================================================
+   TODA LA WEB EN BURDEOS
+   Fondo burdeos, letras crema y el amarillo bebé para los detalles.
+   ========================================================= */
+:root {
+  --ink: oklch(0.255 0.072 14);
+  --background: oklch(0.255 0.072 14);
+  --foreground: oklch(0.975 0.035 98);
+  --primary: oklch(0.955 0.075 100);
+  --primary-foreground: oklch(0.255 0.072 14);
+  --secondary: oklch(0.29 0.08 14);
+  --secondary-foreground: oklch(0.975 0.035 98);
+  --muted: oklch(0.33 0.07 14);
+  --muted-foreground: oklch(0.84 0.045 75);
+  --accent-foreground: oklch(0.255 0.072 14);
+  --border: oklch(0.975 0.035 98 / .17);
+  --input: oklch(0.975 0.035 98 / .25);
+  --ring: oklch(0.955 0.075 100);
+  --card: oklch(0.29 0.08 14);
+  --card-foreground: oklch(0.975 0.035 98);
+  --marker: oklch(0.975 0.035 98 / .13);
+  color-scheme: dark;
+}
+body { background: var(--background); }
+::selection { background: var(--accent); color: var(--ink); }
+.editorial-cursor:not(.is-active) { background: var(--accent); }
+
+/* Palabras en cursiva en amarillo bebé, con un rotulador suave */
+h2 em, .start-text strong em, .hero-italic { color: var(--accent); }
+
+/* Todo lo que se pinta de amarillo lleva el texto en burdeos */
+.hero-actions a:hover, .hero-actions button:hover, .header-book:hover, .header-book-light:hover, .calendar-day.selected, .start-item.is-open .start-plus, .stamp:hover, .testimonial-dots i { color: var(--ink); }
+.header-book-light:hover { border-color: var(--accent); }
+.calendar-day.selected .day-number { color: var(--ink); }
+
+/* La entrada con la foto deja paso al burdeos */
+.intro-card { background: var(--ink); }
+
+/* Las hojas de CV (vista previa y dibujo) siguen siendo papel blanco con tinta burdeos */
+.cv-paper, .feature-paper { --foreground: var(--ink); --muted-foreground: oklch(0.49 0.04 15); --border: oklch(0.915 0.03 96); --muted: oklch(0.93 0.02 90); color: var(--ink); background: #fff; }
+
+/* Al imprimir, papel blanco y tinta burdeos */
+@media print {
+  :root { --background: #fff; --foreground: var(--ink); --muted-foreground: oklch(0.49 0.04 15); --border: oklch(0.915 0.03 96); --secondary: #fff; --card: #fff; color-scheme: light; }
+}
+
+/* Portada sobre burdeos: brillo cálido suave y sin bordes rectos */
+.hero::before, .page-hero::before { background: radial-gradient(ellipse 60% 55% at 72% 45%, oklch(0.955 0.075 100 / .16) 0%, oklch(0.955 0.075 100 / .05) 45%, transparent 75%); opacity: 1; }
+.hero::after, .page-hero::after { opacity: .05; }
+.hero::before, .hero::after, .page-hero::before, .page-hero::after { -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent); mask-image: linear-gradient(to bottom, #000 75%, transparent); }
+/* Bajo "Iglesias." una línea fina amarilla en lugar de la barra */
+.hero-line-indent::after { height: .035em; bottom: .02em; background: var(--accent); opacity: .85; }
+/* Sobre burdeos, el rotulador pasa a ser un subrayado fino amarillo que se dibuja solo */
+h2 em, .start-text strong em { background-image: linear-gradient(transparent 88%, oklch(0.955 0.075 100 / .55) 88%, oklch(0.955 0.075 100 / .55) 94%, transparent 94%); }
+
+/* =========================================================
+   ARREGLOS DE LA AUDITORÍA (móvil y ordenador)
+   ========================================================= */
+/* Calendarios: sobre el amarillo (día elegido o al pasar el ratón), número en burdeos */
+.calendar-day[aria-pressed="true"], .calendar-day[aria-pressed="true"] .day-number, .calendar-day.selected { color: var(--ink) !important; }
+@media (hover: hover) { .calendar-day:not(:disabled):hover, .calendar-day:not(:disabled):hover .day-number { color: var(--ink); } }
+/* Nada puede empujar la página hacia los lados (evita que en el iPhone "baile" al deslizar) */
+html, body { overflow-x: clip; }
+/* El logo con zona táctil cómoda */
+.brand { display: inline-flex; align-items: center; min-height: 44px; }
+/* El relleno amarillo al pasar por encima solo en aparatos con ratón (en el móvil se quedaba pegado al tocar) */
+@media (hover: none) {
+  .project-row:hover::before { transform: scaleY(0); }
+  .project-row:hover, .project-row:hover .project-number, .project-row:hover .project-description { color: inherit; }
+  .career-item:hover:not(.is-open), .start-item:hover:not(.is-open) { background: transparent; }
+  .portrait:hover img { transform: none !important; }
+}
+@media (max-width: 700px) {
+  /* Textos pequeños en mayúsculas: un poco más grandes para leerlos sin esfuerzo */
+  .eyebrow, .career-year, .facts span, .metrics span:not(strong span), .hero-bottom, .comment-list time, .progress-item span, .status-pill, .testimonial-count, .testimonial figcaption span, .booking-step-labels span, .footer .section-wrap, .mobile-menu p, .contact-lead { font-size: 11.5px; }
+  .section-heading .eyebrow { font-size: 11px; }
+  /* Botones al tamaño del dedo */
+  .calendar-heading button { width: 42px; height: 42px; }
+  .testimonial-dots button { width: 28px; height: 40px; }
+  .icon-button, .testimonial-pause { width: 42px; height: 42px; }
+  .builder button, .inline-form button, .form-actions button { min-height: 44px; }
+  .footer a { padding: 0 2px; }
+}
+
+/* ---------- Accesibilidad ---------- */
+/* "Saltar al contenido": invisible hasta que se llega con el teclado */
+.skip-link { position: fixed; z-index: 200; top: 10px; left: 10px; padding: 12px 18px; border-radius: 999px; background: var(--accent); color: var(--ink); font-size: 13px; font-weight: 600; transform: translateY(-150%); transition: transform .3s var(--ease-out); }
+.skip-link:focus-visible { transform: none; outline-color: var(--accent); }
+#pagina main:focus { outline: none; }
+/* "Subir foto" muestra el contorno de foco aunque el campo real esté oculto */
+.photo-picker:has(input:focus-visible) label { outline: 2px solid var(--foreground); outline-offset: 3px; }
+
+/* ---------- Desplazamiento suave ----------
+   En ordenador lo hace Lenis; el suavizado propio del navegador se apaga para que no se sumen los dos */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* ---------- Impresión: sin animaciones, todo visible y quieto ---------- */
+@media print {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal-inner, .section-pad h2, .career-item, .project-row, .cv-entry, .skill, .portrait, .portrait img, .cv-text, h2 em, .hero-content { opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important; }
+  .testimonial-timer, .skip-link, .hero-stamp { display: none !important; }
+}
+
+/* ---------- Navegadores antiguos (iPhone con iOS 15.3 o anterior) ----------
+   No entienden los colores "oklch": se les dan los mismos colores en formato clásico */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --ink: #3d1119; --background: #3d1119; --foreground: #fbf6e6; --primary: #fbf0b3; --primary-foreground: #3d1119;
+    --secondary: #47151e; --secondary-foreground: #fbf6e6; --muted: #52202a; --muted-foreground: #e3cfae;
+    --accent: #fbf0b3; --accent-foreground: #3d1119; --border: rgba(251, 246, 230, .17); --input: rgba(251, 246, 230, .25);
+    --ring: #fbf0b3; --card: #47151e; --card-foreground: #fbf6e6; --gold: #f3dc7c; --marker: rgba(251, 246, 230, .13); --destructive: #c8553d;
+  }
+}
+
+/* Texto que llega dentro del HTML (para buscadores) mientras carga la web: ya con el estilo de la portada */
+.seo-fallback { width: min(100% - 40px, 1312px); margin: 0 auto; padding: clamp(150px, 22vh, 230px) 0 80px; color: var(--foreground); }
+.seo-fallback p:first-child { font: 500 11px/1.5 var(--font-sans); letter-spacing: .19em; color: var(--muted-foreground); }
+.seo-fallback h1 { font: 400 clamp(64px, 12vw, 180px)/.9 var(--font-display); letter-spacing: -.04em; margin: 40px 0; }
+.seo-fallback p, .seo-fallback nav { font-size: 15px; line-height: 1.7; color: var(--muted-foreground); max-width: 560px; }
+.seo-fallback a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+.testimonial-count { white-space: nowrap; }

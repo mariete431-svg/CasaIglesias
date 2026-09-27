@@ -41,11 +41,14 @@ export default function App() {
     <SiteHeader />
     <AnimatePresence mode="wait" initial={false} onExitComplete={() => scrollToLocation(window.location.hash)}>
       <motion.div
+        id="pagina"
         key={location.pathname}
-        initial={reduced ? false : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={reduced ? {} : { opacity: 0, y: -10 }}
-        transition={{ duration: .45, ease: [.22, 1, .36, 1] }}
+        // Cambio de página con profundidad: la que se va se aleja, la nueva llega de frente
+        initial={reduced ? false : { opacity: 0, y: 40, scale: .985, rotateX: 5 }}
+        animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        exit={reduced ? { opacity: 0 } : { opacity: 0, y: -14, scale: .97, rotateX: -3 }}
+        transition={{ type: "spring", bounce: 0, duration: .6, opacity: { duration: .35 } }}
+        style={{ transformPerspective: 1600, transformOrigin: "50% 0%" }}
       >
         <ErrorBoundary key={location.pathname}>
         <Suspense fallback={<div style={{ minHeight: "100svh" }} />}>

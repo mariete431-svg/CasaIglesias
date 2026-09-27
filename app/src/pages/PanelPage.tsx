@@ -13,7 +13,7 @@ import { readStored, writeStored } from "@/lib/utils";
 /* ---------- Calendario: mismos datos que el panel antiguo ---------- */
 const TAGS = [
   { id: "yellow", label: "Importante", hex: "#FFE98A" },
-  { id: "forest", label: "Trabajo", hex: "#1A1814" },
+  { id: "forest", label: "Trabajo", hex: "#F3E9D6" },
   { id: "blue", label: "Personal", hex: "#7EA3C9" },
   { id: "rose", label: "Recordatorio", hex: "#D99A9A" },
 ] as const;

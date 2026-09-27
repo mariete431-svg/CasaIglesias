@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, FileText, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CountUp, EditorialMarquee, Entrance, HeroTitle, Magnetic, ProfileParallax, ProjectPreview, Reveal } from "@/components/EditorialEffects";
+import { CountUp, EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Stamp, Tilt } from "@/components/EditorialEffects";
 import { usePageTitle } from "@/components/SiteChrome";
 import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
@@ -12,7 +12,7 @@ import { capitalize, dayKey } from "@/lib/appointments";
 // El calendario de reservas solo se descarga al abrir su desplegable
 const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: m.Booking })));
 
-export const CV_PDF = asset("cv%202025.pdf");
+export const CV_PDF = asset("cv-mario-iglesias.pdf");
 
 const experience = [
   { year: "2025", role: "Inside LVMH Certificate", place: "Curso online", detail: "Operations & Supply Chain, Retail & Client Experience." },
@@ -39,15 +39,24 @@ function StartHere() {
   const [open, setOpen] = useState<Panel>(null);
   const [days, setDays] = useState<string[] | null>(null);
 
+  // Los próximos huecos se piden cuando la página ya ha cargado, para no retrasar la portada
   useEffect(() => {
-    const now = new Date();
-    const to = dayKey(new Date(now.getTime() + 45 * 86_400_000));
     let active = true;
-    loadSupabase()
-      .then(({ bookingClient }) => bookingClient.rpc("get_available_days", { p_from: dayKey(now), p_to: to }))
-      .then(({ data, error }) => { if (active) setDays(!error && Array.isArray(data) ? data.slice(0, 3) : []); })
-      .catch(() => { if (active) setDays([]); });
-    return () => { active = false; };
+    const load = () => {
+      const now = new Date();
+      const to = dayKey(new Date(now.getTime() + 45 * 86_400_000));
+      loadSupabase()
+        .then(({ bookingClient }) => bookingClient.rpc("get_available_days", { p_from: dayKey(now), p_to: to }))
+        .then(({ data, error }) => { if (active) setDays(!error && Array.isArray(data) ? data.slice(0, 3) : []); })
+        .catch(() => { if (active) setDays([]); });
+    };
+    // Safari antiguo no tiene requestIdleCallback: allí se espera un momento fijo
+    const hasIdle = typeof window.requestIdleCallback === "function";
+    const idle = hasIdle ? window.requestIdleCallback(load, { timeout: 3000 }) : window.setTimeout(load, 1500);
+    return () => {
+      active = false;
+      if (hasIdle) window.cancelIdleCallback(idle); else window.clearTimeout(idle);
+    };
   }, []);
 
   // Cualquier enlace a #reservar (cabecera, botones, otras páginas) abre el calendario
@@ -73,6 +82,7 @@ function StartHere() {
 
   return <section id="servicios" className="start-section"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">01 / EMPIEZA AQUÍ</span><span className="section-rule" /></div></Reveal>
+    <h2 className="sr-only">Empieza aquí: reserva una reunión o crea tu currículum</h2>
     <div className="start-list">
       <Reveal><div id="reservar" className={`start-item ${open === "reservar" ? "is-open" : ""}`}>
         <button type="button" className="start-toggle" aria-expanded={open === "reservar"} aria-controls="start-reservar" onClick={() => toggle("reservar")} data-cursor={open === "reservar" ? "Cerrar" : "Abrir"}>
@@ -80,7 +90,7 @@ function StartHere() {
           <span className="start-text"><strong>Reservar una <em>reunión</em></strong><small>30 minutos · teléfono o videollamada · {nextDays}</small></span>
           <span className="start-plus" aria-hidden="true"><Plus /></span>
         </button>
-        <motion.div id="start-reservar" className="start-panel" initial={false} animate={{ height: open === "reservar" ? "auto" : 0, opacity: open === "reservar" ? 1 : 0 }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
+        <motion.div id="start-reservar" className="start-panel" inert={open !== "reservar"} initial={false} animate={{ height: open === "reservar" ? "auto" : 0, opacity: open === "reservar" ? 1 : 0 }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
           {open === "reservar" && <div className="start-panel-inner"><Suspense fallback={<p className="status-text">Abriendo el calendario…</p>}><Booking compact /></Suspense></div>}
         </motion.div>
       </div></Reveal>
@@ -91,7 +101,7 @@ function StartHere() {
           <span className="start-text"><strong>Crea tu <em>currículum</em></strong><small>Herramienta gratuita · en directo · guárdalo en PDF</small></span>
           <span className="start-plus" aria-hidden="true"><Plus /></span>
         </button>
-        <motion.div id="start-cv" className="start-panel" initial={false} animate={{ height: open === "cv" ? "auto" : 0, opacity: open === "cv" ? 1 : 0 }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
+        <motion.div id="start-cv" className="start-panel" inert={open !== "cv"} initial={false} animate={{ height: open === "cv" ? "auto" : 0, opacity: open === "cv" ? 1 : 0 }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
           <div className="start-panel-inner start-cv">
             <div className="feature-paper" aria-hidden="true"><span /><span /><span /><span /><span /></div>
             <div>
@@ -111,15 +121,19 @@ function StartHere() {
 export default function Home() {
   usePageTitle("Mario Iglesias — Atención al cliente y desarrollo web");
   const [openExperience, setOpenExperience] = useState<number | null>(null);
+  // Mientras está la foto de entrada, el titular espera para escribirse cuando la foto se va
+  const [heroReady, setHeroReady] = useState(() => !introPending());
+  const show = heroReady ? { opacity: 1, y: 0 } : undefined;
   return <>
-    <Entrance />
+    <Entrance onReveal={() => setHeroReady(true)} />
     <main id="inicio">
       <section className="hero section-wrap" aria-labelledby="hero-title">
-        <div className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026</p></Reveal>
-          <HeroTitle />
-          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .45, duration: .6 }}>Atención al cliente, organización y desarrollo web.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
-          <motion.div className="hero-actions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .55, duration: .6 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
-        </div>
+        <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026 <span className="status-pill"><i aria-hidden="true" />Disponible</span></p></Reveal>
+          <HeroTitle play={heroReady} delay={.35} />
+          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Atención al cliente, organización y desarrollo web.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
+          <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
+        </HeroDepth>
+        <div className="hero-stamp"><Stamp show={heroReady} /></div>
         <div className="hero-bottom"><span>MARIO IGLESIAS · 2026</span><a href="#servicios" aria-label="Bajar a los servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
       </section>
 
@@ -130,7 +144,7 @@ export default function Home() {
         <Reveal><div className="section-heading"><span className="eyebrow">02 / PERFIL</span><span className="section-rule" /></div></Reveal>
         <div className="profile-grid"><div className="profile-quote"><ProfileParallax direction={-1}><Reveal><h2>El valor de<br /><em>hacerlo bien.</em></h2><blockquote>“Un profesional trabajador, con ganas de aprender y facilidad para trabajar en equipo.”</blockquote></Reveal></ProfileParallax></div>
           <div className="profile-details"><Reveal><p>He trabajado en cocina, perfumería y restauración. De cada experiencia he aprendido algo fundamental: las cosas bien hechas se notan en los detalles.</p><p>Hoy llevo esa misma atención, curiosidad y compromiso al mundo de la web. Me interesa crear, aprender y aportar valor donde pueda marcar la diferencia.</p></Reveal>
-            <ProfileParallax><Reveal><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias Martínez" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Reveal></ProfileParallax>
+            <ProfileParallax><Reveal><Tilt max={8}><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias Martínez" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Tilt></Reveal></ProfileParallax>
           </div></div>
         <Reveal><div className="facts"><div><span>BASE</span><strong>Adeje, Tenerife</strong></div><div><span>DISPONIBILIDAD</span><strong>Total, España</strong></div><div><span>IDIOMAS</span><strong>Español nativo, Inglés medio</strong></div></div></Reveal>
         <Reveal><div className="metrics" aria-label="Resumen de experiencia"><div><strong><CountUp to={7} /></strong><span>ETAPAS DE FORMACIÓN Y TRABAJO</span></div><div><strong><CountUp to={3} /></strong><span>ÁMBITOS DE EXPERIENCIA</span></div><div><strong><CountUp to={2} /></strong><span>IDIOMAS</span></div></div></Reveal>
@@ -138,7 +152,7 @@ export default function Home() {
 
       <section id="trayectoria" className="career-section section-pad"><div className="section-wrap">
         <Reveal><div className="section-heading"><span className="eyebrow">03 / TRAYECTORIA</span><span className="section-rule" /></div><div className="intro-row"><h2>Un camino de<br /><em>aprendizaje.</em></h2><p>Cada etapa deja una forma distinta de mirar el trabajo. Todas suman.</p></div></Reveal>
-        <div className="career-list"><motion.span className="career-timeline" initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true, amount: .1 }} transition={{ duration: 1.8, ease: [.2, .7, .2, 1] }} />{experience.map((entry, i) => <Reveal key={entry.role + entry.year}><motion.div className={`career-item ${openExperience === i ? "is-open" : ""}`} initial={{ opacity: .48 }} whileInView={{ opacity: 1 }} viewport={{ amount: .55 }} transition={{ duration: .45 }}><Button variant="text" className="career-toggle" aria-expanded={openExperience === i} onClick={() => setOpenExperience(openExperience === i ? null : i)}><span className="career-year">{entry.year}</span><span className="career-main"><strong>{entry.role}</strong><small>{entry.place}</small></span><span className="career-icon">{openExperience === i ? <Minus /> : <Plus />}</span></Button><motion.div initial={false} animate={{ height: openExperience === i ? "auto" : 0, opacity: openExperience === i ? 1 : 0 }} transition={{ duration: .48, ease: [.22, 1, .36, 1] }} className="career-detail"><p>{entry.detail}</p></motion.div></motion.div></Reveal>)}</div>
+        <div className="career-list"><motion.span className="career-timeline" initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true, amount: .1 }} transition={{ duration: 1.8, ease: [.2, .7, .2, 1] }} />{experience.map((entry, i) => <Reveal key={entry.role + entry.year}><motion.div className={`career-item ${openExperience === i ? "is-open" : ""}`} initial={{ opacity: .48 }} whileInView={{ opacity: 1 }} viewport={{ amount: .55 }} transition={{ duration: .45 }}><Button variant="text" className="career-toggle" aria-expanded={openExperience === i} onClick={() => setOpenExperience(openExperience === i ? null : i)}><span className="career-year">{entry.year}</span><span className="career-main"><strong>{entry.role}</strong><small>{entry.place}</small></span><span className="career-icon">{openExperience === i ? <Minus /> : <Plus />}</span></Button><motion.div initial={false} animate={{ height: openExperience === i ? "auto" : 0, opacity: openExperience === i ? 1 : 0 }} transition={{ duration: .48, ease: [.22, 1, .36, 1] }} className="career-detail" inert={openExperience !== i}><p>{entry.detail}</p></motion.div></motion.div></Reveal>)}</div>
         <Reveal><div className="hero-actions"><Button variant="outlineLuxury" size="lg" asChild><Link to="/cv">CV completo <ArrowUpRight /></Link></Button><Button variant="outlineLuxury" size="lg" asChild><a href={CV_PDF} target="_blank" rel="noopener noreferrer">Descargar CV (PDF) <ArrowUpRight /></a></Button></div></Reveal>
       </div></section>
 
@@ -148,7 +162,7 @@ export default function Home() {
         ["01", "Atención al cliente", "Trato cercano, resolución de incidencias, cobros y pedidos."],
         ["02", "Organización", "Trabajo bajo presión, orden y trabajo en equipo."],
         ["03", "Web", "HTML, CSS, JavaScript, Git y GitHub — en aprendizaje continuo."],
-      ].map(([number, title, description]) => <Reveal key={title}><article className="skill"><span className="eyebrow">{number}</span><h3>{title}</h3><p>{description}</p></article></Reveal>)}</div></div></section>
+      ].map(([number, title, description]) => <Reveal key={title}><Tilt max={4}><article className="skill"><span className="eyebrow">{number}</span><h3>{title}</h3><p>{description}</p></article></Tilt></Reveal>)}</div></div></section>
 
       <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">05 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Una selección de trabajos y proyectos personales.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
