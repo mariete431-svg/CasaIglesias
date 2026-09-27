@@ -629,21 +629,6 @@ h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(
 .status-pill i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--gold); animation: ping 1.8s var(--ease-out) infinite; }
 @keyframes ping { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
 
-/* Sello que gira despacio en la portada (ordenador y tablet) */
-.hero-stamp { position: absolute; right: 0; bottom: 96px; z-index: 2; }
-.stamp { position: relative; display: grid; place-items: center; width: 150px; height: 150px; border-radius: 50%; background: var(--accent); color: var(--foreground); box-shadow: 0 24px 50px -28px oklch(0.255 0.072 14 / .45); transition: background .4s, color .4s; }
-.stamp > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.stamp text { font: 600 12.5px var(--font-sans); letter-spacing: .12em; fill: currentColor; }
-.stamp-spin { animation: spin 16s linear infinite; }
-.stamp:hover .stamp-spin { animation-duration: 6s; }
-.stamp:hover { background: var(--foreground); color: var(--primary-foreground); }
-.stamp-core { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: var(--foreground); color: var(--primary-foreground); transition: transform .5s var(--ease-out), background .4s, color .4s; }
-.stamp:hover .stamp-core { transform: rotate(45deg); background: var(--accent); color: var(--foreground); }
-.stamp-core svg { width: 22px; height: 22px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@media (max-width: 1100px) { .hero-stamp { bottom: auto; top: calc(82px + clamp(85px, 14vh, 145px) + 72px); } .stamp { width: 120px; height: 120px; } .stamp text { font-size: 13.5px; } .stamp-core { width: 42px; height: 42px; } }
-@media (max-width: 700px) { .hero-stamp { top: calc(68px + clamp(100px, 17vh, 150px) + 92px); } .stamp { width: 92px; height: 92px; } .stamp text { font-size: 15px; } .stamp-core { width: 34px; height: 34px; } .stamp-core svg { width: 17px; height: 17px; } .status-pill { margin-left: 0; } .hero-eyebrow { flex-wrap: wrap; row-gap: 12px; } }
-
 /* Cinta de texto en amarillo con estrellas */
 .marquee-band { background: var(--accent); border-color: transparent; padding: 22px 0 26px; }
 .marquee-track > span { color: var(--foreground); }
@@ -686,3 +671,127 @@ h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(
 @media (prefers-reduced-motion: reduce) { .status-pill i::after, .hero-line-indent::after { animation: none; } }
 @media print { .hero-stamp, .status-pill { display: none !important; } }
 @media (max-width: 700px) { .testimonial-dots button { width: 22px; } .testimonial-dots { flex-wrap: nowrap; } .testimonial-count { min-width: 0; } }
+
+/* =========================================================
+   FONDO BURDEOS EN TODA LA WEB
+   ========================================================= */
+/* Las secciones dejan ver el color de la página en lugar de tener su propio fondo */
+.profile-section, .skills-section, .testimonials-section, .reserve-section { background: transparent; }
+.testimonial { background: var(--card); }
+/* Sobre el amarillo, el texto siempre en burdeos */
+.section-heading .eyebrow, .marquee-band, .marquee-track > span, .marquee-star, .project-row:hover, .project-row:focus-visible, .editorial-cursor.is-active, .count-badge { color: var(--ink); }
+.project-row:hover .project-number, .project-row:hover .project-description { color: var(--ink); }
+@media (pointer: fine) and (min-width: 901px) { .skill:hover, .skill:hover p, .skill:hover h3 { color: var(--ink); } }
+
+/* Sello de reserva: fino, de una sola línea; solo en pantallas grandes */
+.hero-stamp { position: absolute; right: 0; bottom: 104px; z-index: 2; }
+.stamp { position: relative; display: grid; place-items: center; width: 108px; height: 108px; border-radius: 50%; color: var(--foreground); border: 1px solid color-mix(in oklab, var(--foreground) 22%, transparent); transition: background .45s var(--ease-out), border-color .45s; }
+.stamp > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stamp text { font: 500 11px var(--font-sans); letter-spacing: .2em; fill: currentColor; }
+.stamp-spin { animation: spin 22s linear infinite; }
+.stamp:hover .stamp-spin { animation-duration: 8s; }
+.stamp:hover { background: var(--accent); border-color: transparent; color: var(--ink); }
+.stamp-core { display: grid; place-items: center; width: 30px; height: 30px; transition: transform .5s var(--ease-out); }
+.stamp:hover .stamp-core { transform: rotate(45deg); }
+.stamp-core svg { width: 18px; height: 18px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 1100px) { .hero-stamp { bottom: auto; top: calc(82px + clamp(85px, 14vh, 145px) + 60px); } .stamp { width: 96px; height: 96px; } .stamp text { font-size: 12px; } }
+@media (max-width: 700px) { .hero-stamp { display: none; } }
+
+/* =========================================================
+   MÁS MOVIMIENTO AL HACER SCROLL
+   ========================================================= */
+.reading-progress { height: 3px; background: var(--accent); }
+h2 em { display: inline-block; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Las palabras en cursiva llegan deslizándose desde la derecha mientras se pinta el rotulador */
+    h2 em { animation: marker-draw linear both, glide-in linear both; animation-timeline: view(), view(); animation-range: entry 20% cover 45%, entry 0% cover 40%; }
+    /* Etiquetas de sección: entran desde la izquierda */
+    .section-heading .eyebrow { animation: pill-in linear both; animation-timeline: view(); animation-range: entry 10% cover 25%; }
+    /* Textos: se enfocan al llegar */
+    .profile-details p, .intro-row p, .contact-lead, .cv-text, .hero-subtitle ~ p, .skill p, .testimonials-intro p { animation: focus-in linear both; animation-timeline: view(); animation-range: entry 10% cover 30%; }
+    /* El retrato se descubre de abajo arriba mientras pasa a color */
+    .portrait { animation: uncover linear both; animation-timeline: view(); animation-range: entry 10% cover 40%; }
+    /* "Hablemos." crece al acercarte mientras la foto se desliza */
+    .contact-section h2 { animation: photo-pan linear both, grow-in linear both; animation-timeline: view(), view(); animation-range: normal, entry 0% cover 45%; transform-origin: 0 100%; }
+    /* Las cifras suben desde abajo */
+    .metrics strong, .stat-value, .admin-stats strong { animation: rise-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* Los iconos de "Empieza aquí" giran al llegar */
+    .start-icon { animation: spin-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* El correo se dibuja subrayado */
+    .contact-email { background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 0% 3px; animation: underline-in linear both; animation-timeline: view(); animation-range: entry 30% cover 50%; }
+  }
+}
+@keyframes glide-in { from { transform: translateX(14vw); } to { transform: none; } }
+@keyframes pill-in { from { opacity: 0; transform: translateX(-40px) scale(.9); } to { opacity: 1; transform: none; } }
+@keyframes focus-in { from { opacity: 0; filter: blur(8px); transform: translateY(16px); } to { opacity: 1; filter: none; transform: none; } }
+@keyframes uncover { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes grow-in { from { transform: scale(.78); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(50%); } to { opacity: 1; transform: none; } }
+@keyframes spin-in { from { transform: rotate(-120deg) scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes underline-in { to { background-size: 100% 3px; } }
+.contact-email { border-bottom-color: transparent; }
+
+/* Botones con un poco de sombra y elevación al pasar por encima */
+@media (pointer: fine) and (min-width: 901px) {
+  .hero-actions a, .hero-actions button { transition: transform .45s var(--ease-out), box-shadow .45s var(--ease-out), color .3s; }
+  .hero-actions a:hover, .hero-actions button:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -16px oklch(0.255 0.072 14 / .5); }
+}
+/* Sobre burdeos, la foto de "Hablemos." se aclara con un baño dorado para que brille */
+.contact-section h2 { background-color: oklch(0.72 0.13 75); background-blend-mode: screen; }
+
+/* =========================================================
+   TODA LA WEB EN BURDEOS
+   Fondo burdeos, letras crema y el amarillo bebé para los detalles.
+   ========================================================= */
+:root {
+  --ink: oklch(0.255 0.072 14);
+  --background: oklch(0.255 0.072 14);
+  --foreground: oklch(0.975 0.035 98);
+  --primary: oklch(0.955 0.075 100);
+  --primary-foreground: oklch(0.255 0.072 14);
+  --secondary: oklch(0.29 0.08 14);
+  --secondary-foreground: oklch(0.975 0.035 98);
+  --muted: oklch(0.33 0.07 14);
+  --muted-foreground: oklch(0.84 0.045 75);
+  --accent-foreground: oklch(0.255 0.072 14);
+  --border: oklch(0.975 0.035 98 / .17);
+  --input: oklch(0.975 0.035 98 / .25);
+  --ring: oklch(0.955 0.075 100);
+  --card: oklch(0.29 0.08 14);
+  --card-foreground: oklch(0.975 0.035 98);
+  --marker: oklch(0.975 0.035 98 / .13);
+  color-scheme: dark;
+}
+body { background: var(--background); }
+::selection { background: var(--accent); color: var(--ink); }
+.editorial-cursor:not(.is-active) { background: var(--accent); }
+
+/* Palabras en cursiva en amarillo bebé, con un rotulador suave */
+h2 em, .start-text strong em, .hero-italic { color: var(--accent); }
+
+/* Todo lo que se pinta de amarillo lleva el texto en burdeos */
+.hero-actions a:hover, .hero-actions button:hover, .header-book:hover, .header-book-light:hover, .calendar-day.selected, .start-item.is-open .start-plus, .stamp:hover, .testimonial-dots i { color: var(--ink); }
+.header-book-light:hover { border-color: var(--accent); }
+.calendar-day.selected .day-number { color: var(--ink); }
+
+/* La entrada con la foto deja paso al burdeos */
+.intro-card { background: var(--ink); }
+
+/* Las hojas de CV (vista previa y dibujo) siguen siendo papel blanco con tinta burdeos */
+.cv-paper, .feature-paper { --foreground: var(--ink); --muted-foreground: oklch(0.49 0.04 15); --border: oklch(0.915 0.03 96); --muted: oklch(0.93 0.02 90); color: var(--ink); background: #fff; }
+
+/* Al imprimir, papel blanco y tinta burdeos */
+@media print {
+  :root { --background: #fff; --foreground: var(--ink); --muted-foreground: oklch(0.49 0.04 15); --border: oklch(0.915 0.03 96); --secondary: #fff; --card: #fff; color-scheme: light; }
+}
+
+/* Portada sobre burdeos: brillo cálido suave y sin bordes rectos */
+.hero::before, .page-hero::before { background: radial-gradient(ellipse 60% 55% at 72% 45%, oklch(0.955 0.075 100 / .16) 0%, oklch(0.955 0.075 100 / .05) 45%, transparent 75%); opacity: 1; }
+.hero::after, .page-hero::after { opacity: .05; }
+.hero::before, .hero::after, .page-hero::before, .page-hero::after { -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent); mask-image: linear-gradient(to bottom, #000 75%, transparent); }
+/* Bajo "Iglesias." una línea fina amarilla en lugar de la barra */
+.hero-line-indent::after { height: .035em; bottom: .02em; background: var(--accent); opacity: .85; }
+/* Sobre burdeos, el rotulador pasa a ser un subrayado fino amarillo que se dibuja solo */
+h2 em, .start-text strong em { background-image: linear-gradient(transparent 88%, oklch(0.955 0.075 100 / .55) 88%, oklch(0.955 0.075 100 / .55) 94%, transparent 94%); }

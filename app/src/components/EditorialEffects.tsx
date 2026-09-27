@@ -75,7 +75,7 @@ export function Entrance({ onReveal }: { onReveal?: () => void }) {
   const lifting = phase === "lift";
   // Va directamente sobre la pantalla (fuera de la página animada) para ocuparla entera
   return createPortal(<motion.div className="intro" aria-hidden="true" onClick={reveal}
-    initial={false} animate={{ backgroundColor: lifting ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)" }} transition={{ duration: .7, delay: lifting ? .25 : 0 }}
+    initial={false} animate={{ backgroundColor: lifting ? "rgba(61,17,25,0)" : "rgba(61,17,25,1)" }} transition={{ duration: .7, delay: lifting ? .25 : 0 }}
     style={{ pointerEvents: lifting ? "none" : "auto" }}>
     {phase !== "loading" && <motion.div className="intro-card"
       initial={{ scale: 1, rotateX: 0, y: "0%", borderRadius: 0 }}
