@@ -648,7 +648,7 @@ h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(
 @media (pointer: fine) and (min-width: 901px) { .skill { padding-left: 22px; margin-left: -22px; padding-bottom: 28px; } .skill:hover { background: var(--accent); } }
 
 /* "Hablemos." relleno con la puesta de sol */
-.contact-section h2 { background: url("/tenerife-movil.jpg") 50% 40% / cover; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact-section h2 { background: url("/tenerife-texto.jpg") 50% 40% / cover; -webkit-background-clip: text; background-clip: text; color: transparent; }
 .contact-section h2 span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
 @supports not ((-webkit-background-clip: text) or (background-clip: text)) { .contact-section h2 { color: var(--foreground); background: none; } }
 @supports (animation-timeline: view()) {
@@ -795,3 +795,32 @@ h2 em, .start-text strong em, .hero-italic { color: var(--accent); }
 .hero-line-indent::after { height: .035em; bottom: .02em; background: var(--accent); opacity: .85; }
 /* Sobre burdeos, el rotulador pasa a ser un subrayado fino amarillo que se dibuja solo */
 h2 em, .start-text strong em { background-image: linear-gradient(transparent 88%, oklch(0.955 0.075 100 / .55) 88%, oklch(0.955 0.075 100 / .55) 94%, transparent 94%); }
+
+/* =========================================================
+   ARREGLOS DE LA AUDITORÍA (móvil y ordenador)
+   ========================================================= */
+/* Calendarios: sobre el amarillo (día elegido o al pasar el ratón), número en burdeos */
+.calendar-day[aria-pressed="true"], .calendar-day[aria-pressed="true"] .day-number, .calendar-day.selected { color: var(--ink) !important; }
+@media (hover: hover) { .calendar-day:not(:disabled):hover, .calendar-day:not(:disabled):hover .day-number { color: var(--ink); } }
+/* Nada puede empujar la página hacia los lados (evita que en el iPhone "baile" al deslizar) */
+html, body { overflow-x: clip; }
+/* El logo con zona táctil cómoda */
+.brand { display: inline-flex; align-items: center; min-height: 44px; }
+/* El relleno amarillo al pasar por encima solo en aparatos con ratón (en el móvil se quedaba pegado al tocar) */
+@media (hover: none) {
+  .project-row:hover::before { transform: scaleY(0); }
+  .project-row:hover, .project-row:hover .project-number, .project-row:hover .project-description { color: inherit; }
+  .career-item:hover:not(.is-open), .start-item:hover:not(.is-open) { background: transparent; }
+  .portrait:hover img { transform: none !important; }
+}
+@media (max-width: 700px) {
+  /* Textos pequeños en mayúsculas: un poco más grandes para leerlos sin esfuerzo */
+  .eyebrow, .career-year, .facts span, .metrics span:not(strong span), .hero-bottom, .comment-list time, .progress-item span, .status-pill, .testimonial-count, .testimonial figcaption span, .booking-step-labels span, .footer .section-wrap, .mobile-menu p, .contact-lead { font-size: 11.5px; }
+  .section-heading .eyebrow { font-size: 11px; }
+  /* Botones al tamaño del dedo */
+  .calendar-heading button { width: 42px; height: 42px; }
+  .testimonial-dots button { width: 28px; height: 40px; }
+  .icon-button, .testimonial-pause { width: 42px; height: 42px; }
+  .builder button, .inline-form button, .form-actions button { min-height: 44px; }
+  .footer a { padding: 0 2px; }
+}

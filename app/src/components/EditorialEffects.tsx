@@ -22,7 +22,8 @@ const EASE_OUT = [.22, 1, .36, 1] as const;
 /** ¿Toca la entrada con la foto? Una vez por visita y nunca con "reducir movimiento". */
 export function introPending() {
   if (typeof window === "undefined") return false;
-  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !readStored(INTRO_KEY, false, "session");
+  // Si se llega con un enlace a una sección (#reservar…), se va directo a ella sin la foto
+  return !window.location.hash && !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !readStored(INTRO_KEY, false, "session");
 }
 
 /**
