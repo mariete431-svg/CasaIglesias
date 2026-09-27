@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title>Blog de Mario Iglesias</title>
+  <link>https://mariete431-svg.github.io/MarioIglesias/blog/</link>
+  <atom:link href="https://mariete431-svg.github.io/MarioIglesias/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <description>Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.</description>
+  <language>es</language>
+  <item>
+    <title>Segunda revisión</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/segunda-revision/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/segunda-revision/</guid>
+    <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
+    <description>Una revisión más completa de seguridad, privacidad, accesibilidad y velocidad, y el alta en Google.</description>
+    <content:encoded><![CDATA[<p>Hice una segunda revisión, esta vez más a fondo, y arreglé lo que salió.</p>
+<h2>Qué mejoré</h2>
+<ul>
+<li><strong>Seguridad:</strong> más protección para la web y para la agenda de reservas.</li>
+<li><strong>Privacidad:</strong> las letras de la web ya no se cargan desde Google.</li>
+<li><strong>Creador de CV:</strong> se puede guardar en PDF también desde el iPhone.</li>
+<li><strong>Accesibilidad:</strong> el menú del móvil funciona mejor con el teclado.</li>
+<li><strong>Velocidad:</strong> las fotos pesan hasta un 60 % menos.</li>
+<li><strong>Google:</strong> di de alta la web en Google Search Console.</li>
+</ul>
+<p>Todo se comprobó en móvil y en ordenador antes de publicarlo.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Rediseño en burdeos</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-en-burdeos/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-en-burdeos/</guid>
+    <pubDate>Sun, 27 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Nuevo estilo con fondo burdeos, detalles en amarillo y animaciones al hacer scroll.</description>
+    <content:encoded><![CDATA[<p>Quería que la web tuviera más personalidad sin perder un aspecto cuidado.</p>
+<h2>Qué cambió</h2>
+<ul>
+<li>Toda la web pasó a tener fondo burdeos, con texto claro y detalles en amarillo.</li>
+<li>Al abrir la portada aparece una foto de Tenerife a pantalla completa.</li>
+<li>Los bloques aparecen con animaciones suaves al hacer scroll.</li>
+<li>Las opiniones aparecen en un recuadro claro y pasan solas.</li>
+</ul>
+<p>Antes de llegar a este resultado probé otras combinaciones de color que descarté. Después revisé cada página en móvil, tablet y ordenador para que todo se leyera bien.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Primera revisión de la web</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/primera-revision/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/primera-revision/</guid>
+    <pubDate>Sat, 26 Sep 2026 20:00:00 GMT</pubDate>
+    <description>Revisé la web página por página y arreglé fallos en móvil, accesibilidad, Google y velocidad.</description>
+    <content:encoded><![CDATA[<p>Con el diseño terminado, revisé la web entera en móvil y en ordenador.</p>
+<h2>Qué arreglé</h2>
+<ul>
+<li><strong>Formularios:</strong> mensajes claros cuando falta algo o un dato no es válido.</li>
+<li><strong>Móvil:</strong> el iPhone ya no amplía la pantalla al escribir, y los botones son más fáciles de tocar.</li>
+<li><strong>Accesibilidad:</strong> la web se puede usar con el teclado y las opiniones se pueden pausar.</li>
+<li><strong>Google:</strong> cada página tiene su título y su descripción, y hay un mapa del sitio.</li>
+<li><strong>Velocidad:</strong> la portada carga menos cosas al abrirse.</li>
+<li><strong>Privacidad:</strong> añadí una <a href="/MarioIglesias/privacidad">página de privacidad</a> y los comentarios se revisan antes de publicarse.</li>
+</ul>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Cambio de diseño</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/cambio-de-diseno/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/cambio-de-diseno/</guid>
+    <pubDate>Sat, 26 Sep 2026 15:00:00 GMT</pubDate>
+    <description>Probé varios diseños hasta quedarme con uno limpio y más fácil de usar.</description>
+    <content:encoded><![CDATA[<p>Probé tres diseños distintos en un día. Los dos primeros no me convencían, así que seguí probando.</p>
+<h2>El diseño final</h2>
+<p>Un estilo limpio, con una letra elegante para los títulos y otra muy legible para el texto. La web pasó a estar hecha con React, lo que permite reutilizar las mismas piezas en todas las páginas.</p>
+<h2>Más fácil de usar</h2>
+<ul>
+<li>Los botones de reservar y de crear CV están siempre visibles.</li>
+<li>Debajo de la portada hay dos accesos directos: reservar una reunión y el <a href="/MarioIglesias/crear-cv">creador de CV</a>.</li>
+<li>Añadí una sección con opiniones de la gente.</li>
+</ul>
+<p>Las direcciones antiguas siguen funcionando y redirigen a las nuevas.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Agenda de citas</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</guid>
+    <pubDate>Sat, 26 Sep 2026 08:00:00 GMT</pubDate>
+    <description>Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas.</description>
+    <content:encoded><![CDATA[<p>El siguiente paso fue que la gente pudiera reservar una reunión desde la web.</p>
+<h2>Qué añadí</h2>
+<ul>
+<li>Un calendario que muestra solo las horas libres, en bloques de 30 minutos y en hora de Canarias.</li>
+<li>Un panel privado con contraseña para ver las citas y organizar mi horario.</li>
+<li>Un aviso por email cada vez que alguien reserva.</li>
+</ul>
+<h2>Cómo</h2>
+<p>Para guardar las reservas usé Supabase, un servicio de base de datos. Lo primero que configuré fueron las reglas de acceso: los visitantes solo pueden ver qué horas están libres y reservar; todo lo demás solo lo veo yo.</p>
+]]></content:encoded>
+  </item>
+  <item>
+    <title>Mi primera web</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</guid>
+    <pubDate>Sat, 12 Sep 2026 21:00:00 GMT</pubDate>
+    <description>Una página sencilla para presentarme y una lista de tareas. Mi punto de partida.</description>
+    <content:encoded><![CDATA[<p>Esta web empezó el 12 de septiembre de 2026. Era la primera vez que publicaba algo así.</p>
+<h2>Qué tenía</h2>
+<ul>
+<li>Una portada con una presentación breve.</li>
+<li>Una sección de proyectos.</li>
+<li>Una lista de tareas que guarda los datos en el propio navegador de cada persona.</li>
+</ul>
+<h2>Cómo estaba hecha</h2>
+<p>HTML para el contenido, CSS para el diseño y un poco de JavaScript para la lista de tareas. La web se publica gratis con GitHub Pages: cada cambio se propone, se revisa y, al aceptarlo, se publica.</p>
+]]></content:encoded>
+  </item>
+</channel>
+</rss>
