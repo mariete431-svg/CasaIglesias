@@ -8,19 +8,19 @@ import { formatPostDate, isoDay, posts } from "@/lib/blog";
 import { asset } from "@/lib/asset";
 
 export default function BlogPage() {
-  usePageTitle("Bitácora — Mario Iglesias");
+  usePageTitle("Blog — Mario Iglesias");
   const [tag, setTag] = useState<string | null>(null);
   const tags = useMemo(() => [...new Set(posts.flatMap(p => p.tags))].sort((a, b) => a.localeCompare(b, "es")), []);
   const visible = tag ? posts.filter(p => p.tags.includes(tag)) : posts;
 
   return <main>
     <PageHero
-      eyebrow="BITÁCORA — CÓMO CONSTRUYO MI WEB, PASO A PASO"
-      lines={["Bitácora", "de obra."]}
-      subtitle={<>Todo lo que voy construyendo en esta web: qué quería, qué decisiones tomé y qué aprendí por el camino. Lo escribo yo, con ayuda de Claude.</>}
+      eyebrow="BLOG — DISEÑO WEB"
+      lines={["Mario", "Iglesias."]}
+      subtitle={<>Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo. Aquí cuento lo que voy haciendo en esta web.</>}
       actions={<>
-        <Button variant="luxury" size="lg" asChild><a href="#articulos">Leer los artículos <ArrowUpRight /></a></Button>
-        <Button variant="outlineLuxury" size="lg" asChild><a href={asset("blog/feed.xml")}>Seguir por RSS <Rss /></a></Button>
+        <Button variant="luxury" size="lg" asChild><a href="#articulos">Leer el blog <ArrowUpRight /></a></Button>
+        <Button variant="outlineLuxury" size="lg" asChild><a href={asset("blog/feed.xml")}>RSS <Rss /></a></Button>
       </>}
       bottomHref="#articulos"
     />

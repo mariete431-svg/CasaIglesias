@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Una agenda de citas de verdad (y por qué la seguridad va primero) — Mario Iglesias</title>
-    <meta name="description" content="Pasar de una web que solo se lee a una que guarda datos de otras personas. Cómo monté las reservas con Supabase, un panel privado y avisos por email, y por qué empecé por las reglas de seguridad." />
-    <meta property="og:title" content="Una agenda de citas de verdad (y por qué la seguridad va primero) — Mario Iglesias" />
-    <meta property="og:description" content="Pasar de una web que solo se lee a una que guarda datos de otras personas. Cómo monté las reservas con Supabase, un panel privado y avisos por email, y por qué empecé por las reglas de seguridad." />
+    <title>Agenda de citas — Mario Iglesias</title>
+    <meta name="description" content="Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas." />
+    <meta property="og:title" content="Agenda de citas — Mario Iglesias" />
+    <meta property="og:description" content="Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas." />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="Mario Iglesias" />
@@ -21,48 +21,31 @@
     <link rel="apple-touch-icon" href="/MarioIglesias/apple-touch-icon.png" />
     <meta name="theme-color" content="#3d1119" />
     <style>html,body{background:#3d1119}</style>
-    <script type="module" crossorigin src="/MarioIglesias/assets/index-zXzDoK-T.js"></script>
+    <script type="module" crossorigin src="/MarioIglesias/assets/index-ClvImj3X.js"></script>
     <link rel="modulepreload" crossorigin href="/MarioIglesias/assets/button-dNVPP3Gg.js">
-    <link rel="stylesheet" crossorigin href="/MarioIglesias/assets/index-DZJXrup6.css">
+    <link rel="stylesheet" crossorigin href="/MarioIglesias/assets/index-CYGG5ZoE.css">
   
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://uaojfcqpdngoqpjrmttx.supabase.co wss://uaojfcqpdngoqpjrmttx.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <link rel="alternate" type="application/rss+xml" title="Bitácora de Mario Iglesias" href="https://mariete431-svg.github.io/MarioIglesias/blog/feed.xml" />
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Una agenda de citas de verdad (y por qué la seguridad va primero)","description":"Pasar de una web que solo se lee a una que guarda datos de otras personas. Cómo monté las reservas con Supabase, un panel privado y avisos por email, y por qué empecé por las reglas de seguridad.","datePublished":"2026-09-26","dateModified":"2026-09-26","inLanguage":"es","keywords":"Seguridad","url":"https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/","mainEntityOfPage":"https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/","image":"https://mariete431-svg.github.io/MarioIglesias/og-imagen.jpg","author":{"@type":"Person","@id":"https://mariete431-svg.github.io/MarioIglesias/#mario","name":"Mario Iglesias Martínez","url":"https://mariete431-svg.github.io/MarioIglesias/"},"publisher":{"@type":"Person","@id":"https://mariete431-svg.github.io/MarioIglesias/#mario","name":"Mario Iglesias Martínez","url":"https://mariete431-svg.github.io/MarioIglesias/"},"isPartOf":{"@type":"Blog","name":"Bitácora de Mario Iglesias","url":"https://mariete431-svg.github.io/MarioIglesias/blog/"}}</script>
+    <link rel="alternate" type="application/rss+xml" title="Blog de Mario Iglesias" href="https://mariete431-svg.github.io/MarioIglesias/blog/feed.xml" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Agenda de citas","description":"Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas.","datePublished":"2026-09-26","dateModified":"2026-09-26","inLanguage":"es","keywords":"Seguridad","url":"https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/","mainEntityOfPage":"https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/","image":"https://mariete431-svg.github.io/MarioIglesias/og-imagen.jpg","author":{"@type":"Person","@id":"https://mariete431-svg.github.io/MarioIglesias/#mario","name":"Mario Iglesias Martínez","url":"https://mariete431-svg.github.io/MarioIglesias/"},"publisher":{"@type":"Person","@id":"https://mariete431-svg.github.io/MarioIglesias/#mario","name":"Mario Iglesias Martínez","url":"https://mariete431-svg.github.io/MarioIglesias/"},"isPartOf":{"@type":"Blog","name":"Blog de Mario Iglesias","url":"https://mariete431-svg.github.io/MarioIglesias/blog/"}}</script>
   </head>
   <body>
     <div id="root"><article class="seo-fallback is-article">
-      <p><a href="/MarioIglesias/blog/">BITÁCORA</a> · 2026-09-26</p>
-      <h1>Una agenda de citas de verdad (y por qué la seguridad va primero)</h1>
-      <p>Pasar de una web que solo se lee a una que guarda datos de otras personas. Cómo monté las reservas con Supabase, un panel privado y avisos por email, y por qué empecé por las reglas de seguridad.</p>
-      <p>La lista de tareas guardaba los datos en el navegador de cada persona. Pero una <strong>agenda de citas</strong> es otra cosa: si alguien reserva una reunión, esa reserva tiene que llegarme <strong>a mí</strong>. Necesitaba una base de datos en internet.</p>
-<h2>La herramienta: Supabase</h2>
-<p>Elegí <strong>Supabase</strong>, un servicio que te da una base de datos (PostgreSQL), inicio de sesión y funciones en la nube, con un plan gratuito generoso. Para una web personal es ideal: no tengo que mantener ningún servidor.</p>
-<h2>Lo que construimos</h2>
+      <p><a href="/MarioIglesias/blog/">BLOG</a> · 2026-09-26</p>
+      <h1>Agenda de citas</h1>
+      <p>Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas.</p>
+      <p>El siguiente paso fue que la gente pudiera reservar una reunión desde la web.</p>
+<h2>Qué añadí</h2>
 <ul>
-<li><strong>Reserva por pasos:</strong> eliges día, luego hora y luego dejas tus datos. El calendario <strong>solo enseña los huecos libres</strong>, en hora de Canarias y en bloques de 30 minutos.</li>
-<li><strong>Panel privado:</strong> una página con contraseña donde veo las citas, marco si están confirmadas, bloqueo días de vacaciones y cambio mi horario.</li>
-<li><strong>Aviso por email:</strong> cuando alguien reserva, me llega un correo con sus datos para poder responderle directamente.</li>
+<li>Un calendario que muestra solo las horas libres, en bloques de 30 minutos y en hora de Canarias.</li>
+<li>Un panel privado con contraseña para ver las citas y organizar mi horario.</li>
+<li>Un aviso por email cada vez que alguien reserva.</li>
 </ul>
-<h2>Por qué empecé por la seguridad</h2>
-<p>Aquí está la decisión más importante de todo el proyecto. En cuanto una web guarda nombres, emails y teléfonos de otras personas, <strong>tienes la responsabilidad de protegerlos</strong>.</p>
-<p>Supabase tiene una herramienta clave para esto: las <strong>reglas por fila</strong> (en inglés, <em>Row Level Security</em>). Con ellas decides, dentro de la propia base de datos, quién puede leer o cambiar cada cosa. Lo configuramos así:</p>
-<ul>
-<li>Los <strong>visitantes</strong> no pueden leer ninguna tabla. Solo pueden hacer dos cosas muy concretas: preguntar qué horas están libres y reservar una.</li>
-<li>Esas dos acciones pasan por <strong>funciones que comprueban los datos</strong>: que el nombre y el correo tengan sentido, que la hora siga libre y que nadie reserve de más.</li>
-<li>Todo lo demás (citas, horario, días bloqueados) <strong>solo lo puede ver el administrador</strong>.</li>
-</ul>
-<p>La ventaja de hacerlo en la base de datos, y no solo en la web, es que <strong>aunque alguien se salte la web</strong> y hable directamente con la base de datos, las reglas siguen ahí.</p>
-<blockquote>
-<p><strong>Lo que aprendí</strong>
-La seguridad no se añade al final: se diseña al principio. Y lo más seguro es que el público solo pueda hacer lo mínimo imprescindible.</p>
-</blockquote>
-<h2>Un fallo curioso que tuvimos después</h2>
-<p>Unos días más tarde vi que las opiniones de la web salían vacías… pero solo en mi ordenador. La causa: yo tenía abierta la sesión del panel privado, y para la base de datos yo ya no era un &quot;visitante&quot;, así que las reglas para visitantes no me incluían. La solución fue que las partes públicas de la web usen siempre una conexión de visitante, aunque haya una sesión abierta. Un buen recordatorio de que <strong>probar como un visitante cualquiera</strong> es parte del trabajo.</p>
-<h2>Lo siguiente</h2>
-<p>La agenda funcionaba, pero el diseño de la web no me convencía. Lo cambiamos varias veces hasta dar con uno que sí, y de eso va el siguiente artículo.</p>
+<h2>Cómo</h2>
+<p>Para guardar las reservas usé Supabase, un servicio de base de datos. Lo primero que configuré fueron las reglas de acceso: los visitantes solo pueden ver qué horas están libres y reservar; todo lo demás solo lo veo yo.</p>
 
-      <p>Escrito por Mario Iglesias con ayuda de Claude.</p>
+      <p>Mario Iglesias · Escrito con ayuda de IA (Claude).</p>
     </article></div>
   </body>
 </html>

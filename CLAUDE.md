@@ -8,11 +8,11 @@ Mario habla español y está aprendiendo: explícale todo con pasos sencillos y 
 - Cada cambio va en una rama nueva desde `origin/main` y una propuesta (pull request). Mario la acepta él mismo; tú no puedes aceptarla. Antes de decir que algo está publicado, comprueba con `gh pr view` que la propuesta está en estado MERGED.
 - Colores: toda la web en burdeos (`--ink`), letras crema y amarillo bebé solo para detalles. Nada de objetos volando: el movimiento es elegante y respeta "Reducir movimiento".
 
-## Bitácora (blog): un artículo por cada cambio
+## Blog: un artículo por cada cambio
 
 Cada vez que termines un cambio visible o importante en la web, escribe en la **misma rama** un artículo nuevo en `app/src/content/blog/`. Así, cuando Mario acepta la propuesta, se publican a la vez el cambio y su artículo.
 
-No hace falta artículo para retoques mínimos (una errata, un color); en ese caso añade una frase al final del artículo más reciente que trate del tema, o nada.
+No hace falta artículo para retoques mínimos (una errata, un color).
 
 ### Formato del archivo
 
@@ -29,13 +29,14 @@ etiquetas: Diseño
 
 Etiquetas: usa solo estas (una a tres): `Primeros pasos`, `Diseño`, `Seguridad`, `Auditoría`, `Accesibilidad`, `SEO`, `Proceso`. Si hace falta una nueva, que sea general y avisa a Mario.
 
-### Cómo escribir
+### Cómo escribir (Mario lo quiere así)
 
-- En primera persona, con la voz de Mario: cercano, claro, sin tecnicismos sin explicar. Frases cortas.
-- Estructura: contexto → qué quería → qué hicimos → **por qué así** (las decisiones y las alternativas descartadas) → una cita con `> **Lo que aprendí**` → "Lo siguiente".
-- Entre 400 y 800 palabras. Títulos de sección con `##`.
-- Solo hechos reales, con sus fechas. Si algo no se probó, dilo.
-- Enlaces internos con `/`, por ejemplo `[creador de CV](/crear-cv)`.
+- Tono sencillo y directo, en primera persona. **Nada romántico ni poético**: sin frases del tipo "una entrada con mi puesta de sol", sin citas destacadas, sin cajas de "lo que aprendí".
+- **Títulos cortos y descriptivos**: "Rediseño en burdeos", "Agenda de citas". Nunca títulos largos con dos puntos.
+- Solo la trayectoria: qué se hizo y, si acaso, por qué, en pocas líneas. **Pocos detalles.**
+- Entre 80 y 200 palabras. Secciones con `##` cortas ("Qué cambió", "Cómo") y listas breves.
+- Solo hechos reales, con sus fechas. Enlaces internos con `/`, por ejemplo `[creador de CV](/crear-cv)`.
+- El encabezado del blog presenta a Mario tal cual: 24 años, hace diseños web, es su primera vez y está aprendiendo.
 
 ### Lo que nunca se publica
 
@@ -43,6 +44,6 @@ Etiquetas: usa solo estas (una a tres): `Primeros pasos`, `Diseño`, `Seguridad`
 - Detalles de cómo funcionan las defensas (límites exactos, nombres de tablas o funciones, reglas de la base de datos).
 - Fallos de seguridad que todavía no estén arreglados.
 
-La firma ("Escrito por Mario Iglesias con ayuda de Claude") la añade la página automáticamente.
+La firma ("Escrito con ayuda de IA (Claude)") la añade la página automáticamente.
 
 Después de escribir el artículo, ejecuta `npm run build` en `app/` para comprobar que aparece en `blog/`, en `sitemap.xml` y en `blog/feed.xml`.

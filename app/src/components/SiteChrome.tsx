@@ -84,7 +84,7 @@ export function SiteFooter() {
   return <footer className="footer"><div className="section-wrap">
     <span>© 2026 Mario Iglesias · Adeje, Tenerife</span>
     <nav aria-label="Enlaces legales">
-      <Link to="/blog">Bitácora</Link>
+      <Link to="/blog">Blog</Link>
       <Link to="/privacidad">Privacidad y aviso legal</Link>
       <Link to="/admin">Panel <ArrowUpRight size={13} /></Link>
     </nav>

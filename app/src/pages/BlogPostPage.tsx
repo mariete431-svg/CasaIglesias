@@ -44,7 +44,7 @@ export default function BlogPostPage() {
     <article className="post">
       <header className="post-header section-wrap">
         <motion.p className="eyebrow hero-eyebrow" initial={reduced ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}>
-          <Link to="/blog" className="post-back"><ArrowLeft size={14} strokeWidth={1.5} /> BITÁCORA</Link>
+          <Link to="/blog" className="post-back"><ArrowLeft size={14} strokeWidth={1.5} /> BLOG</Link>
           <span className="eyebrow-line" /> <time dateTime={isoDay(post.date)}>{formatPostDate(post.date).toUpperCase()}</time> · {post.minutes} MIN
         </motion.p>
         <motion.h1 initial={reduced ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1, duration: .9, ease: [.22, 1, .36, 1] }}>{post.title}</motion.h1>
@@ -56,10 +56,10 @@ export default function BlogPostPage() {
         <div className="post-body" onClick={onArticleClick} dangerouslySetInnerHTML={{ __html: html }} />
 
         <Reveal><footer className="post-footer">
-          <p className="post-signature">Escrito por <strong>Mario Iglesias</strong> con ayuda de Claude, a partir del trabajo real en esta web. Si ves algo mejorable, <a href="mailto:mariete431@icloud.com">escríbeme</a>.</p>
+          <p className="post-signature">Mario Iglesias · Escrito con ayuda de IA (Claude). ¿Dudas o sugerencias? <a href="mailto:mariete431@icloud.com">Escríbeme</a>.</p>
           <nav className="post-nav" aria-label="Más artículos">
             {older ? <Link to={`/blog/${older.slug}`} className="post-nav-link"><small><ArrowLeft size={13} /> ANTERIOR</small><span>{older.title}</span></Link> : <span />}
-            {newer ? <Link to={`/blog/${newer.slug}`} className="post-nav-link post-nav-next"><small>SIGUIENTE <ArrowRight size={13} /></small><span>{newer.title}</span></Link> : <Link to="/blog" className="post-nav-link post-nav-next"><small>BITÁCORA <ArrowUpRight size={13} /></small><span>Todos los artículos</span></Link>}
+            {newer ? <Link to={`/blog/${newer.slug}`} className="post-nav-link post-nav-next"><small>SIGUIENTE <ArrowRight size={13} /></small><span>{newer.title}</span></Link> : <Link to="/blog" className="post-nav-link post-nav-next"><small>BLOG <ArrowUpRight size={13} /></small><span>Todos los artículos</span></Link>}
           </nav>
         </footer></Reveal>
       </div>

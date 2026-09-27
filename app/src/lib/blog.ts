@@ -1,4 +1,4 @@
-// Bitácora: cada artículo es un archivo .md en src/content/blog/ con este encabezado:
+// Blog: cada artículo es un archivo .md en src/content/blog/ con este encabezado:
 //
 // ---
 // titulo: Título del artículo

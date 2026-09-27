@@ -35,8 +35,8 @@ const pages = {
     index: true,
   },
   blog: {
-    title: "Bitácora — Mario Iglesias",
-    description: "Cómo construyo mi web paso a paso: diseño, seguridad, accesibilidad y Google. Qué quería, qué decidí y qué aprendí en cada cambio.",
+    title: "Blog — Mario Iglesias",
+    description: "Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.",
     index: true,
   },
   tareas: { title: "Lista de tareas — Mario Iglesias", description: "Una lista de tareas sencilla que se guarda en tu navegador.", index: false },
@@ -88,7 +88,7 @@ const personJson = JSON.stringify({
 
 // Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
 // React lo sustituye por la página completa en cuanto carga.
-const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["blog/", "Bitácora"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
+const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
 const fallback = (title, description) => `<div class="seo-fallback">
       <p>ADEJE, TENERIFE</p>
       <h1>${escape(title.split(" — ")[0])}</h1>
@@ -98,7 +98,7 @@ const fallback = (title, description) => `<div class="seo-fallback">
     </div>`;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
-const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Bitácora de Mario Iglesias" href="${SITE}blog/feed.xml" />`;
+const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Blog de Mario Iglesias" href="${SITE}blog/feed.xml" />`;
 
 // content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
 function pageHtml(route, { title, description, index, jsonLd, content, ogType }) {
@@ -127,7 +127,7 @@ for (const [route, meta] of Object.entries(pages)) {
 // Página de error: nunca debe aparecer en Google
 writeFileSync(join(dist, "404.html"), pageHtml("", { ...pages[""], title: "Página no encontrada — Mario Iglesias", index: false }));
 
-// ---------- Bitácora (blog) ----------
+// ---------- Blog ----------
 // Los artículos son archivos .md en src/content/blog (ver src/lib/blog.ts para el formato)
 const postsDir = join(app, "src", "content", "blog");
 const parsePost = (file) => {
@@ -172,14 +172,14 @@ for (const post of posts) {
     image: `${SITE}og-imagen.jpg`,
     author,
     publisher: author,
-    isPartOf: { "@type": "Blog", name: "Bitácora de Mario Iglesias", url: `${SITE}blog/` },
+    isPartOf: { "@type": "Blog", name: "Blog de Mario Iglesias", url: `${SITE}blog/` },
   });
   const content = `<article class="seo-fallback is-article">
-      <p><a href="${BASE}blog/">BITÁCORA</a> · ${day(post.date)}</p>
+      <p><a href="${BASE}blog/">BLOG</a> · ${day(post.date)}</p>
       <h1>${escape(post.title)}</h1>
       <p>${escape(post.summary)}</p>
       ${post.html}
-      <p>Escrito por Mario Iglesias con ayuda de Claude.</p>
+      <p>Mario Iglesias · Escrito con ayuda de IA (Claude).</p>
     </article>`;
   writeFileSync(join(folder, "index.html"), pageHtml(route, { title: `${post.title} — Mario Iglesias`, description: post.summary, index: true, jsonLd, content, ogType: "article" }));
 }
@@ -189,15 +189,15 @@ for (const post of posts) {
   const blogJson = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Bitácora de Mario Iglesias",
+    name: "Blog de Mario Iglesias",
     url: `${SITE}blog/`,
     inLanguage: "es",
     author,
     blogPost: posts.map(p => ({ "@type": "BlogPosting", headline: p.title, datePublished: day(p.date), url: `${SITE}blog/${p.slug}/` })),
   });
   const content = `<div class="seo-fallback">
-      <p>BITÁCORA — CÓMO CONSTRUYO MI WEB, PASO A PASO</p>
-      <h1>Bitácora de obra</h1>
+      <p>BLOG — DISEÑO WEB</p>
+      <h1>Mario Iglesias</h1>
       <p>${escape(pages.blog.description)}</p>
       <ul>${posts.map(p => `<li><a href="${BASE}blog/${p.slug}/">${escape(p.title)}</a> (${day(p.date)})</li>`).join("")}</ul>
     </div>`;
@@ -211,7 +211,7 @@ mkdirSync(join(dist, "blog"), { recursive: true });
 writeFileSync(join(dist, "blog", "feed.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
-  <title>Bitácora de Mario Iglesias</title>
+  <title>Blog de Mario Iglesias</title>
   <link>${SITE}blog/</link>
   <atom:link href="${SITE}blog/feed.xml" rel="self" type="application/rss+xml" />
   <description>${escape(pages.blog.description)}</description>
@@ -260,6 +260,13 @@ if (existsSync(assets)) {
     if (file.endsWith(".js")) pending.push(...[...readFileSync(join(assets, file), "utf8").matchAll(/([\w-]+-[\w-]{8}\.(?:js|css))/g)].map(m => m[1]));
   }
   for (const file of readdirSync(assets)) if (!keep.has(file)) rmSync(join(assets, file), { force: true });
+}
+// Artículos del blog que ya no existen: se borran para que no queden publicados
+const rootBlog = join(root, "blog");
+if (existsSync(rootBlog)) {
+  for (const entry of readdirSync(rootBlog, { withFileTypes: true })) {
+    if (entry.isDirectory() && !existsSync(join(dist, "blog", entry.name))) rmSync(join(rootBlog, entry.name), { recursive: true, force: true });
+  }
 }
 cpSync(dist, root, { recursive: true });
 console.log("Web copiada a la raíz del repositorio.");

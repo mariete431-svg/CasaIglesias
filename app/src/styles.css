@@ -885,7 +885,7 @@ html.lenis { scroll-behavior: auto !important; }
 }
 
 /* =========================================================
-   BITÁCORA (blog)
+   BLOG
    ========================================================= */
 .blog-tags { margin: -30px 0 40px; }
 .post-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
@@ -967,3 +967,12 @@ html.lenis { scroll-behavior: auto !important; }
 .seo-fallback.is-article h1 { font-size: clamp(40px, 6vw, 80px); line-height: 1; }
 .seo-fallback.is-article h2 { font: 400 32px/1.1 var(--font-display); margin: 1.6em 0 .4em; }
 .seo-fallback.is-article blockquote { margin: 1.4em 0; padding: 16px 20px; border-left: 3px solid var(--accent); }
+
+/* Blog: tono sencillo y directo (títulos moderados, entradilla sin cursiva, sin cajas de cita) */
+.post-header h1 { font-size: clamp(38px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -.025em; margin: 30px 0 18px; }
+.post-lead { font: 400 17px/1.7 var(--font-sans); color: var(--muted-foreground); max-width: 680px; }
+.post-body blockquote { background: none; color: var(--foreground); font: inherit; padding: 0 0 0 18px; border-left: 2px solid var(--border); border-radius: 0; }
+.post-body blockquote a { color: var(--foreground); }
+.post-main strong { font-size: clamp(26px, 2.6vw, 36px); }
+@media (max-width: 700px) { .post-header h1 { font-size: clamp(32px, 9vw, 44px); } .post-main strong { font-size: 27px; } }
+.post-body ul { list-style: disc; } .post-body ol { list-style: decimal; }
