@@ -41,7 +41,9 @@ export function Testimonials({ label }: { label: string }) {
   }, [near]);
 
   const count = comments?.length ?? 0;
-  const playing = !reduced && !stopped && count > 1;
+  // Pasan solas siempre, también con "Reducir movimiento" (entonces solo con un fundido suave).
+  // El botón de pausa permite pararlas.
+  const playing = !stopped && count > 1;
   // Cada cambio de opinión reinicia la cuenta, así al tocar un punto se ve completa
   useEffect(() => {
     if (!playing) return;
@@ -66,7 +68,7 @@ export function Testimonials({ label }: { label: string }) {
         {/* Mientras cambian solas no se anuncian, para no interrumpir al lector de pantalla */}
         <div className="testimonial-body" aria-live={playing ? "off" : "polite"}>
           <AnimatePresence mode="wait">
-            {current && <motion.div key={current.id} initial={reduced ? false : { opacity: 0, y: 28, rotateX: -24 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -18, rotateX: 18 }} transition={{ type: "spring", bounce: 0, duration: .75, opacity: { duration: .45 } }} style={{ transformPerspective: 900, transformOrigin: "50% 50%" }}>
+            {current && <motion.div key={current.id} initial={reduced ? { opacity: 0 } : { opacity: 0, y: 28, rotateX: -24 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -18, rotateX: 18 }} transition={{ type: "spring", bounce: 0, duration: .75, opacity: { duration: .45 } }} style={{ transformPerspective: 900, transformOrigin: "50% 50%" }}>
               <blockquote>{current.message}</blockquote>
               <figcaption><strong>{current.name}</strong><span>{fmtDate.format(new Date(current.created_at))}</span></figcaption>
             </motion.div>}
@@ -78,7 +80,7 @@ export function Testimonials({ label }: { label: string }) {
           <div className="testimonial-nav">
             <span className="testimonial-count">{String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}</span>
             <div className="testimonial-dots">{comments!.map((c, i) => <button key={c.id} type="button" aria-label={`Opinión de ${c.name}`} aria-current={i === index} onClick={() => setIndex(i)}>{i === index && <motion.i layoutId="testimonial-dot" transition={{ type: "spring", stiffness: 400, damping: 34 }} />}</button>)}</div>
-            {!reduced && <button type="button" className="icon-button testimonial-pause" aria-label={stopped ? "Pasar las opiniones solas" : "Pausar las opiniones"} onClick={() => setStopped(value => !value)}>{stopped ? <Play /> : <Pause />}</button>}
+            <button type="button" className="icon-button testimonial-pause" aria-label={stopped ? "Pasar las opiniones solas" : "Pausar las opiniones"} onClick={() => setStopped(value => !value)}>{stopped ? <Play /> : <Pause />}</button>
           </div>
         </>}
       </figure></Reveal>
