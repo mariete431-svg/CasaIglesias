@@ -1,9 +1,14 @@
-# MarioIglesias.
+# Mario Iglesias — web personal
 
-## Web nueva (2026)
+Web publicada: https://mariete431-svg.github.io/MarioIglesias/
 
-El código de la web está en la carpeta `app/` (React + Vite, diseño creado con Lovable).
-Para publicar cambios:
+## Dónde está cada cosa
+
+- `app/` — el código de la web (React + Vite + framer-motion). Es lo único que se edita.
+- `app/supabase/` — la función que avisa por email de cada reserva y los cambios de la base de datos.
+- La raíz del repositorio (`index.html`, `assets/`, `cv/`…) la genera `npm run build`: no se edita a mano.
+
+## Publicar cambios
 
 ```bash
 cd app
@@ -11,4 +16,5 @@ npm install
 npm run build
 ```
 
-`npm run build` genera la web y la copia a la raíz del repositorio, que es lo que publica GitHub Pages.
+`npm run build` comprueba el código, genera la web y la copia a la raíz del repositorio, que es lo que publica GitHub Pages.
+Cada página recibe su título, descripción, ficha para Google y política de seguridad.

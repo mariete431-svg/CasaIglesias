@@ -39,6 +39,57 @@ const pages = {
 };
 
 const escape = (text) => text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+// Seguridad: la página solo puede cargar cosas de la propia web y de la base de datos (Supabase).
+// Va solo en la versión publicada: en desarrollo, Vite necesita scripts propios.
+const SUPABASE = "https://uaojfcqpdngoqpjrmttx.supabase.co";
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  `connect-src 'self' ${SUPABASE} wss://uaojfcqpdngoqpjrmttx.supabase.co`,
+  "frame-src 'none'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join("; ");
+const securityMeta = `
+    <meta http-equiv="Content-Security-Policy" content="${CSP}" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />`;
+
+// Ficha para Google: quién es Mario (datos estructurados de schema.org)
+const personJson = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE}#mario`,
+      name: "Mario Iglesias Martínez",
+      alternateName: "Mario Iglesias",
+      jobTitle: "Atención al cliente y desarrollo web",
+      url: SITE,
+      image: `${SITE}og-imagen.jpg`,
+      email: "mailto:mariete431@icloud.com",
+      address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" },
+      knowsLanguage: ["es", "en"],
+      sameAs: ["https://www.instagram.com/Whsmario/"],
+    },
+    { "@type": "WebSite", "@id": `${SITE}#web`, url: SITE, name: "Mario Iglesias", inLanguage: "es", publisher: { "@id": `${SITE}#mario` } },
+  ],
+});
+
+// Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
+// React lo sustituye por la página completa en cuanto carga.
+const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
+const fallback = (title, description) => `<div class="seo-fallback">
+      <p>ADEJE, TENERIFE</p>
+      <h1>${escape(title.split(" — ")[0])}</h1>
+      <p>${escape(description)}</p>
+      <nav aria-label="Páginas">${links.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join(" · ")}</nav>
+      <p><a href="mailto:mariete431@icloud.com">mariete431@icloud.com</a></p>
+    </div>`;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
 function pageHtml(route, { title, description, index }) {
@@ -49,7 +100,9 @@ function pageHtml(route, { title, description, index }) {
     .replace(/(<meta property="og:title" content=")[^"]*/, `$1${escape(title)}`)
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
-    .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`);
+    .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
+    .replace("</head>", `${securityMeta}${route === "" ? `\n    <script type="application/ld+json">${personJson}</script>` : ""}\n  </head>`)
+    .replace('<div id="root"></div>', `<div id="root">${fallback(title, description)}</div>`);
   if (!index) html = html.replace("<head>", '<head>\n    <meta name="robots" content="noindex, nofollow" />');
   return html;
 }

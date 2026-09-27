@@ -648,7 +648,7 @@ h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(
 @media (pointer: fine) and (min-width: 901px) { .skill { padding-left: 22px; margin-left: -22px; padding-bottom: 28px; } .skill:hover { background: var(--accent); } }
 
 /* "Hablemos." relleno con la puesta de sol */
-.contact-section h2 { background: url("/tenerife-texto.jpg") 50% 40% / cover; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact-section h2 { background: url("/tenerife-texto.jpg") 50% 40% / cover; background-image: image-set(url("/tenerife-texto.webp") type("image/webp"), url("/tenerife-texto.jpg") type("image/jpeg")); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .contact-section h2 span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
 @supports not ((-webkit-background-clip: text) or (background-clip: text)) { .contact-section h2 { color: var(--foreground); background: none; } }
 @supports (animation-timeline: view()) {
@@ -824,3 +824,44 @@ html, body { overflow-x: clip; }
   .builder button, .inline-form button, .form-actions button { min-height: 44px; }
   .footer a { padding: 0 2px; }
 }
+
+/* ---------- Accesibilidad ---------- */
+/* "Saltar al contenido": invisible hasta que se llega con el teclado */
+.skip-link { position: fixed; z-index: 200; top: 10px; left: 10px; padding: 12px 18px; border-radius: 999px; background: var(--accent); color: var(--ink); font-size: 13px; font-weight: 600; transform: translateY(-150%); transition: transform .3s var(--ease-out); }
+.skip-link:focus-visible { transform: none; outline-color: var(--accent); }
+#pagina main:focus { outline: none; }
+/* "Subir foto" muestra el contorno de foco aunque el campo real esté oculto */
+.photo-picker:has(input:focus-visible) label { outline: 2px solid var(--foreground); outline-offset: 3px; }
+
+/* ---------- Desplazamiento suave ----------
+   En ordenador lo hace Lenis; el suavizado propio del navegador se apaga para que no se sumen los dos */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* ---------- Impresión: sin animaciones, todo visible y quieto ---------- */
+@media print {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal-inner, .section-pad h2, .career-item, .project-row, .cv-entry, .skill, .portrait, .portrait img, .cv-text, h2 em, .hero-content { opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important; }
+  .testimonial-timer, .skip-link, .hero-stamp { display: none !important; }
+}
+
+/* ---------- Navegadores antiguos (iPhone con iOS 15.3 o anterior) ----------
+   No entienden los colores "oklch": se les dan los mismos colores en formato clásico */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --ink: #3d1119; --background: #3d1119; --foreground: #fbf6e6; --primary: #fbf0b3; --primary-foreground: #3d1119;
+    --secondary: #47151e; --secondary-foreground: #fbf6e6; --muted: #52202a; --muted-foreground: #e3cfae;
+    --accent: #fbf0b3; --accent-foreground: #3d1119; --border: rgba(251, 246, 230, .17); --input: rgba(251, 246, 230, .25);
+    --ring: #fbf0b3; --card: #47151e; --card-foreground: #fbf6e6; --gold: #f3dc7c; --marker: rgba(251, 246, 230, .13); --destructive: #c8553d;
+  }
+}
+
+/* Texto que llega dentro del HTML (para buscadores) mientras carga la web: ya con el estilo de la portada */
+.seo-fallback { width: min(100% - 40px, 1312px); margin: 0 auto; padding: clamp(150px, 22vh, 230px) 0 80px; color: var(--foreground); }
+.seo-fallback p:first-child { font: 500 11px/1.5 var(--font-sans); letter-spacing: .19em; color: var(--muted-foreground); }
+.seo-fallback h1 { font: 400 clamp(64px, 12vw, 180px)/.9 var(--font-display); letter-spacing: -.04em; margin: 40px 0; }
+.seo-fallback p, .seo-fallback nav { font-size: 15px; line-height: 1.7; color: var(--muted-foreground); max-width: 560px; }
+.seo-fallback a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+.testimonial-count { white-space: nowrap; }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Pause, Play } from "lucide-react";
@@ -19,14 +19,26 @@ export function Testimonials({ label }: { label: string }) {
   // Solo se para con el botón de pausa (o con "reducir movimiento" activado en el móvil)
   const [stopped, setStopped] = useState(false);
 
+  // Las opiniones se piden al acercarse a la sección, no al abrir la portada
+  const sectionRef = useRef<HTMLElement>(null);
+  const [near, setNear] = useState(false);
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || !("IntersectionObserver" in window)) { setNear(true); return; }
+    const observer = new IntersectionObserver(entries => { if (entries[0]?.isIntersecting) { setNear(true); observer.disconnect(); } }, { rootMargin: "900px 0px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!near) return;
     let active = true;
     loadSupabase()
       .then(({ publicClient }) => publicClient.from("comments").select("id, name, message, created_at").order("created_at", { ascending: false }).limit(12))
       .then(({ data, error }) => { if (active) setComments(!error && data ? data : []); })
       .catch(() => { if (active) setComments([]); });
     return () => { active = false; };
-  }, []);
+  }, [near]);
 
   const count = comments?.length ?? 0;
   const playing = !reduced && !stopped && count > 1;
@@ -40,7 +52,7 @@ export function Testimonials({ label }: { label: string }) {
   if (comments !== null && count === 0) return null;
   const current = comments?.[index];
 
-  return <section id="opiniones" className="testimonials-section section-pad"><div className="section-wrap">
+  return <section ref={sectionRef} id="opiniones" className="testimonials-section section-pad"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">{label}</span><span className="section-rule" /></div></Reveal>
     <div className="testimonials-grid">
       <Reveal><div className="testimonials-intro">

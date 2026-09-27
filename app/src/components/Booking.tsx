@@ -17,7 +17,7 @@ const bookingSchema = z.object({
   email: z.string().trim().email("Escribe un correo válido.").max(LIMITS.email, `El correo no puede pasar de ${LIMITS.email} caracteres.`),
   phone: z.string().trim().max(LIMITS.phone, `El teléfono no puede pasar de ${LIMITS.phone} caracteres.`),
   topic: z.string().trim().max(LIMITS.topic, `El mensaje no puede pasar de ${LIMITS.topic} caracteres.`),
-  consent: z.literal(true, { errorMap: () => ({ message: "Necesitamos tu consentimiento para reservar." }) }),
+  consent: z.literal(true, { error: "Necesitamos tu consentimiento para reservar." }),
 });
 type Field = "name" | "email" | "phone" | "topic" | "consent";
 type Form = { name: string; email: string; phone: string; topic: string; consent: boolean };
@@ -194,7 +194,7 @@ export function Booking({ compact = false }: { compact?: boolean }) {
                 <div className="form-row"><label htmlFor="booking-phone">Teléfono <span className="optional">Opcional</span></label><input id="booking-phone" type="tel" autoComplete="tel" maxLength={LIMITS.phone} value={form.phone} onChange={e => setField("phone", e.target.value)} aria-invalid={!!errors.phone} placeholder="+34" />{errors.phone && <small role="alert">{errors.phone}</small>}</div>
                 <div className="form-row"><label htmlFor="booking-topic">¿De qué quieres hablar? <span className="optional">Opcional · {form.topic.length}/{LIMITS.topic}</span></label><textarea id="booking-topic" rows={3} maxLength={LIMITS.topic} value={form.topic} onChange={e => setField("topic", e.target.value)} aria-invalid={!!errors.topic} placeholder="Cuéntame brevemente…" />{errors.topic && <small role="alert">{errors.topic}</small>}</div>
                 <div className="hp-field" aria-hidden="true"><label htmlFor="booking-website">No rellenes este campo</label><input id="booking-website" tabIndex={-1} autoComplete="off" value={trap} onChange={e => setTrap(e.target.value)} /></div>
-                <label className="consent-row"><input type="checkbox" checked={form.consent} onChange={e => setField("consent", e.target.checked)} aria-invalid={!!errors.consent} aria-required="true" /><span>Acepto que Mario use estos datos solo para contactarme sobre esta reunión, según la <Link to="/privacidad" target="_blank">política de privacidad</Link>.</span></label>
+                <label className="consent-row"><input type="checkbox" checked={form.consent} onChange={e => setField("consent", e.target.checked)} aria-invalid={!!errors.consent} aria-required="true" /><span>Acepto que Mario use estos datos solo para contactarme sobre esta reunión, según la <Link to="/privacidad" target="_blank" rel="noopener">política de privacidad<span className="sr-only"> (se abre en una pestaña nueva)</span></Link>.</span></label>
                 {errors.consent && <small className="form-error" role="alert">{errors.consent}</small>}
                 {submitError && <p className="form-error" role="alert">{submitError}</p>}
                 <div className="form-actions"><Button type="button" variant="text" onClick={() => setStep(1)}><ArrowLeft /> Volver a la hora</Button><Button type="submit" variant="luxury" disabled={submitting}>{submitting ? "Confirmando…" : "Confirmar reunión"} {!submitting && <ArrowRight />}</Button></div>

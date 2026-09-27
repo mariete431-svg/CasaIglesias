@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
@@ -31,12 +31,34 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   useEffect(() => setMenuOpen(false), [pathname]);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLElement>(null);
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    // Con el menú abierto, la página de detrás no se puede usar con el teclado
+    const page = document.getElementById("pagina");
+    if (menuOpen) page?.setAttribute("inert", "");
+    if (!menuOpen) return () => { document.body.style.overflow = ""; };
+    window.setTimeout(() => menu.current?.querySelector<HTMLElement>("a")?.focus(), 50);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setMenuOpen(false); trigger.current?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; page?.removeAttribute("inert"); document.removeEventListener("keydown", onKey); };
   }, [menuOpen]);
 
+  // "Saltar al contenido": lleva el foco directamente a la página, sin pasar por el menú
+  const skip = (event: MouseEvent) => {
+    event.preventDefault();
+    const main = document.querySelector<HTMLElement>("#pagina main") ?? document.getElementById("pagina");
+    if (!main) return;
+    main.setAttribute("tabindex", "-1");
+    main.focus({ preventScroll: true });
+    main.scrollIntoView();
+  };
+
   return <>
+    <a className="skip-link" href="#pagina" onClick={skip}>Saltar al contenido</a>
     <header className="site-header"><div className="header-inner">
       <NavItem to="/#inicio" className="brand"><span>Mario Iglesias<span className="brand-dot" aria-hidden="true">.</span></span></NavItem>
       <nav className="desktop-nav" aria-label="Navegación principal">{navigation.map(item => <NavItem key={item.label} to={item.to} className="nav-link">{item.label}</NavItem>)}</nav>
@@ -44,9 +66,9 @@ export function SiteHeader() {
         <NavItem to="/crear-cv" className="header-book header-book-light">Crear CV <ArrowUpRight size={15} strokeWidth={1.5} /></NavItem>
         <NavItem to="/#reservar" className="header-book">Reservar<span className="hide-mobile">&nbsp;reunión</span> <ArrowUpRight size={15} strokeWidth={1.5} /></NavItem>
       </div>
-      <Button variant="text" size="icon" className="menu-trigger" aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={menuOpen} onClick={() => setMenuOpen(value => !value)}>{menuOpen ? <X /> : <Menu />}</Button>
+      <Button ref={trigger} variant="text" size="icon" className="menu-trigger" aria-controls="menu-movil" aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"} aria-expanded={menuOpen} onClick={() => setMenuOpen(value => !value)}>{menuOpen ? <X /> : <Menu />}</Button>
     </div></header>
-    {menuOpen && <motion.nav className="mobile-menu" aria-label="Navegación móvil" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35, ease: [.22, 1, .36, 1] }}>
+    {menuOpen && <motion.nav ref={menu} id="menu-movil" className="mobile-menu" aria-label="Navegación móvil" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35, ease: [.22, 1, .36, 1] }}>
       <motion.div className="mobile-menu-main" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .05, duration: .45 }}>
         <NavItem to="/#reservar" className="mobile-cta mobile-cta-dark" onClick={() => setMenuOpen(false)}><small>RESERVA</small>Reservar reunión<ArrowUpRight /></NavItem>
         <NavItem to="/crear-cv" className="mobile-cta" onClick={() => setMenuOpen(false)}><small>HERRAMIENTA GRATUITA</small>Crear mi CV<ArrowUpRight /></NavItem>

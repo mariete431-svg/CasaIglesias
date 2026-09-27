@@ -41,6 +41,7 @@ export default function App() {
     <SiteHeader />
     <AnimatePresence mode="wait" initial={false} onExitComplete={() => scrollToLocation(window.location.hash)}>
       <motion.div
+        id="pagina"
         key={location.pathname}
         // Cambio de página con profundidad: la que se va se aleja, la nueva llega de frente
         initial={reduced ? false : { opacity: 0, y: 40, scale: .985, rotateX: 5 }}

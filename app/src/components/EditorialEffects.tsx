@@ -49,7 +49,7 @@ export function Entrance({ onReveal }: { onReveal?: () => void }) {
     // Se espera a la foto; si tarda (mala cobertura), se entra directamente sin foto
     const small = window.matchMedia("(max-width: 700px)").matches;
     const img = new Image();
-    img.src = asset(small ? "tenerife-movil.jpg" : "tenerife.jpg");
+    img.src = asset(small ? "tenerife-movil.webp" : "tenerife.webp");
     const giveUp = window.setTimeout(() => { revealed.current = true; writeStored(INTRO_KEY, true, "session"); onReveal?.(); setPhase("off"); }, 1600);
     img.decode().then(() => { window.clearTimeout(giveUp); if (!revealed.current) setPhase("show"); }).catch(() => undefined);
     return () => window.clearTimeout(giveUp);
@@ -87,7 +87,9 @@ export function Entrance({ onReveal }: { onReveal?: () => void }) {
       onAnimationComplete={() => { if (lifting) setPhase("off"); }}
       style={{ transformPerspective: 1400, transformOrigin: "50% 30%" }}>
       <picture>
+        <source media="(max-width: 700px)" type="image/webp" srcSet={asset("tenerife-movil.webp")} />
         <source media="(max-width: 700px)" srcSet={asset("tenerife-movil.jpg")} />
+        <source type="image/webp" srcSet={asset("tenerife.webp")} />
         <motion.img src={asset("tenerife.jpg")} alt="" initial={{ scale: 1.22, filter: "blur(18px) brightness(.7)" }} animate={{ scale: 1.04, filter: "blur(0px) brightness(1)" }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} />
       </picture>
       <div className="intro-shade" />
