@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HeroTitle, Magnetic, Reveal } from "@/components/EditorialEffects";
+import { HeroDepth, HeroTitle, Magnetic, Reveal } from "@/components/EditorialEffects";
 
 const navigation = [
   { label: "Perfil", to: "/#perfil" },
@@ -72,12 +72,12 @@ export function PageHero({ eyebrow, lines, subtitle, actions, bottom = "Desliza 
   eyebrow: string; lines: string[]; subtitle?: ReactNode; actions?: ReactNode; bottom?: string; bottomHref?: string;
 }) {
   return <section className="page-hero section-wrap" aria-labelledby="page-title">
-    <div className="hero-content">
+    <HeroDepth className="hero-content">
       <Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> {eyebrow}</p></Reveal>
       <HeroTitle lines={lines} id="page-title" delay={.15} />
       {subtitle && <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .75, duration: .7 }}>{subtitle}</motion.p>}
       {actions && <motion.div className="hero-actions no-print" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .9, duration: .7 }}>{actions}</motion.div>}
-    </div>
+    </HeroDepth>
     <div className="hero-bottom"><span>{eyebrow.split("—")[0].trim()}</span>{bottomHref ? <a href={bottomHref}>{bottom.toUpperCase()} <ArrowDown size={15} strokeWidth={1.5} /></a> : <span>{bottom.toUpperCase()}</span>}</div>
   </section>;
 }

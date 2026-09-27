@@ -22,25 +22,30 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Cormorant Garamond", Georgia, serif;
 }
+/* Paleta: blanco y amarillo bebé. La "tinta" (textos y botones oscuros) es un burdeos
+   casi negro, el guiño old money. Cambiando estas líneas cambia toda la web. */
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.205 0.011 76);
-  --primary: oklch(0.205 0.011 76);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.983 0.01 91);
-  --secondary-foreground: oklch(0.205 0.011 76);
-  --muted: oklch(0.955 0.008 90);
-  --muted-foreground: oklch(0.51 0.016 78);
-  --accent: oklch(0.958 0.06 98);
-  --accent-foreground: oklch(0.205 0.011 76);
-  --border: oklch(0.89 0.012 88);
-  --input: oklch(0.89 0.012 88);
-  --ring: oklch(0.7 0.08 95);
+  --foreground: oklch(0.255 0.072 14);
+  --primary: oklch(0.255 0.072 14);
+  --primary-foreground: oklch(0.995 0.012 98);
+  --secondary: oklch(0.986 0.024 98);
+  --secondary-foreground: oklch(0.255 0.072 14);
+  --muted: oklch(0.962 0.03 98);
+  --muted-foreground: oklch(0.49 0.04 15);
+  --accent: oklch(0.955 0.075 100);
+  --accent-foreground: oklch(0.255 0.072 14);
+  --border: oklch(0.915 0.03 96);
+  --input: oklch(0.915 0.03 96);
+  --ring: oklch(0.72 0.1 98);
   --destructive: oklch(0.54 0.17 30);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0.011 76);
+  --card-foreground: oklch(0.255 0.072 14);
   --radius: 0.25rem;
-  --gold: oklch(0.78 0.13 96);
+  --gold: oklch(0.88 0.12 100);
+  /* Curvas de movimiento: salida suave tipo Apple */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-soft: cubic-bezier(.2, .7, .2, 1);
 }
 @layer base {
   * { box-sizing: border-box; border-color: var(--border); }
@@ -91,9 +96,6 @@ h2 em,h3 em,h1 em { font-weight: 300; }
 .site-header { transition: transform .55s cubic-bezier(.22,1,.36,1), background .5s, backdrop-filter .5s, border-color .5s; }
 html[data-scrolled="false"] .site-header { background: var(--background); backdrop-filter: none; border-color: transparent; }
 html[data-scrolled="true"][data-header-visible="false"] .site-header { transform: translateY(-105%); }
-.entrance-screen { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--background); pointer-events: none; }
-.entrance-monogram { font: 300 76px/1 var(--font-display); }
-.entrance-line { width: 70px; height: 2px; margin-top: 18px; background: var(--accent); transform-origin: left; }
 .hero, .page-hero { position: relative; isolation: isolate; }
 .hero::before, .page-hero::before { content: ""; position: absolute; z-index: -1; inset: 0 calc((100vw - 100%) / -2); background: radial-gradient(ellipse 54% 75% at 74% 48%, var(--accent) 0%, var(--secondary) 28%, var(--background) 78%); opacity: .55; animation: aurora-breathe 18s ease-in-out infinite alternate; pointer-events: none; }
 .hero::after, .page-hero::after { content: ""; position: absolute; z-index: -1; inset: 0 calc((100vw - 100%) / -2); opacity: .09; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
@@ -103,7 +105,8 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .hero-letter-mask { display: inline-block; overflow: hidden; vertical-align: baseline; padding: .22em .12em .3em; margin: -.22em -.12em -.3em; }
 .hero-letter-mask > span { display: inline-block; }
 .hero-italic { font-style: italic; font-weight: 300; }
-.reveal-mask { will-change: auto; }
+.reveal-mask { will-change: auto; perspective: 1100px; }
+.reveal-mask > .reveal-inner { transform-origin: 50% 100%; }
 .portrait img { transition: filter .7s, transform 1.2s cubic-bezier(.22,1,.36,1); }
 .portrait:hover img { filter: grayscale(0); transform: scale(1.09) !important; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid var(--border); margin-top: 50px; padding-top: 33px; }
@@ -368,7 +371,7 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
   .page-hero { padding-top: 0; }
   .section-pad { padding: 20px 0; }
   .section-wrap { width: 100%; }
-  .reveal-mask { opacity: 1 !important; transform: none !important; }
+  .reveal-mask, .reveal-inner { opacity: 1 !important; transform: none !important; }
   /* Creador de CV: solo se imprime la hoja de la vista previa */
   html.printing-cv body * { visibility: hidden !important; }
   html.printing-cv .cv-paper, html.printing-cv .cv-paper * { visibility: visible !important; }
@@ -529,3 +532,72 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .legal ul { padding-left: 20px; list-style: disc; }
 .legal li + li { margin-top: 12px; }
 .legal a { text-decoration: underline; text-underline-offset: 3px; }
+
+
+/* =========================================================
+   MOVIMIENTO 3D (entrada con foto, scroll y botones)
+   ========================================================= */
+
+/* Entrada: la puesta de sol a pantalla completa */
+.intro { position: fixed; inset: 0; z-index: 100; overflow: hidden; cursor: pointer; }
+.intro-card { position: absolute; inset: 0; overflow: hidden; background: var(--foreground); will-change: transform; box-shadow: 0 60px 120px -40px oklch(0.255 0.072 14 / .55); }
+.intro-card picture, .intro-card img { display: block; width: 100%; height: 100%; }
+.intro-card img { object-fit: cover; object-position: 50% 45%; will-change: transform, filter; }
+.intro-shade { position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0.255 0.072 14 / .1) 0%, transparent 40%, oklch(0.255 0.072 14 / .55) 100%); }
+.intro-copy { position: absolute; left: 0; right: 0; bottom: clamp(48px, 11vh, 110px); width: min(100% - 96px, 1312px); margin: 0 auto; color: oklch(0.995 0.012 98); }
+.intro-copy p { font: 500 11px/1 var(--font-sans); letter-spacing: .24em; margin: 0 0 22px; }
+.intro-copy h2 { font-size: clamp(64px, 11vw, 176px); line-height: .9; letter-spacing: -.04em; margin: 0; white-space: nowrap; }
+.intro-line { display: block; width: 90px; height: 2px; margin-top: 28px; background: var(--accent); transform-origin: left; }
+@media (max-width: 700px) {
+  .intro-copy { width: calc(100% - 40px); bottom: 64px; }
+  .intro-copy h2 { font-size: clamp(52px, 15.5vw, 80px); white-space: normal; }
+}
+
+/* Botones: respuesta inmediata al pulsar, como en el iPhone */
+a, button { -webkit-tap-highlight-color: transparent; }
+.mobile-cta, .chip, .tag-button, .icon-button { transition-property: transform, background, color, border-color; }
+.hero-actions a:active, .hero-actions button:active, .header-book:active, .mobile-cta:active, .chip:active, .tag-button:active, .icon-button:active, .inline-form button:active, .form-actions button:active, .slots-grid button:active, .confirmation-actions button:active { transform: scale(.97); transition-duration: .1s; }
+.start-toggle:active .start-icon, .start-toggle:active .start-plus { transform: scale(.94); }
+.start-icon { transition: background .4s, border-color .4s, color .4s, transform .5s var(--ease-out); }
+
+/* Cabecera de cristal con un velo amarillo bebé */
+html[data-scrolled="true"] .site-header { background: color-mix(in oklab, var(--secondary) 72%, transparent); backdrop-filter: blur(20px) saturate(170%); -webkit-backdrop-filter: blur(20px) saturate(170%); }
+@media (prefers-reduced-transparency: reduce) { html[data-scrolled="true"] .site-header { background: var(--background); backdrop-filter: none; } }
+
+/* El brillo amarillo de la portada, algo más presente */
+.hero::before, .page-hero::before { opacity: .8; }
+
+/* Retrato: se gira muy poco en 3D al pasar el ratón */
+.portrait { transform-style: preserve-3d; box-shadow: 0 30px 60px -40px oklch(0.255 0.072 14 / .45); }
+
+/* Scroll en 3D sin programación: el navegador lo anima según la posición (va fluido también en móvil).
+   Si el navegador no lo sabe hacer, simplemente se ve todo quieto. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Las líneas finas de cada sección se dibujan al llegar */
+    .section-rule, .facts, .metrics { animation: draw-rule linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    .section-rule { transform-origin: left; }
+    /* Los títulos grandes se levantan desde atrás */
+    .section-pad h2, .start-section h2, .testimonials-intro h2 { animation: stand-up linear both; animation-timeline: view(); animation-range: entry 5% cover 38%; transform-origin: 50% 100%; }
+    /* Filas de listas (trayectoria, proyectos, CV, panel): una tras otra al bajar */
+    .career-item, .project-row, .cv-entry, .progress-item, .week-row, .cv-skills li { animation: row-in linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; transform-origin: 50% 0%; }
+    /* Las tarjetas de competencias y las cifras entran con profundidad */
+    .skill, .stat, .testimonial { animation: card-in linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+    /* Al salir por arriba, la cinta de texto se aleja un poco */
+    .marquee-band { animation: band-depth linear both; animation-timeline: view(); }
+  }
+}
+@keyframes draw-rule { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes stand-up { from { opacity: .15; transform: perspective(900px) rotateX(38deg) translateY(40px); } to { opacity: 1; transform: none; } }
+@keyframes row-in { from { opacity: 0; transform: perspective(900px) rotateX(-28deg) translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes card-in { from { opacity: .2; transform: perspective(1000px) translateZ(-120px) rotateY(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes band-depth { 0% { transform: perspective(900px) rotateX(24deg) scale(.96); } 35%, 65% { transform: none; } 100% { transform: perspective(900px) rotateX(-24deg) scale(.96); } }
+@media print { .intro { display: none !important; } .reveal-mask { perspective: none !important; } }
+
+/* Opiniones: pasan solas; la barrita marca el tiempo hasta la siguiente */
+.testimonial-body { perspective: 900px; }
+.testimonial-timer { height: 2px; margin-top: 36px; background: var(--border); overflow: hidden; }
+.testimonial-timer span { display: block; height: 100%; background: var(--gold); transform-origin: left; }
+.testimonial-timer + .testimonial-nav { margin-top: 0; border-top: 0; padding-top: 14px; }
+.testimonial-count { font-size: 11px; letter-spacing: .14em; color: var(--muted-foreground); font-variant-numeric: tabular-nums; min-width: 64px; }
+.testimonial-nav .testimonial-pause { margin-left: 0; }

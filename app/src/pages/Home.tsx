@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, FileText, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CountUp, EditorialMarquee, Entrance, HeroTitle, Magnetic, ProfileParallax, ProjectPreview, Reveal } from "@/components/EditorialEffects";
+import { CountUp, EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Tilt } from "@/components/EditorialEffects";
 import { usePageTitle } from "@/components/SiteChrome";
 import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
@@ -111,15 +111,18 @@ function StartHere() {
 export default function Home() {
   usePageTitle("Mario Iglesias — Atención al cliente y desarrollo web");
   const [openExperience, setOpenExperience] = useState<number | null>(null);
+  // Mientras está la foto de entrada, el titular espera para escribirse cuando la foto se va
+  const [heroReady, setHeroReady] = useState(() => !introPending());
+  const show = heroReady ? { opacity: 1, y: 0 } : undefined;
   return <>
-    <Entrance />
+    <Entrance onReveal={() => setHeroReady(true)} />
     <main id="inicio">
       <section className="hero section-wrap" aria-labelledby="hero-title">
-        <div className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026</p></Reveal>
-          <HeroTitle />
-          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .45, duration: .6 }}>Atención al cliente, organización y desarrollo web.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
-          <motion.div className="hero-actions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .55, duration: .6 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
-        </div>
+        <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026</p></Reveal>
+          <HeroTitle play={heroReady} delay={.35} />
+          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Atención al cliente, organización y desarrollo web.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
+          <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
+        </HeroDepth>
         <div className="hero-bottom"><span>MARIO IGLESIAS · 2026</span><a href="#servicios" aria-label="Bajar a los servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
       </section>
 
@@ -130,7 +133,7 @@ export default function Home() {
         <Reveal><div className="section-heading"><span className="eyebrow">02 / PERFIL</span><span className="section-rule" /></div></Reveal>
         <div className="profile-grid"><div className="profile-quote"><ProfileParallax direction={-1}><Reveal><h2>El valor de<br /><em>hacerlo bien.</em></h2><blockquote>“Un profesional trabajador, con ganas de aprender y facilidad para trabajar en equipo.”</blockquote></Reveal></ProfileParallax></div>
           <div className="profile-details"><Reveal><p>He trabajado en cocina, perfumería y restauración. De cada experiencia he aprendido algo fundamental: las cosas bien hechas se notan en los detalles.</p><p>Hoy llevo esa misma atención, curiosidad y compromiso al mundo de la web. Me interesa crear, aprender y aportar valor donde pueda marcar la diferencia.</p></Reveal>
-            <ProfileParallax><Reveal><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias Martínez" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Reveal></ProfileParallax>
+            <ProfileParallax><Reveal><Tilt max={8}><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias Martínez" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Tilt></Reveal></ProfileParallax>
           </div></div>
         <Reveal><div className="facts"><div><span>BASE</span><strong>Adeje, Tenerife</strong></div><div><span>DISPONIBILIDAD</span><strong>Total, España</strong></div><div><span>IDIOMAS</span><strong>Español nativo, Inglés medio</strong></div></div></Reveal>
         <Reveal><div className="metrics" aria-label="Resumen de experiencia"><div><strong><CountUp to={7} /></strong><span>ETAPAS DE FORMACIÓN Y TRABAJO</span></div><div><strong><CountUp to={3} /></strong><span>ÁMBITOS DE EXPERIENCIA</span></div><div><strong><CountUp to={2} /></strong><span>IDIOMAS</span></div></div></Reveal>
@@ -148,7 +151,7 @@ export default function Home() {
         ["01", "Atención al cliente", "Trato cercano, resolución de incidencias, cobros y pedidos."],
         ["02", "Organización", "Trabajo bajo presión, orden y trabajo en equipo."],
         ["03", "Web", "HTML, CSS, JavaScript, Git y GitHub — en aprendizaje continuo."],
-      ].map(([number, title, description]) => <Reveal key={title}><article className="skill"><span className="eyebrow">{number}</span><h3>{title}</h3><p>{description}</p></article></Reveal>)}</div></div></section>
+      ].map(([number, title, description]) => <Reveal key={title}><Tilt max={4}><article className="skill"><span className="eyebrow">{number}</span><h3>{title}</h3><p>{description}</p></article></Tilt></Reveal>)}</div></div></section>
 
       <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">05 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Una selección de trabajos y proyectos personales.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;

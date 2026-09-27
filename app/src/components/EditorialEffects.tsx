@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
+import { createPortal } from "react-dom";
 import { readStored, writeStored } from "@/lib/utils";
+import { asset } from "@/lib/asset";
 
 export function useMotionPreference() {
   const [reduced, setReduced] = useState(false);
@@ -14,20 +16,87 @@ export function useMotionPreference() {
   return reduced;
 }
 
-export function Entrance() {
-  const reduced = useMotionPreference();
-  const [open, setOpen] = useState(false);
+const INTRO_KEY = "mi-intro-seen";
+const EASE_OUT = [.22, 1, .36, 1] as const;
+
+/** ¿Toca la entrada con la foto? Una vez por visita y nunca con "reducir movimiento". */
+export function introPending() {
+  if (typeof window === "undefined") return false;
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !readStored(INTRO_KEY, false, "session");
+}
+
+/**
+ * Entrada de la portada: la puesta de sol de Tenerife a pantalla completa se enfoca,
+ * aparece el nombre y la foto se levanta como una tarjeta en 3D dejando ver la web.
+ * Se salta tocando, con la rueda o con cualquier tecla. `onReveal` avisa a la portada
+ * para que su titular empiece justo cuando la foto se va.
+ */
+export function Entrance({ onReveal }: { onReveal?: () => void }) {
+  const [phase, setPhase] = useState<"off" | "loading" | "show" | "lift">(() => introPending() ? "loading" : "off");
+  const revealed = useRef(false);
+  const reveal = () => {
+    if (revealed.current) return;
+    revealed.current = true;
+    writeStored(INTRO_KEY, true, "session");
+    onReveal?.();
+    setPhase("lift");
+  };
+
   useEffect(() => {
-    if (reduced || readStored("mi-intro-seen", false, "session")) return;
-    setOpen(true);
-    // Se marca como vista solo al cerrarse: si el efecto se repite, la cortina no se queda puesta
-    const timer = window.setTimeout(() => { setOpen(false); writeStored("mi-intro-seen", true, "session"); }, 650);
-    return () => window.clearTimeout(timer);
-  }, [reduced]);
-  return <AnimatePresence>{open && <motion.div className="entrance-screen" initial={{ y: 0 }} animate={{ y: 0 }} exit={{ y: "-102%" }} transition={{ duration: .45, ease: [.64, 0, .24, 1] }} aria-hidden="true">
-    <motion.div className="entrance-monogram" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .45 }}>MI</motion.div>
-    <motion.div className="entrance-line" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: .35, duration: .6, ease: [.22, 1, .36, 1] }} />
-  </motion.div>}</AnimatePresence>;
+    if (phase === "off") { onReveal?.(); return; }
+    if (phase !== "loading") return;
+    // Se espera a la foto; si tarda (mala cobertura), se entra directamente sin foto
+    const small = window.matchMedia("(max-width: 700px)").matches;
+    const img = new Image();
+    img.src = asset(small ? "tenerife-movil.jpg" : "tenerife.jpg");
+    const giveUp = window.setTimeout(() => { revealed.current = true; writeStored(INTRO_KEY, true, "session"); onReveal?.(); setPhase("off"); }, 1600);
+    img.decode().then(() => { window.clearTimeout(giveUp); if (!revealed.current) setPhase("show"); }).catch(() => undefined);
+    return () => window.clearTimeout(giveUp);
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (phase !== "show") return;
+    const timer = window.setTimeout(reveal, 2300);
+    const skip = () => reveal();
+    window.addEventListener("wheel", skip, { passive: true });
+    window.addEventListener("touchmove", skip, { passive: true });
+    window.addEventListener("keydown", skip);
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("wheel", skip);
+      window.removeEventListener("touchmove", skip);
+      window.removeEventListener("keydown", skip);
+      document.documentElement.style.overflow = "";
+    };
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (phase === "off") return null;
+  const lifting = phase === "lift";
+  // Va directamente sobre la pantalla (fuera de la página animada) para ocuparla entera
+  return createPortal(<motion.div className="intro" aria-hidden="true" onClick={reveal}
+    initial={false} animate={{ backgroundColor: lifting ? "rgba(255,255,255,0)" : "rgba(255,255,255,1)" }} transition={{ duration: .7, delay: lifting ? .25 : 0 }}
+    style={{ pointerEvents: lifting ? "none" : "auto" }}>
+    {phase !== "loading" && <motion.div className="intro-card"
+      initial={{ scale: 1, rotateX: 0, y: "0%", borderRadius: 0 }}
+      animate={lifting
+        ? { scale: [1, .9, .86], rotateX: [0, 8, 16], y: ["0%", "0%", "-118%"], borderRadius: [0, 28, 28] }
+        : { scale: 1 }}
+      transition={lifting ? { duration: 1.15, times: [0, .38, 1], ease: [.64, 0, .24, 1] } : undefined}
+      onAnimationComplete={() => { if (lifting) setPhase("off"); }}
+      style={{ transformPerspective: 1400, transformOrigin: "50% 30%" }}>
+      <picture>
+        <source media="(max-width: 700px)" srcSet={asset("tenerife-movil.jpg")} />
+        <motion.img src={asset("tenerife.jpg")} alt="" initial={{ scale: 1.22, filter: "blur(18px) brightness(.7)" }} animate={{ scale: 1.04, filter: "blur(0px) brightness(1)" }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} />
+      </picture>
+      <div className="intro-shade" />
+      <motion.div className="intro-copy" animate={{ opacity: lifting ? 0 : 1, y: lifting ? -16 : 0 }} transition={{ duration: .45 }}>
+        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8, ease: EASE_OUT }}>ADEJE, TENERIFE</motion.p>
+        <h2>{Array.from("Mario Iglesias").map((character, i) => <span className="hero-letter-mask" key={i}><motion.span initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ delay: .7 + i * .035, duration: .8, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</h2>
+        <motion.span className="intro-line" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.3, duration: .9, ease: EASE_OUT }} />
+      </motion.div>
+    </motion.div>}
+  </motion.div>, document.body);
 }
 
 export function ScrollAtmosphere() {
@@ -117,8 +186,10 @@ export function EditorialMarquee({ phrase = "Atención al cliente · Organizaci�
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
   const [speed, setSpeed] = useState(0);
+  // Al hacer scroll rápido el texto se inclina ligeramente y vuelve a su sitio al parar
+  const skewX = useSpring(useTransform(velocity, [-2500, 0, 2500], [7, 0, -7], { clamp: true }), { stiffness: 200, damping: 30 });
   useEffect(() => velocity.on("change", value => setSpeed(Math.min(Math.abs(value) / 1300, .6))), [velocity]);
-  return <div className="marquee-band" aria-label={phrase}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase}</span>)}</motion.div></div>;
+  return <div className="marquee-band" aria-label={phrase}><motion.div style={reduced ? {} : { skewX }}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase}</span>)}</motion.div></motion.div></div>;
 }
 
 export function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
@@ -155,16 +226,25 @@ export function ProfileParallax({ children, direction = 1 }: { children: ReactNo
   return <div ref={ref}><motion.div style={reduced ? {} : { y }}>{children}</motion.div></div>;
 }
 
-/** Titular que se revela letra a letra. Cada línea es un texto; las líneas pares van en cursiva y con sangría. */
-export function HeroTitle({ lines = ["Mario", "Iglesias."], id = "hero-title", delay = .25 }: { lines?: string[]; id?: string; delay?: number }) {
+/** Titular que se revela letra a letra. Cada línea es un texto; las líneas pares van en cursiva y con sangría.
+ *  `play` en falso lo deja esperando (la portada lo usa mientras está la foto de entrada). */
+export function HeroTitle({ lines = ["Mario", "Iglesias."], id = "hero-title", delay = .25, play = true }: { lines?: string[]; id?: string; delay?: number; play?: boolean }) {
   const reduced = useMotionPreference();
-  const ref = useRef<HTMLHeadingElement>(null);
+  return <h1 id={id} aria-label={lines.join(" ")}>
+    {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>{Array.from(line).map((character, index) => <span className="hero-letter-mask" key={`${lineIndex}-${index}`}><motion.span className={lineIndex ? "hero-italic" : ""} initial={reduced ? false : { y: "110%" }} animate={play ? { y: "0%" } : undefined} transition={{ delay: delay + lineIndex * .16 + index * .035, duration: .75, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</span></span>)}
+  </h1>;
+}
+
+/** Portada en 3D: al bajar, el bloque se inclina hacia atrás y se aleja, como una hoja que se tumba. */
+export function HeroDepth({ children, className = "" }: { children: ReactNode; className?: string }) {
+  const reduced = useMotionPreference();
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1, .86]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, .2]);
-  return <motion.h1 ref={ref} id={id} aria-label={lines.join(" ")} style={reduced ? {} : { scale, opacity }}>
-    {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>{Array.from(line).map((character, index) => <span className="hero-letter-mask" key={`${lineIndex}-${index}`}><motion.span className={lineIndex ? "hero-italic" : ""} initial={reduced ? false : { y: "110%" }} animate={{ y: "0%" }} transition={{ delay: delay + lineIndex * .16 + index * .035, duration: .75, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</span></span>)}
-  </motion.h1>;
+  const rotateX = useTransform(scrollYProgress, [0, 1], [0, 18]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, .9]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const opacity = useTransform(scrollYProgress, [0, .85], [1, 0]);
+  return <motion.div ref={ref} className={className} style={reduced ? {} : { rotateX, scale, y, opacity, transformPerspective: 1300, transformOrigin: "50% 100%" }}>{children}</motion.div>;
 }
 
 export function ProjectPreview({ name, children }: { name: string; children: ReactNode }) {
@@ -174,12 +254,33 @@ export function ProjectPreview({ name, children }: { name: string; children: Rea
   const [hovered, setHovered] = useState(false);
   return <div className="project-preview-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onMouseMove={event => { x.set(event.clientX + 18); y.set(event.clientY - 45); }}>
     {children}
-    {!reduced && <AnimatePresence>{hovered && <motion.div className="project-float" style={{ x, y }} initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .94 }} transition={{ duration: .2 }} aria-hidden="true"><span>PROYECTO / MI</span><strong>{name}</strong><span>EXPLORAR ↗</span></motion.div>}</AnimatePresence>}
+    {!reduced && createPortal(<AnimatePresence>{hovered && <motion.div className="project-float" style={{ x, y }} initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .94 }} transition={{ duration: .2 }} aria-hidden="true"><span>PROYECTO / MI</span><strong>{name}</strong><span>EXPLORAR ↗</span></motion.div>}</AnimatePresence>, document.body)}
   </div>;
 }
 
-/** Aparición al entrar en pantalla (fundido + desplazamiento corto). */
+/** Aparición al entrar en pantalla: el bloque llega un poco inclinado hacia atrás y se pone de pie (3D suave).
+ *  La perspectiva la pone el contenedor (CSS), así al terminar el bloque queda totalmente plano. */
 export function Reveal({ children, className = "", immediate = false, delay = 0 }: { children: ReactNode; className?: string; immediate?: boolean; delay?: number }) {
   const reduced = useMotionPreference();
-  return <motion.div className={`reveal-mask ${className}`} initial={reduced || immediate ? false : { opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .05 }} transition={{ duration: .85, delay, ease: [0.2, 0.65, 0.25, 1] }}>{children}</motion.div>;
+  return <div className={`reveal-mask ${className}`}>
+    <motion.div className="reveal-inner"
+      initial={immediate ? false : reduced ? { opacity: 0 } : { opacity: 0, y: 46, rotateX: 16, scale: .975 }}
+      whileInView={reduced ? { opacity: 1 } : { opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+      viewport={{ once: true, amount: .05, margin: "0px 0px -6% 0px" }}
+      transition={reduced ? { duration: .4 } : { type: "spring", bounce: 0, duration: 1.1, delay, opacity: { duration: .7, delay } }}>{children}</motion.div>
+  </div>;
+}
+
+/** Inclinación 3D muy suave que sigue al ratón (solo ordenador). Vuelve a su sitio con un muelle. */
+export function Tilt({ children, className = "", max = 5 }: { children: ReactNode; className?: string; max?: number }) {
+  const reduced = useMotionPreference();
+  const rotateX = useSpring(0, { stiffness: 180, damping: 22 });
+  const rotateY = useSpring(0, { stiffness: 180, damping: 22 });
+  const onMove = (event: MouseEvent<HTMLDivElement>) => {
+    if (reduced || !window.matchMedia("(pointer: fine) and (min-width: 901px)").matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    rotateY.set(((event.clientX - rect.left) / rect.width - .5) * max * 2);
+    rotateX.set(-((event.clientY - rect.top) / rect.height - .5) * max * 2);
+  };
+  return <motion.div className={className} style={{ rotateX, rotateY, transformPerspective: 900 }} onMouseMove={onMove} onMouseLeave={() => { rotateX.set(0); rotateY.set(0); }}>{children}</motion.div>;
 }
