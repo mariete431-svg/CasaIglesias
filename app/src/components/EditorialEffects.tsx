@@ -181,7 +181,7 @@ export function Magnetic({ children, className = "" }: { children: ReactNode; cl
   return <motion.div className={className} style={{ x, y }} onMouseMove={onMove} onMouseLeave={() => { x.set(0); y.set(0); }}>{children}</motion.div>;
 }
 
-export function EditorialMarquee({ phrase = "Atención al cliente · Organización · Desarrollo web · Discreción · Detalle · " }: { phrase?: string }) {
+export function EditorialMarquee({ phrase = "Atención al cliente ✦ Organización ✦ Desarrollo web ✦ Discreción ✦ Detalle ✦ " }: { phrase?: string }) {
   const reduced = useMotionPreference();
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
@@ -189,7 +189,7 @@ export function EditorialMarquee({ phrase = "Atención al cliente · Organizaci�
   // Al hacer scroll rápido el texto se inclina ligeramente y vuelve a su sitio al parar
   const skewX = useSpring(useTransform(velocity, [-2500, 0, 2500], [7, 0, -7], { clamp: true }), { stiffness: 200, damping: 30 });
   useEffect(() => velocity.on("change", value => setSpeed(Math.min(Math.abs(value) / 1300, .6))), [velocity]);
-  return <div className="marquee-band" aria-label={phrase}><motion.div style={reduced ? {} : { skewX }}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase}</span>)}</motion.div></motion.div></div>;
+  return <div className="marquee-band" aria-label={phrase}><motion.div style={reduced ? {} : { skewX }}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase.split("✦").map((word, j, all) => <span key={j}>{word}{j < all.length - 1 && <b className="marquee-star">✦</b>}</span>)}</span>)}</motion.div></motion.div></div>;
 }
 
 export function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
@@ -283,4 +283,18 @@ export function Tilt({ children, className = "", max = 5 }: { children: ReactNod
     rotateX.set(-((event.clientY - rect.top) / rect.height - .5) * max * 2);
   };
   return <motion.div className={className} style={{ rotateX, rotateY, transformPerspective: 900 }} onMouseMove={onMove} onMouseLeave={() => { rotateX.set(0); rotateY.set(0); }}>{children}</motion.div>;
+}
+
+/** Sello redondo con texto que gira despacio alrededor de una flecha. Es un enlace (por defecto, a reservar). */
+export function Stamp({ text = "RESERVA TU REUNIÓN ✦ 30 MINUTOS ✦ ", href = "#reservar", show = true }: { text?: string; href?: string; show?: boolean }) {
+  const reduced = useMotionPreference();
+  return <motion.a href={href} className="stamp" aria-label="Reservar una reunión" data-cursor="Reservar"
+    initial={{ opacity: 0, scale: .6, rotate: -40 }} animate={show ? { opacity: 1, scale: 1, rotate: 0 } : undefined}
+    transition={{ type: "spring", bounce: .25, duration: 1.1, delay: 1.1 }} whileTap={{ scale: .94 }}>
+    <svg viewBox="0 0 200 200" aria-hidden="true" className={reduced ? "" : "stamp-spin"}>
+      <defs><path id="stamp-circle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" /></defs>
+      <text><textPath href="#stamp-circle" textLength="462">{text}</textPath></text>
+    </svg>
+    <span className="stamp-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></span>
+  </motion.a>;
 }

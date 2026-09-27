@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, FileText, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CountUp, EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Tilt } from "@/components/EditorialEffects";
+import { CountUp, EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Stamp, Tilt } from "@/components/EditorialEffects";
 import { usePageTitle } from "@/components/SiteChrome";
 import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
@@ -118,11 +118,12 @@ export default function Home() {
     <Entrance onReveal={() => setHeroReady(true)} />
     <main id="inicio">
       <section className="hero section-wrap" aria-labelledby="hero-title">
-        <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026</p></Reveal>
+        <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ADEJE, TENERIFE — 2026 <span className="status-pill"><i aria-hidden="true" />Disponible</span></p></Reveal>
           <HeroTitle play={heroReady} delay={.35} />
           <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Atención al cliente, organización y desarrollo web.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
         </HeroDepth>
+        <div className="hero-stamp"><Stamp show={heroReady} /></div>
         <div className="hero-bottom"><span>MARIO IGLESIAS · 2026</span><a href="#servicios" aria-label="Bajar a los servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
       </section>
 

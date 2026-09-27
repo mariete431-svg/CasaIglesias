@@ -119,7 +119,7 @@ html[data-scrolled="true"][data-header-visible="false"] .site-header { transform
 .career-item:hover,.career-item.is-open { background: var(--secondary); }
 .marquee-band { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 28px 0 32px; background: var(--background); }
 .marquee-track { display: flex; width: max-content; white-space: nowrap; }
-.marquee-track span { font: italic 300 clamp(45px,6vw,90px)/1 var(--font-display); padding-right: .25em; }
+.marquee-track > span { font: italic 300 clamp(45px,6vw,90px)/1 var(--font-display); padding-right: .25em; }
 .project-float { position: fixed; top: 0; left: 0; z-index: 60; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; width: 190px; height: 125px; padding: 15px; background: var(--accent); border: 1px solid var(--border); }
 .project-float span { font-size: 10px; letter-spacing: .14em; }
 .project-float strong { font: italic 400 26px/1 var(--font-display); }
@@ -601,3 +601,88 @@ html[data-scrolled="true"] .site-header { background: color-mix(in oklab, var(--
 .testimonial-timer + .testimonial-nav { margin-top: 0; border-top: 0; padding-top: 14px; }
 .testimonial-count { font-size: 11px; letter-spacing: .14em; color: var(--muted-foreground); font-variant-numeric: tabular-nums; min-width: 64px; }
 .testimonial-nav .testimonial-pause { margin-left: 0; }
+
+/* =========================================================
+   MÁS VIDA: amarillo con intención, detalles juveniles
+   ========================================================= */
+:root { --marker: oklch(0.93 0.11 100); --butter: oklch(0.965 0.06 100); }
+
+/* Subrayado de rotulador amarillo detrás de las palabras en cursiva */
+h2 em, .start-text strong em { background: linear-gradient(transparent 58%, var(--marker) 58%, var(--marker) 88%, transparent 88%) no-repeat 0 0 / 100% 100%; padding: 0 .06em; margin: 0 -.06em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hero-line-indent { position: relative; }
+.hero-line-indent::after { content: ""; position: absolute; z-index: -1; left: -.04em; right: -.06em; bottom: .16em; height: .2em; background: var(--marker); border-radius: 2px; transform-origin: left; animation: marker-in 1s var(--ease-out) 1.4s both; }
+@keyframes marker-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    h2 em, .start-text strong em { background-size: 0% 100%; animation: marker-draw linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+  }
+}
+@keyframes marker-draw { to { background-size: 100% 100%; } }
+
+/* Etiquetas de sección en píldora amarilla */
+.section-heading .eyebrow { background: var(--accent); color: var(--foreground); padding: 8px 14px 7px; border-radius: 999px; font-weight: 600; letter-spacing: .16em; }
+.section-heading { gap: 18px; }
+
+/* Píldora "Disponible" con un punto que late */
+.status-pill { display: inline-flex; align-items: center; gap: 8px; margin-left: 6px; padding: 6px 12px 5px 10px; border-radius: 999px; background: var(--foreground); color: var(--primary-foreground); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.status-pill i { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+.status-pill i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--gold); animation: ping 1.8s var(--ease-out) infinite; }
+@keyframes ping { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(2.8); opacity: 0; } }
+
+/* Sello que gira despacio en la portada (ordenador y tablet) */
+.hero-stamp { position: absolute; right: 0; bottom: 96px; z-index: 2; }
+.stamp { position: relative; display: grid; place-items: center; width: 150px; height: 150px; border-radius: 50%; background: var(--accent); color: var(--foreground); box-shadow: 0 24px 50px -28px oklch(0.255 0.072 14 / .45); transition: background .4s, color .4s; }
+.stamp > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stamp text { font: 600 12.5px var(--font-sans); letter-spacing: .12em; fill: currentColor; }
+.stamp-spin { animation: spin 16s linear infinite; }
+.stamp:hover .stamp-spin { animation-duration: 6s; }
+.stamp:hover { background: var(--foreground); color: var(--primary-foreground); }
+.stamp-core { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: var(--foreground); color: var(--primary-foreground); transition: transform .5s var(--ease-out), background .4s, color .4s; }
+.stamp:hover .stamp-core { transform: rotate(45deg); background: var(--accent); color: var(--foreground); }
+.stamp-core svg { width: 22px; height: 22px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 1100px) { .hero-stamp { bottom: auto; top: calc(82px + clamp(85px, 14vh, 145px) + 72px); } .stamp { width: 120px; height: 120px; } .stamp text { font-size: 13.5px; } .stamp-core { width: 42px; height: 42px; } }
+@media (max-width: 700px) { .hero-stamp { top: calc(68px + clamp(100px, 17vh, 150px) + 92px); } .stamp { width: 92px; height: 92px; } .stamp text { font-size: 15px; } .stamp-core { width: 34px; height: 34px; } .stamp-core svg { width: 17px; height: 17px; } .status-pill { margin-left: 0; } .hero-eyebrow { flex-wrap: wrap; row-gap: 12px; } }
+
+/* Cinta de texto en amarillo con estrellas */
+.marquee-band { background: var(--accent); border-color: transparent; padding: 22px 0 26px; }
+.marquee-track > span { color: var(--foreground); }
+.marquee-star { display: inline-block; font: normal 400 .42em/1 var(--font-sans); vertical-align: .55em; margin: 0 .55em; color: var(--foreground); }
+
+/* Proyectos: la fila se llena de amarillo al pasar por encima */
+.project-row { position: relative; isolation: isolate; }
+.project-row::before { content: ""; position: absolute; inset: 0 -12px; z-index: -1; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform .5s var(--ease-out); border-radius: 2px; }
+.project-row:hover::before, .project-row:focus-visible::before { transform: scaleY(1); }
+.project-inactive::before { display: none; }
+.project-row:hover .project-number { color: var(--foreground); }
+.project-float { background: var(--foreground); color: var(--primary-foreground); border: 0; border-radius: 14px; }
+
+/* Competencias: número en círculo y tarjeta que se ilumina */
+.skill { position: relative; transition: background .5s, transform .5s var(--ease-out); border-radius: 4px; }
+.skill > .eyebrow { display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--foreground); color: var(--primary-foreground); letter-spacing: 0; font-weight: 600; }
+@media (pointer: fine) and (min-width: 901px) { .skill { padding-left: 22px; margin-left: -22px; padding-bottom: 28px; } .skill:hover { background: var(--accent); } }
+
+/* "Hablemos." relleno con la puesta de sol */
+.contact-section h2 { background: url("/tenerife-movil.jpg") 50% 40% / cover; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.contact-section h2 span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) { .contact-section h2 { color: var(--foreground); background: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .contact-section h2 { animation: photo-pan linear both; animation-timeline: view(); }
+    /* El retrato pasa de blanco y negro a color al llegar a él */
+    .portrait img { animation: color-in linear both; animation-timeline: view(); animation-range: entry 40% cover 55%; }
+  }
+}
+@keyframes color-in { from { filter: grayscale(1); } to { filter: grayscale(0); } }
+@keyframes photo-pan { from { background-position: 50% 0%; } to { background-position: 50% 100%; } }
+
+/* Botón principal: al pasar por encima se vuelve amarillo con la flecha girando */
+.hero-actions svg, .header-book svg { transition: transform .45s var(--ease-out); }
+.hero-actions a:hover svg, .header-book:hover svg { transform: rotate(45deg); }
+
+/* Cursor: una bolita burdeos que se hace amarilla sobre los enlaces */
+@media (pointer: fine) and (min-width: 901px) { .editorial-cursor { width: 10px; height: 10px; margin: -5px; } .editorial-cursor.is-active { border: 0; box-shadow: 0 10px 30px -12px oklch(0.255 0.072 14 / .5); } .editorial-cursor span { font-weight: 600; letter-spacing: .04em; } }
+
+@media (prefers-reduced-motion: reduce) { .status-pill i::after, .hero-line-indent::after { animation: none; } }
+@media print { .hero-stamp, .status-pill { display: none !important; } }
+@media (max-width: 700px) { .testimonial-dots button { width: 22px; } .testimonial-dots { flex-wrap: nowrap; } .testimonial-count { min-width: 0; } }
