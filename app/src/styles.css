@@ -865,3 +865,21 @@ html.lenis { scroll-behavior: auto !important; }
 .seo-fallback p, .seo-fallback nav { font-size: 15px; line-height: 1.7; color: var(--muted-foreground); max-width: 560px; }
 .seo-fallback a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 .testimonial-count { white-space: nowrap; }
+
+/* Opiniones: el cuadrado en amarillo muy claro para que destaque sobre el burdeos.
+   Dentro, los colores pasan a tinta burdeos para que todo se lea bien. */
+.testimonial {
+  --foreground: var(--ink);
+  --muted-foreground: oklch(0.45 0.06 18);
+  --border: oklch(0.255 0.072 14 / .16);
+  --gold: oklch(0.72 0.14 82);
+  background: oklch(0.975 0.045 100);
+  border-color: transparent;
+  color: var(--ink);
+  box-shadow: 0 30px 60px -35px oklch(0 0 0 / .55);
+}
+.testimonial .testimonial-timer span { background: var(--ink); }
+.testimonial .icon-button:hover { background: oklch(0.255 0.072 14 / .07); }
+@supports not (color: oklch(0 0 0)) {
+  .testimonial { --muted-foreground: #7a4b53; --border: rgba(61, 17, 25, .16); --gold: #e6c552; background: #fffae0; }
+}
