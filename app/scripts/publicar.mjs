@@ -22,7 +22,7 @@ const pages = {
   cv: {
     title: "CV — Casa Iglesias",
     description: "Currículum de Mario Iglesias Martínez: experiencia en atención al cliente, cocina y restauración, formación y habilidades. Descárgalo en PDF.",
-    index: true,
+    index: false,
   },
   "crear-cv": {
     title: "Crea tu currículum gratis — Casa Iglesias",
@@ -39,8 +39,6 @@ const pages = {
     description: "Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.",
     index: true,
   },
-  tareas: { title: "Lista de tareas — Casa Iglesias", description: "Una lista de tareas sencilla que se guarda en tu navegador.", index: false },
-  panel: { title: "Mi panel — Casa Iglesias", description: "Panel personal de Mario Iglesias.", index: false },
   admin: { title: "Panel privado — Casa Iglesias", description: "Acceso privado.", index: false },
 };
 
@@ -90,7 +88,7 @@ const personJson = JSON.stringify({
 
 // Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
 // React lo sustituye por la página completa en cuanto carga.
-const links = [["", "Inicio"], ["cv/", "Currículum"], ["crear-cv/", "Crear tu CV gratis"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
+const links = [["", "Inicio"], ["#precios", "Precios"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
 const fallback = (title, description) => `<div class="seo-fallback">
       <p>ADEJE, TENERIFE</p>
       <h1>${escape(title.split(" — ")[0])}</h1>
@@ -240,8 +238,10 @@ ${posts.map(p => `  <url><loc>${SITE}blog/${p.slug}/</loc><lastmod>${day(p.date)
 `);
 
 // Direcciones antiguas (.html) → páginas nuevas. admin.html conserva el enlace de recuperación de contraseña.
-const redirects = { "cv.html": "cv/", "tareas.html": "tareas/", "dashboard.html": "panel/", "crear-cv.html": "crear-cv/", "admin.html": "admin/" };
+// La lista de tareas y el panel personal pasaron al panel privado de Mario: sus direcciones llevan a la portada
+const redirects = { "cv.html": "cv/", "tareas.html": "", "dashboard.html": "", "tareas/index.html": "", "panel/index.html": "", "crear-cv.html": "crear-cv/", "admin.html": "admin/" };
 for (const [file, target] of Object.entries(redirects)) {
+  mkdirSync(dirname(join(dist, file)), { recursive: true });
   writeFileSync(join(dist, file), `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Mario Iglesias</title>
 <link rel="canonical" href="${SITE}${target}">
 <script>location.replace("${BASE}${target}" + location.search + location.hash);</script>

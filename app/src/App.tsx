@@ -9,8 +9,6 @@ import Home from "@/pages/Home";
 
 // El resto de páginas se descargan solo cuando se visitan
 const CvPage = lazy(() => import("@/pages/CvPage"));
-const TasksPage = lazy(() => import("@/pages/TasksPage"));
-const PanelPage = lazy(() => import("@/pages/PanelPage"));
 const BuilderPage = lazy(() => import("@/pages/BuilderPage"));
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
@@ -57,8 +55,6 @@ export default function App() {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/cv" element={<CvPage />} />
-          <Route path="/tareas" element={<TasksPage />} />
-          <Route path="/panel" element={<PanelPage />} />
           <Route path="/crear-cv" element={<BuilderPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/privacidad" element={<PrivacyPage />} />

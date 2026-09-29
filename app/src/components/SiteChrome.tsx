@@ -98,7 +98,6 @@ export function SiteFooter() {
     <nav aria-label="Enlaces legales">
       <Link to="/blog">Blog</Link>
       <Link to="/privacidad">Privacidad y aviso legal</Link>
-      <Link to="/admin">Panel <ArrowUpRight size={13} /></Link>
     </nav>
   </div></footer>;
 }

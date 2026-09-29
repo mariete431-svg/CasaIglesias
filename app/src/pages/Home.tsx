@@ -16,11 +16,7 @@ export const CV_PDF = asset("cv-mario-iglesias.pdf");
 
 const projects = [
   { name: "ZONA 4", description: "Web para un gimnasio (proyecto de práctica).", to: "https://mariete431-svg.github.io/zona4/" },
-  { name: "Web personal", description: "Diseñada y programada por mí.", to: "#inicio" },
-  { name: "Lista de tareas", description: "Organización sencilla para el día a día.", to: "/tareas" },
-  { name: "Panel personal", description: "Un espacio para tenerlo todo en orden.", to: "/panel" },
-  { name: "Blog", description: "Lo que voy haciendo y aprendiendo.", to: "/blog" },
-  { name: "Edición de vídeo", description: "En proceso.", to: "" },
+  { name: "Casa Iglesias", description: "La marca y la web de mi propio estudio.", to: "#inicio" },
 ];
 
 /* ---------- Servicios y precios de Casa Iglesias ---------- */
@@ -29,26 +25,38 @@ const packages = [
   { name: "Negocio", price: 790, time: "3 semanas", items: ["Hasta 5 páginas: inicio, servicios, sobre nosotros, galería o blog y contacto", "Ayuda con los textos", "Preparada para salir bien en Google", "2 rondas de cambios"] },
   { name: "Reservas", price: 1290, time: "4 semanas", tag: "Mi especialidad", items: ["Todo lo del paquete Negocio", "Reservas de citas online con calendario", "Aviso por email en cada reserva", "2 rondas de cambios"] },
 ];
+const brandPackages = [
+  { name: "Marca Básica", price: 190, time: "1–2 semanas", items: ["Logo principal + versión icono", "Colores y letras de la marca", "Archivos listos para usar (PNG y SVG)", "Guía de marca de 1 página", "2 rondas de cambios"] },
+  { name: "Marca Completa", price: 390, time: "2–3 semanas", items: ["Todo lo de Marca Básica", "4 versiones del logo", "Guía de marca completa", "Tarjeta de visita lista para imprimir", "Foto de perfil y 3 plantillas para redes"] },
+  { name: "Pack Marca + Web", price: 990, time: "4–5 semanas", tag: "Ahorra 190 €", items: ["Marca Completa + Web Negocio", "Primero la marca y después la web con esa marca", "Por separado costaría 1.180 €", "2 rondas de cambios en cada parte"] },
+];
 const extras = [["Página adicional", 90], ["Versión en inglés", 190], ["Ficha de Google Business", 60]] as const;
 // Miles con punto también en 4 cifras (1.290 €), como en el panel y los presupuestos
 const euros = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €`;
 
+type Pack = { name: string; price: number; time: string; tag?: string; items: string[] };
+function PriceCard({ pack, delay }: { pack: Pack; delay: number }) {
+  return <Reveal delay={delay}><article className={`price-card ${pack.tag ? "is-featured" : ""}`}>
+    {pack.tag && <span className="price-tag">{pack.tag}</span>}
+    <span className="eyebrow">{pack.name.toUpperCase()}</span>
+    <p className="price-amount">{euros(pack.price)}<small> + IGIC</small></p>
+    <p className="price-time">Entrega en {pack.time}</p>
+    <ul>{pack.items.map(item => <li key={item}>{item}</li>)}</ul>
+    <Button variant={pack.tag ? "luxury" : "outlineLuxury"} size="lg" asChild><a href="#reservar" data-cursor="Reservar">Pedir presupuesto <ArrowUpRight /></a></Button>
+  </article></Reveal>;
+}
+
 function Pricing() {
   return <section id="precios" className="pricing-section section-pad"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">02 / SERVICIOS Y PRECIOS</span><span className="section-rule" /></div>
-      <div className="intro-row"><h2>Webs para<br /><em>negocios.</em></h2><p>Precios cerrados y sin sorpresas. Pagas la mitad al empezar y la otra mitad cuando tu web está lista.</p></div></Reveal>
-    <div className="pricing-grid">{packages.map((pack, i) => <Reveal key={pack.name} delay={i * .06}><article className={`price-card ${pack.tag ? "is-featured" : ""}`}>
-      {pack.tag && <span className="price-tag">{pack.tag}</span>}
-      <span className="eyebrow">{pack.name.toUpperCase()}</span>
-      <p className="price-amount">{euros(pack.price)}<small> + IGIC</small></p>
-      <p className="price-time">Entrega en {pack.time}</p>
-      <ul>{pack.items.map(item => <li key={item}>{item}</li>)}</ul>
-      <Button variant={pack.tag ? "luxury" : "outlineLuxury"} size="lg" asChild><a href="#reservar" data-cursor="Reservar">Pedir presupuesto <ArrowUpRight /></a></Button>
-    </article></Reveal>)}</div>
+      <div className="intro-row"><h2>Webs y marca para<br /><em>negocios.</em></h2><p>Precios cerrados y sin sorpresas. Pagas la mitad al empezar y la otra mitad cuando tu web está lista.</p></div></Reveal>
+    <div className="pricing-grid">{packages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
+    <Reveal><div className="pricing-subhead"><h3>Identidad <em>visual.</em></h3><p>Para negocios que empiezan o que todavía no tienen marca: logo, colores y todo lo necesario para verse profesionales desde el primer día.</p></div></Reveal>
+    <div className="pricing-grid">{brandPackages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
     <Reveal><div className="pricing-more">
       <div><span className="eyebrow">MANTENIMIENTO</span><p><strong>29 € al mes.</strong> Alojamiento de la web, copias de seguridad y hasta 30 minutos de cambios al mes.</p></div>
       <div><span className="eyebrow">EXTRAS</span><p>{extras.map(([name, price]) => <span key={name}>{name} · <strong>{euros(price)}</strong></span>)}</p></div>
-      <div><span className="eyebrow">LANZAMIENTO</span><p><strong>-30 % a mis 3 primeros clientes</strong>, a cambio de una opinión y permiso para enseñar su web.</p></div>
+      <div><span className="eyebrow">LANZAMIENTO</span><p><strong>-30 % a mis 3 primeros clientes</strong>, a cambio de una opinión y permiso para enseñar su trabajo.</p></div>
     </div></Reveal>
   </div></section>;
 }
@@ -132,7 +140,7 @@ export default function Home() {
       <section className="hero section-wrap" aria-labelledby="hero-title">
         <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ESTUDIO DE DISEÑO Y DESARROLLO WEB · TENERIFE <span className="status-pill"><i aria-hidden="true" />Disponible</span></p></Reveal>
           <HeroTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.35} />
-          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Diseño y desarrollo webs para negocios, por Mario Iglesias.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
+          <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Webs e identidad visual para negocios, por Mario Iglesias.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="#precios" data-cursor="Ver">Ver precios <ArrowUpRight /></a></Button></Magnetic></motion.div>
         </HeroDepth>
         <div className="hero-stamp"><Stamp show={heroReady} /></div>
@@ -155,7 +163,7 @@ export default function Home() {
 
       <EditorialMarquee />
 
-      <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">04 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Una selección de trabajos y proyectos personales.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
+      <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">04 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Trabajos hechos de principio a fin: diseño, marca y web.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
         return <Reveal key={project.name}><ProjectPreview name={project.name}>{!project.to
           ? <div className="project-row project-inactive">{inner}<span className="project-dash">—</span></div>
