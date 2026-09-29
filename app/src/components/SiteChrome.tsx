@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { HeroDepth, HeroTitle, Magnetic, Reveal } from "@/components/EditorialEffects";
 
 const navigation = [
+  { label: "Precios", to: "/#precios" },
   { label: "Perfil", to: "/#perfil" },
   { label: "Trayectoria", to: "/#trayectoria" },
   { label: "Proyectos", to: "/#proyectos" },
