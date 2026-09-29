@@ -127,4 +127,61 @@ He hecho mi primera web para un negocio que no es el mío: ZONA 4, un gimnasio i
 Probé varias ideas hasta dar con una clara y sencilla. Antes de publicarla revisé errores, móvil, accesibilidad y velocidad, y lo arreglé todo.
 
 Está en la sección de proyectos de la portada: [ZONA 4](https://mariete431-svg.github.io/zona4/).
+`,"../content/blog/2026-09-29-casa-iglesias.md":`---
+titulo: Nace Casa Iglesias
+fecha: 2026-09-29 12:00
+resumen: Mi estudio de diseño y desarrollo web ya tiene nombre, logo y colores. La web los estrena hoy.
+etiquetas: Diseño, Primeros pasos
+---
+
+Hoy he creado la marca de mi estudio: **Casa Iglesias, estudio de diseño y desarrollo web**.
+
+## Qué cambió
+
+- Un logo nuevo: un sello con mis iniciales, CI.
+- Los colores de siempre, pero ya fijos: burdeos, crema y amarillo bebé.
+- La cabecera de la web, la portada, el icono de la pestaña y la imagen que sale al compartir el enlace llevan la marca.
+- Un Instagram nuevo para el estudio: [@casaiglesias.studio](https://www.instagram.com/casaiglesias.studio/).
+
+## Por qué
+
+Quiero empezar a trabajar con negocios reales, y para eso necesitaba un nombre y una imagen que se reconozcan.
+`,"../content/blog/2026-09-29-portada-sin-cv.md":`---
+titulo: Portada sin currículum
+fecha: 2026-09-29 20:30
+resumen: Quito mi trayectoria y mis competencias de la portada. La web principal ahora habla solo del estudio, los precios y los proyectos.
+etiquetas: Diseño, Proceso
+---
+
+## Qué cambió
+
+- La portada ya no muestra mi currículum: he quitado el perfil, la trayectoria y las competencias.
+- En su lugar hay una sección corta, **El estudio**, que cuenta quién hay detrás de Casa Iglesias y cómo trabajo.
+- El botón «Crear mi CV» de la portada pasa a ser «Ver precios», y el del menú desaparece.
+- El orden queda así: empieza aquí, precios, estudio, proyectos, opiniones y contacto.
+
+## Por qué
+
+La web ya es la de un estudio que hace webs para negocios. A un cliente le interesa qué hago y cuánto cuesta, no dónde he trabajado antes.
+
+El [creador de CV](/crear-cv) sigue funcionando y aparece en la lista de proyectos.
+`,"../content/blog/2026-09-29-servicios-y-precios.md":`---
+titulo: Servicios y precios
+fecha: 2026-09-29 16:00
+resumen: Ya se pueden ver en la web los paquetes de Casa Iglesias, con sus precios, plazos y lo que incluye cada uno.
+etiquetas: Proceso
+---
+
+He añadido a la portada un apartado con mis [servicios y precios](/#precios).
+
+## Qué hay
+
+- Tres paquetes: **Esencial** (390 €), **Negocio** (790 €) y **Reservas** (1.290 €).
+- Un plan de mantenimiento de 29 € al mes.
+- Extras: página adicional, versión en inglés y ficha de Google Business.
+- Un descuento del 30 % para mis tres primeros clientes, a cambio de una opinión.
+
+## Cómo funciona
+
+Los precios son cerrados. Se paga la mitad al empezar y la otra mitad al entregar la web. Para pedir presupuesto, basta con reservar una reunión de 30 minutos.
 `});function t(e,t){let n=t.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/),r={};for(let e of(n?.[1]??``).split(/\r?\n/)){let t=e.indexOf(`:`);t>0&&(r[e.slice(0,t).trim()]=e.slice(t+1).trim())}let i=(n?.[2]??t).trim(),a=i.split(/\s+/).filter(Boolean).length;return{slug:e.replace(/^.*\//,``).replace(/\.md$/,``).replace(/^\d{4}-\d{2}-\d{2}-/,``),title:r.titulo??`Sin título`,date:r.fecha??``,summary:r.resumen??``,tags:(r.etiquetas??``).split(`,`).map(e=>e.trim()).filter(Boolean),body:i,minutes:Math.max(1,Math.round(a/200))}}var n=Object.entries(e).map(([e,n])=>t(e,n)).sort((e,t)=>t.date.localeCompare(e.date)||e.slug.localeCompare(t.slug)),r=new Intl.DateTimeFormat(`es-ES`,{day:`numeric`,month:`long`,year:`numeric`,timeZone:`UTC`}),i=e=>e?r.format(new Date(`${e.slice(0,10)}T12:00:00Z`)):``,a=e=>e.slice(0,10);export{a as n,n as r,i as t};
