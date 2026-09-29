@@ -202,4 +202,38 @@ He añadido a la portada un apartado con mis [servicios y precios](/#precios).
 ## Cómo funciona
 
 Los precios son cerrados. Se paga la mitad al empezar y la otra mitad al entregar la web. Para pedir presupuesto, basta con reservar una reunión de 30 minutos.
+`,"../content/blog/2026-09-29-web-mas-profesional.md":`---
+titulo: Web más profesional
+fecha: 2026-09-29 22:00
+resumen: Quito de la web las herramientas personales, como la lista de tareas y el panel, y dejo solo lo que le sirve a un cliente.
+etiquetas: Diseño, Proceso
+---
+
+## Qué cambió
+
+- La **lista de tareas** y el **panel personal** salen de la web. Ahora los llevo en un panel privado de trabajo. Sus direcciones antiguas llevan a la portada.
+- En **Proyectos** quedan solo trabajos completos: ZONA 4 y la marca y la web de Casa Iglesias.
+- El formulario para **dejar una opinión** pasa a la sección de opiniones de la portada. Las opiniones se publican cuando las reviso.
+- El pie de página ya no enseña el enlace al panel privado.
+
+## Por qué
+
+La web es para clientes. Las herramientas que uso para organizarme no les aportan nada.
+`,"../content/blog/2026-09-30-ajustes-auditoria.md":`---
+titulo: Ajustes tras la auditoría
+fecha: 2026-09-30 10:00
+resumen: Revisé la web entera y arreglé lo más importante: la política de privacidad, la franja de texto de la portada y el botón del menú en el móvil.
+etiquetas: Auditoría, Accesibilidad
+---
+
+## Qué cambió
+
+- **Privacidad y aviso legal:** quito lo que hablaba de la lista de tareas y del calendario, que ya no existen, y aclaro que la web es de Casa Iglesias.
+- **Portada:** la franja de texto en movimiento ahora habla de lo que hago: diseño web, identidad visual y reservas online.
+- **Móvil:** el botón del menú es más grande (44 × 44 px), para acertar bien con el dedo.
+- **Opiniones:** solo se enseñan opiniones de clientes.
+
+## Por qué
+
+Hice una auditoría completa de la web: enlaces, móvil, accesibilidad, velocidad y seguridad. Estos eran los puntos más importantes.
 `});function t(e,t){let n=t.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/),r={};for(let e of(n?.[1]??``).split(/\r?\n/)){let t=e.indexOf(`:`);t>0&&(r[e.slice(0,t).trim()]=e.slice(t+1).trim())}let i=(n?.[2]??t).trim(),a=i.split(/\s+/).filter(Boolean).length;return{slug:e.replace(/^.*\//,``).replace(/\.md$/,``).replace(/^\d{4}-\d{2}-\d{2}-/,``),title:r.titulo??`Sin título`,date:r.fecha??``,summary:r.resumen??``,tags:(r.etiquetas??``).split(`,`).map(e=>e.trim()).filter(Boolean),body:i,minutes:Math.max(1,Math.round(a/200))}}var n=Object.entries(e).map(([e,n])=>t(e,n)).sort((e,t)=>t.date.localeCompare(e.date)||e.slug.localeCompare(t.slug)),r=new Intl.DateTimeFormat(`es-ES`,{day:`numeric`,month:`long`,year:`numeric`,timeZone:`UTC`}),i=e=>e?r.format(new Date(`${e.slice(0,10)}T12:00:00Z`)):``,a=e=>e.slice(0,10);export{a as n,n as r,i as t};

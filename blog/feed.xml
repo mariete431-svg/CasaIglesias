@@ -7,6 +7,22 @@
   <description>Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.</description>
   <language>es</language>
   <item>
+    <title>Ajustes tras la auditoría</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/ajustes-auditoria/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/ajustes-auditoria/</guid>
+    <pubDate>Wed, 30 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Revisé la web entera y arreglé lo más importante: la política de privacidad, la franja de texto de la portada y el botón del menú en el móvil.</description>
+    <content:encoded><![CDATA[<h2>Qué cambió</h2>
+<ul>
+<li><strong>Privacidad y aviso legal:</strong> quito lo que hablaba de la lista de tareas y del calendario, que ya no existen, y aclaro que la web es de Casa Iglesias.</li>
+<li><strong>Portada:</strong> la franja de texto en movimiento ahora habla de lo que hago: diseño web, identidad visual y reservas online.</li>
+<li><strong>Móvil:</strong> el botón del menú es más grande (44 × 44 px), para acertar bien con el dedo.</li>
+</ul>
+<h2>Por qué</h2>
+<p>Hice una auditoría completa de la web: enlaces, móvil, accesibilidad, velocidad y seguridad. Estos eran los puntos más importantes.</p>
+]]></content:encoded>
+  </item>
+  <item>
     <title>Web más profesional</title>
     <link>https://mariete431-svg.github.io/MarioIglesias/blog/web-mas-profesional/</link>
     <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/web-mas-profesional/</guid>
