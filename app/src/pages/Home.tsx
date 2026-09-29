@@ -33,6 +33,36 @@ const projects = [
   { name: "Edición de vídeo", description: "En proceso.", to: "" },
 ];
 
+/* ---------- Servicios y precios de Casa Iglesias ---------- */
+const packages = [
+  { name: "Esencial", price: 390, time: "1–2 semanas", items: ["Web de una página, adaptada al móvil", "Botón de WhatsApp y formulario de contacto", "Preparada para salir bien en Google", "Ficha de Google Business configurada"] },
+  { name: "Negocio", price: 790, time: "3 semanas", items: ["Hasta 5 páginas: inicio, servicios, sobre nosotros, galería o blog y contacto", "Ayuda con los textos", "Preparada para salir bien en Google", "2 rondas de cambios"] },
+  { name: "Reservas", price: 1290, time: "4 semanas", tag: "Mi especialidad", items: ["Todo lo del paquete Negocio", "Reservas de citas online con calendario", "Aviso por email en cada reserva", "2 rondas de cambios"] },
+];
+const extras = [["Página adicional", 90], ["Versión en inglés", 190], ["Ficha de Google Business", 60]] as const;
+// Miles con punto también en 4 cifras (1.290 €), como en el panel y los presupuestos
+const euros = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €`;
+
+function Pricing() {
+  return <section id="precios" className="pricing-section section-pad"><div className="section-wrap">
+    <Reveal><div className="section-heading"><span className="eyebrow">02 / SERVICIOS Y PRECIOS</span><span className="section-rule" /></div>
+      <div className="intro-row"><h2>Webs para<br /><em>negocios.</em></h2><p>Precios cerrados y sin sorpresas. Pagas la mitad al empezar y la otra mitad cuando tu web está lista.</p></div></Reveal>
+    <div className="pricing-grid">{packages.map((pack, i) => <Reveal key={pack.name} delay={i * .06}><article className={`price-card ${pack.tag ? "is-featured" : ""}`}>
+      {pack.tag && <span className="price-tag">{pack.tag}</span>}
+      <span className="eyebrow">{pack.name.toUpperCase()}</span>
+      <p className="price-amount">{euros(pack.price)}<small> + IGIC</small></p>
+      <p className="price-time">Entrega en {pack.time}</p>
+      <ul>{pack.items.map(item => <li key={item}>{item}</li>)}</ul>
+      <Button variant={pack.tag ? "luxury" : "outlineLuxury"} size="lg" asChild><a href="#reservar" data-cursor="Reservar">Pedir presupuesto <ArrowUpRight /></a></Button>
+    </article></Reveal>)}</div>
+    <Reveal><div className="pricing-more">
+      <div><span className="eyebrow">MANTENIMIENTO</span><p><strong>29 € al mes.</strong> Alojamiento de la web, copias de seguridad y hasta 30 minutos de cambios al mes.</p></div>
+      <div><span className="eyebrow">EXTRAS</span><p>{extras.map(([name, price]) => <span key={name}>{name} · <strong>{euros(price)}</strong></span>)}</p></div>
+      <div><span className="eyebrow">LANZAMIENTO</span><p><strong>-30 % a mis 3 primeros clientes</strong>, a cambio de una opinión y permiso para enseñar su web.</p></div>
+    </div></Reveal>
+  </div></section>;
+}
+
 /* ---------- Lo principal: dos desplegables (reservar reunión y crear CV) ---------- */
 const shortDay = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 type Panel = "reservar" | "cv" | null;
@@ -141,9 +171,11 @@ export default function Home() {
 
       <StartHere />
 
+      <Pricing />
+
 
       <section id="perfil" className="profile-section section-pad"><div className="section-wrap">
-        <Reveal><div className="section-heading"><span className="eyebrow">02 / PERFIL</span><span className="section-rule" /></div></Reveal>
+        <Reveal><div className="section-heading"><span className="eyebrow">03 / PERFIL</span><span className="section-rule" /></div></Reveal>
         <div className="profile-grid"><div className="profile-quote"><ProfileParallax direction={-1}><Reveal><h2>El valor de<br /><em>hacerlo bien.</em></h2><blockquote>“Un profesional trabajador, con ganas de aprender y facilidad para trabajar en equipo.”</blockquote></Reveal></ProfileParallax></div>
           <div className="profile-details"><Reveal><p>He trabajado en cocina, perfumería y restauración. De cada experiencia he aprendido algo fundamental: las cosas bien hechas se notan en los detalles.</p><p>Hoy llevo esa misma atención, curiosidad y compromiso al mundo de la web. Me interesa crear, aprender y aportar valor donde pueda marcar la diferencia.</p></Reveal>
             <ProfileParallax><Reveal><Tilt max={8}><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias Martínez" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Tilt></Reveal></ProfileParallax>
@@ -153,20 +185,20 @@ export default function Home() {
       </div></section>
 
       <section id="trayectoria" className="career-section section-pad"><div className="section-wrap">
-        <Reveal><div className="section-heading"><span className="eyebrow">03 / TRAYECTORIA</span><span className="section-rule" /></div><div className="intro-row"><h2>Un camino de<br /><em>aprendizaje.</em></h2><p>Cada etapa deja una forma distinta de mirar el trabajo. Todas suman.</p></div></Reveal>
+        <Reveal><div className="section-heading"><span className="eyebrow">04 / TRAYECTORIA</span><span className="section-rule" /></div><div className="intro-row"><h2>Un camino de<br /><em>aprendizaje.</em></h2><p>Cada etapa deja una forma distinta de mirar el trabajo. Todas suman.</p></div></Reveal>
         <div className="career-list"><motion.span className="career-timeline" initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true, amount: .1 }} transition={{ duration: 1.8, ease: [.2, .7, .2, 1] }} />{experience.map((entry, i) => <Reveal key={entry.role + entry.year}><motion.div className={`career-item ${openExperience === i ? "is-open" : ""}`} initial={{ opacity: .48 }} whileInView={{ opacity: 1 }} viewport={{ amount: .55 }} transition={{ duration: .45 }}><Button variant="text" className="career-toggle" aria-expanded={openExperience === i} onClick={() => setOpenExperience(openExperience === i ? null : i)}><span className="career-year">{entry.year}</span><span className="career-main"><strong>{entry.role}</strong><small>{entry.place}</small></span><span className="career-icon">{openExperience === i ? <Minus /> : <Plus />}</span></Button><motion.div initial={false} animate={{ height: openExperience === i ? "auto" : 0, opacity: openExperience === i ? 1 : 0 }} transition={{ duration: .48, ease: [.22, 1, .36, 1] }} className="career-detail" inert={openExperience !== i}><p>{entry.detail}</p></motion.div></motion.div></Reveal>)}</div>
         <Reveal><div className="hero-actions"><Button variant="outlineLuxury" size="lg" asChild><Link to="/cv">CV completo <ArrowUpRight /></Link></Button><Button variant="outlineLuxury" size="lg" asChild><a href={CV_PDF} target="_blank" rel="noopener noreferrer">Descargar CV (PDF) <ArrowUpRight /></a></Button></div></Reveal>
       </div></section>
 
       <EditorialMarquee />
 
-      <section className="skills-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">04 / COMPETENCIAS</span><span className="section-rule" /></div><h2>Lo que puedo <em>aportar.</em></h2></Reveal><div className="skills-grid">{[
+      <section className="skills-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">05 / COMPETENCIAS</span><span className="section-rule" /></div><h2>Lo que puedo <em>aportar.</em></h2></Reveal><div className="skills-grid">{[
         ["01", "Atención al cliente", "Trato cercano, resolución de incidencias, cobros y pedidos."],
         ["02", "Organización", "Trabajo bajo presión, orden y trabajo en equipo."],
         ["03", "Web", "HTML, CSS, JavaScript, Git y GitHub — en aprendizaje continuo."],
       ].map(([number, title, description]) => <Reveal key={title}><Tilt max={4}><article className="skill"><span className="eyebrow">{number}</span><h3>{title}</h3><p>{description}</p></article></Tilt></Reveal>)}</div></div></section>
 
-      <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">05 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Una selección de trabajos y proyectos personales.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
+      <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">06 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Una selección de trabajos y proyectos personales.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
         return <Reveal key={project.name}><ProjectPreview name={project.name}>{!project.to
           ? <div className="project-row project-inactive">{inner}<span className="project-dash">—</span></div>
@@ -179,9 +211,9 @@ export default function Home() {
       })}</div></div></section>
 
 
-      <Testimonials label="06 / OPINIONES" />
+      <Testimonials label="07 / OPINIONES" />
 
-      <section id="contacto" className="contact-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">07 / CONTACTO</span><span className="section-rule" /></div><p className="contact-lead">PARA TODO LO DEMÁS</p><h2>Hablemos<span>.</span></h2><a className="contact-email" href="mailto:mariete431@icloud.com">mariete431@icloud.com <ArrowUpRight strokeWidth={1.2} /></a><div className="contact-links"><a href="https://www.instagram.com/Whsmario/" target="_blank" rel="noopener noreferrer">Instagram <ArrowUpRight size={16} /></a><a href="#reservar">Reservar una reunión <ArrowUpRight size={16} /></a></div></Reveal></div></section>
+      <section id="contacto" className="contact-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">08 / CONTACTO</span><span className="section-rule" /></div><p className="contact-lead">PARA TODO LO DEMÁS</p><h2>Hablemos<span>.</span></h2><a className="contact-email" href="mailto:mariete431@icloud.com">mariete431@icloud.com <ArrowUpRight strokeWidth={1.2} /></a><div className="contact-links"><a href="https://www.instagram.com/casaiglesias.studio/" target="_blank" rel="noopener noreferrer">Instagram <ArrowUpRight size={16} /></a><a href="#reservar">Reservar una reunión <ArrowUpRight size={16} /></a></div></Reveal></div></section>
     </main>
   </>;
 }
