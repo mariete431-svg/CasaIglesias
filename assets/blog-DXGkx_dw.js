@@ -146,6 +146,24 @@ Hoy he creado la marca de mi estudio: **Casa Iglesias, estudio de diseño y desa
 ## Por qué
 
 Quiero empezar a trabajar con negocios reales, y para eso necesitaba un nombre y una imagen que se reconozcan.
+`,"../content/blog/2026-09-29-identidad-visual.md":`---
+titulo: Nuevo servicio de identidad visual
+fecha: 2026-09-29 21:30
+resumen: Además de webs, ahora hago la marca de negocios que empiezan o que no tienen: logo, colores, guía, tarjeta y plantillas para redes.
+etiquetas: Diseño
+---
+
+## Qué cambió
+
+En la sección de precios hay un apartado nuevo, **Identidad visual**, con tres opciones:
+
+- **Marca Básica (190 €):** logo, icono, colores, letras y una guía de una página.
+- **Marca Completa (390 €):** además, cuatro versiones del logo, guía completa, tarjeta de visita, foto de perfil y plantillas para redes.
+- **Pack Marca + Web (990 €):** la marca completa y una web Negocio hecha con esa marca. Por separado costaría 1.180 €.
+
+## Por qué
+
+Muchos negocios que empiezan no tienen logo ni colores, y sin marca la web se queda coja. Así pueden tener las dos cosas con el mismo estilo.
 `,"../content/blog/2026-09-29-portada-sin-cv.md":`---
 titulo: Portada sin currículum
 fecha: 2026-09-29 20:30
@@ -157,7 +175,7 @@ etiquetas: Diseño, Proceso
 
 - La portada ya no muestra mi currículum: he quitado el perfil, la trayectoria y las competencias.
 - En su lugar hay una sección corta, **El estudio**, que cuenta quién hay detrás de Casa Iglesias y cómo trabajo.
-- El creador de CV gratuito solo aparece en el desplegable de «Empieza aquí». El botón grande de la portada ahora es «Ver precios».
+- El creador de CV gratuito sale de la portada y pasa al menú de las tres rayas. El botón grande de la portada ahora es «Ver precios».
 - El orden queda así: empieza aquí, precios, estudio, proyectos, opiniones y contacto.
 
 ## Por qué
@@ -184,4 +202,21 @@ He añadido a la portada un apartado con mis [servicios y precios](/#precios).
 ## Cómo funciona
 
 Los precios son cerrados. Se paga la mitad al empezar y la otra mitad al entregar la web. Para pedir presupuesto, basta con reservar una reunión de 30 minutos.
+`,"../content/blog/2026-09-29-web-mas-profesional.md":`---
+titulo: Web más profesional
+fecha: 2026-09-29 22:00
+resumen: Quito de la web las herramientas personales, como la lista de tareas y el panel, y dejo solo lo que le sirve a un cliente.
+etiquetas: Diseño, Proceso
+---
+
+## Qué cambió
+
+- La **lista de tareas** y el **panel personal** salen de la web. Ahora los llevo en un panel privado de trabajo. Sus direcciones antiguas llevan a la portada.
+- En **Proyectos** quedan solo trabajos completos: ZONA 4 y la marca y la web de Casa Iglesias.
+- El formulario para **dejar una opinión** pasa a la sección de opiniones de la portada. Las opiniones se publican cuando las reviso.
+- El pie de página ya no enseña el enlace al panel privado.
+
+## Por qué
+
+La web es para clientes. Las herramientas que uso para organizarme no les aportan nada.
 `});function t(e,t){let n=t.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/),r={};for(let e of(n?.[1]??``).split(/\r?\n/)){let t=e.indexOf(`:`);t>0&&(r[e.slice(0,t).trim()]=e.slice(t+1).trim())}let i=(n?.[2]??t).trim(),a=i.split(/\s+/).filter(Boolean).length;return{slug:e.replace(/^.*\//,``).replace(/\.md$/,``).replace(/^\d{4}-\d{2}-\d{2}-/,``),title:r.titulo??`Sin título`,date:r.fecha??``,summary:r.resumen??``,tags:(r.etiquetas??``).split(`,`).map(e=>e.trim()).filter(Boolean),body:i,minutes:Math.max(1,Math.round(a/200))}}var n=Object.entries(e).map(([e,n])=>t(e,n)).sort((e,t)=>t.date.localeCompare(e.date)||e.slug.localeCompare(t.slug)),r=new Intl.DateTimeFormat(`es-ES`,{day:`numeric`,month:`long`,year:`numeric`,timeZone:`UTC`}),i=e=>e?r.format(new Date(`${e.slice(0,10)}T12:00:00Z`)):``,a=e=>e.slice(0,10);export{a as n,n as r,i as t};
