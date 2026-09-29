@@ -27,7 +27,7 @@ function useNoIndex() {
 }
 
 export default function AdminPage() {
-  usePageTitle("Panel privado — Mario Iglesias");
+  usePageTitle("Panel privado — Casa Iglesias");
   useNoIndex();
   const [gate, setGate] = useState<Gate>("loading");
   const [session, setSession] = useState<Session | null>(null);

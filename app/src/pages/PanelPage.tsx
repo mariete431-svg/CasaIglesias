@@ -208,7 +208,7 @@ function Guestbook() {
 }
 
 export default function PanelPage() {
-  usePageTitle("Mi panel — Mario Iglesias");
+  usePageTitle("Mi panel — Casa Iglesias");
   return <main>
     <PageHero
       eyebrow="PROYECTO 03 — PANEL PERSONAL · 2026"

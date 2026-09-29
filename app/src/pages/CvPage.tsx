@@ -17,7 +17,7 @@ const experience = [
 const skills = ["HTML", "CSS", "JavaScript", "Git y GitHub", "Inglés — nivel medio", "Atención al cliente"];
 
 export default function CvPage() {
-  usePageTitle("CV — Mario Iglesias");
+  usePageTitle("CV — Casa Iglesias");
   return <main>
     <PageHero
       eyebrow="CV · 2026 — MARIO IGLESIAS MARTÍNEZ"

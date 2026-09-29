@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PageHero, usePageTitle } from "@/components/SiteChrome";
 
 export default function NotFound() {
-  usePageTitle("Página no encontrada — Mario Iglesias");
+  usePageTitle("Página no encontrada — Casa Iglesias");
   return <main>
     <PageHero
       eyebrow="ERROR 404 — PÁGINA NO ENCONTRADA"

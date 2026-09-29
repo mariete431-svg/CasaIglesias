@@ -20,7 +20,7 @@ function loadTasks(): Task[] {
 }
 
 export default function TasksPage() {
-  usePageTitle("Lista de tareas — Mario Iglesias");
+  usePageTitle("Lista de tareas — Casa Iglesias");
   const reduced = useMotionPreference();
   const [tasks, setTasks] = useState<Task[]>(loadTasks);
   const [text, setText] = useState("");
