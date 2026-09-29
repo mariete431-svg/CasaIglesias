@@ -161,7 +161,7 @@ export default function Home() {
         <Reveal><div className="facts"><div><span>BASE</span><strong>Adeje, Tenerife</strong></div><div><span>TRABAJO</span><strong>Tenerife y online en toda España</strong></div><div><span>IDIOMAS</span><strong>Español nativo, inglés medio</strong></div></div></Reveal>
       </div></section>
 
-      <EditorialMarquee />
+      <EditorialMarquee phrase="Diseño web ✦ Identidad visual ✦ Reservas online ✦ Tenerife ✦ Detalle ✦ " />
 
       <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">04 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Trabajos hechos de principio a fin: diseño, marca y web.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
         const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;

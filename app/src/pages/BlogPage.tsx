@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/EditorialEffects";
 import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome";
 import { formatPostDate, isoDay, posts } from "@/lib/blog";
+import { fraseDeHoy } from "@/content/frases";
 import { asset } from "@/lib/asset";
 
 export default function BlogPage() {
@@ -15,15 +16,19 @@ export default function BlogPage() {
 
   return <main>
     <PageHero
-      eyebrow="BLOG — DISEÑO WEB"
-      lines={["Mario", "Iglesias."]}
-      subtitle={<>Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo. Aquí cuento lo que voy haciendo en esta web.</>}
+      eyebrow="BLOG — CASA IGLESIAS"
+      lines={["Ideas para", "tu negocio."]}
+      subtitle={<>Consejos prácticos para que tu negocio se vea bien en internet y consiga más clientes.</>}
       actions={<>
         <Button variant="luxury" size="lg" asChild><a href="#articulos">Leer el blog <ArrowUpRight /></a></Button>
         <Button variant="outlineLuxury" size="lg" asChild><a href={asset("blog/feed.xml")}>RSS <Rss /></a></Button>
       </>}
       bottomHref="#articulos"
     />
+
+    <section className="blog-quote-section"><div className="section-wrap">
+      <Reveal><figure className="blog-quote"><span className="eyebrow">LA FRASE DE ESTOS DÍAS</span><blockquote>“{fraseDeHoy()}”</blockquote></figure></Reveal>
+    </div></section>
 
     <section id="articulos" className="section-pad"><div className="section-wrap">
       <SectionHeading label={`01 / ${posts.length} ARTÍCULOS`} />

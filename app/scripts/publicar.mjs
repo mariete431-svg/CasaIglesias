@@ -36,7 +36,7 @@ const pages = {
   },
   blog: {
     title: "Blog — Casa Iglesias",
-    description: "Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.",
+    description: "Consejos prácticos de Casa Iglesias para que tu negocio se vea bien en internet y consiga más clientes: webs, reservas online, Google y marca.",
     index: true,
   },
   admin: { title: "Panel privado — Casa Iglesias", description: "Acceso privado.", index: false },
@@ -98,7 +98,7 @@ const fallback = (title, description) => `<div class="seo-fallback">
     </div>`;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
-const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Blog de Mario Iglesias" href="${SITE}blog/feed.xml" />`;
+const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Blog de Casa Iglesias" href="${SITE}blog/feed.xml" />`;
 
 // content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
 function pageHtml(route, { title, description, index, jsonLd, content, ogType }) {
@@ -172,7 +172,7 @@ for (const post of posts) {
     image: `${SITE}og-imagen.jpg`,
     author,
     publisher: author,
-    isPartOf: { "@type": "Blog", name: "Blog de Mario Iglesias", url: `${SITE}blog/` },
+    isPartOf: { "@type": "Blog", name: "Blog de Casa Iglesias", url: `${SITE}blog/` },
   });
   const content = `<article class="seo-fallback is-article">
       <p><a href="${BASE}blog/">BLOG</a> · ${day(post.date)}</p>
@@ -181,7 +181,7 @@ for (const post of posts) {
       ${post.html}
       <p>Mario Iglesias · Escrito con ayuda de IA (Claude).</p>
     </article>`;
-  writeFileSync(join(folder, "index.html"), pageHtml(route, { title: `${post.title} — Mario Iglesias`, description: post.summary, index: true, jsonLd, content, ogType: "article" }));
+  writeFileSync(join(folder, "index.html"), pageHtml(route, { title: `${post.title} — Casa Iglesias`, description: post.summary, index: true, jsonLd, content, ogType: "article" }));
 }
 
 // Portada del blog: lista de artículos también dentro del HTML
@@ -189,15 +189,15 @@ for (const post of posts) {
   const blogJson = JSON.stringify({
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "Blog de Mario Iglesias",
+    name: "Blog de Casa Iglesias",
     url: `${SITE}blog/`,
     inLanguage: "es",
     author,
     blogPost: posts.map(p => ({ "@type": "BlogPosting", headline: p.title, datePublished: day(p.date), url: `${SITE}blog/${p.slug}/` })),
   });
   const content = `<div class="seo-fallback">
-      <p>BLOG — DISEÑO WEB</p>
-      <h1>Mario Iglesias</h1>
+      <p>BLOG — CASA IGLESIAS</p>
+      <h1>Ideas para tu negocio</h1>
       <p>${escape(pages.blog.description)}</p>
       <ul>${posts.map(p => `<li><a href="${BASE}blog/${p.slug}/">${escape(p.title)}</a> (${day(p.date)})</li>`).join("")}</ul>
     </div>`;
@@ -211,7 +211,7 @@ mkdirSync(join(dist, "blog"), { recursive: true });
 writeFileSync(join(dist, "blog", "feed.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
-  <title>Blog de Mario Iglesias</title>
+  <title>Blog de Casa Iglesias</title>
   <link>${SITE}blog/</link>
   <atom:link href="${SITE}blog/feed.xml" rel="self" type="application/rss+xml" />
   <description>${escape(pages.blog.description)}</description>

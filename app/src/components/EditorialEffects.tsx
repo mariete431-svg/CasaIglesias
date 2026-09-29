@@ -184,7 +184,7 @@ export function Magnetic({ children, className = "" }: { children: ReactNode; cl
   return <motion.div className={className} style={{ x, y }} onMouseMove={onMove} onMouseLeave={() => { x.set(0); y.set(0); }}>{children}</motion.div>;
 }
 
-export function EditorialMarquee({ phrase = "Atención al cliente ✦ Organización ✦ Desarrollo web ✦ Discreción ✦ Detalle ✦ " }: { phrase?: string }) {
+export function EditorialMarquee({ phrase = "Diseño web ✦ Identidad visual ✦ Reservas online ✦ Tenerife ✦ Detalle ✦ " }: { phrase?: string }) {
   const reduced = useMotionPreference();
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
