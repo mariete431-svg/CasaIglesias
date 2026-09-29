@@ -1,237 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
-  <title>Blog de Mario Iglesias</title>
+  <title>Blog de Casa Iglesias</title>
   <link>https://mariete431-svg.github.io/MarioIglesias/blog/</link>
   <atom:link href="https://mariete431-svg.github.io/MarioIglesias/blog/feed.xml" rel="self" type="application/rss+xml" />
-  <description>Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.</description>
+  <description>Consejos prácticos de Casa Iglesias para que tu negocio se vea bien en internet y consiga más clientes: webs, reservas online, Google y marca.</description>
   <language>es</language>
   <item>
-    <title>Ajustes tras la auditoría</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/ajustes-auditoria/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/ajustes-auditoria/</guid>
-    <pubDate>Wed, 30 Sep 2026 10:00:00 GMT</pubDate>
-    <description>Revisé la web entera y arreglé lo más importante: la política de privacidad, la franja de texto de la portada y el botón del menú en el móvil.</description>
-    <content:encoded><![CDATA[<h2>Qué cambió</h2>
+    <title>Cómo hacer buenas fotos para tu web con el móvil</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/fotos-para-tu-web/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/fotos-para-tu-web/</guid>
+    <pubDate>Tue, 29 Sep 2026 13:00:00 GMT</pubDate>
+    <description>No hace falta un fotógrafo para empezar. Con tu móvil y cinco trucos, tus fotos pueden verse profesionales.</description>
+    <content:encoded><![CDATA[<p>Las fotos son lo primero que se mira. Y las tuyas, aunque no sean perfectas, transmiten más confianza que cualquier foto de catálogo.</p>
+<h2>Cinco trucos</h2>
+<ol>
+<li><strong>Luz natural.</strong> Haz las fotos cerca de una ventana y apaga los fluorescentes.</li>
+<li><strong>Limpia el lente.</strong> Parece una tontería, pero es la causa de muchas fotos borrosas.</li>
+<li><strong>Fondo ordenado.</strong> Quita cajas, cables y cosas que distraigan.</li>
+<li><strong>Foto en horizontal</strong> para la web y <strong>en vertical</strong> para Instagram.</li>
+<li><strong>Varias de cada.</strong> Haz diez y quédate con la mejor.</li>
+</ol>
+<h2>Qué fotos necesitas</h2>
 <ul>
-<li><strong>Privacidad y aviso legal:</strong> quito lo que hablaba de la lista de tareas y del calendario, que ya no existen, y aclaro que la web es de Casa Iglesias.</li>
-<li><strong>Portada:</strong> la franja de texto en movimiento ahora habla de lo que hago: diseño web, identidad visual y reservas online.</li>
-<li><strong>Móvil:</strong> el botón del menú es más grande (44 × 44 px), para acertar bien con el dedo.</li>
+<li>El local por fuera y por dentro.</li>
+<li>Tú y tu equipo trabajando, sonriendo de forma natural.</li>
+<li>Tu trabajo terminado: un corte de pelo, un plato, una reforma.</li>
 </ul>
-<h2>Por qué</h2>
-<p>Hice una auditoría completa de la web: enlaces, móvil, accesibilidad, velocidad y seguridad. Estos eran los puntos más importantes.</p>
+<p>Pide siempre permiso a quien salga en la foto antes de publicarla.</p>
 ]]></content:encoded>
   </item>
   <item>
-    <title>Web más profesional</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/web-mas-profesional/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/web-mas-profesional/</guid>
-    <pubDate>Tue, 29 Sep 2026 22:00:00 GMT</pubDate>
-    <description>Quito de la web las herramientas personales, como la lista de tareas y el panel, y dejo solo lo que le sirve a un cliente.</description>
-    <content:encoded><![CDATA[<h2>Qué cambió</h2>
-<ul>
-<li>La <strong>lista de tareas</strong> y el <strong>panel personal</strong> salen de la web. Ahora los llevo en un panel privado de trabajo. Sus direcciones antiguas llevan a la portada.</li>
-<li>En <strong>Proyectos</strong> quedan solo trabajos completos: ZONA 4 y la marca y la web de Casa Iglesias.</li>
-<li>El formulario para <strong>dejar una opinión</strong> pasa a la sección de opiniones de la portada. Las opiniones se publican cuando las reviso.</li>
-<li>El pie de página ya no enseña el enlace al panel privado.</li>
-</ul>
-<h2>Por qué</h2>
-<p>La web es para clientes. Las herramientas que uso para organizarme no les aportan nada.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Nuevo servicio de identidad visual</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/identidad-visual/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/identidad-visual/</guid>
-    <pubDate>Tue, 29 Sep 2026 21:30:00 GMT</pubDate>
-    <description>Además de webs, ahora hago la marca de negocios que empiezan o que no tienen: logo, colores, guía, tarjeta y plantillas para redes.</description>
-    <content:encoded><![CDATA[<h2>Qué cambió</h2>
-<p>En la sección de precios hay un apartado nuevo, <strong>Identidad visual</strong>, con tres opciones:</p>
-<ul>
-<li><strong>Marca Básica (190 €):</strong> logo, icono, colores, letras y una guía de una página.</li>
-<li><strong>Marca Completa (390 €):</strong> además, cuatro versiones del logo, guía completa, tarjeta de visita, foto de perfil y plantillas para redes.</li>
-<li><strong>Pack Marca + Web (990 €):</strong> la marca completa y una web Negocio hecha con esa marca. Por separado costaría 1.180 €.</li>
-</ul>
-<h2>Por qué</h2>
-<p>Muchos negocios que empiezan no tienen logo ni colores, y sin marca la web se queda coja. Así pueden tener las dos cosas con el mismo estilo.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Portada sin currículum</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/portada-sin-cv/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/portada-sin-cv/</guid>
-    <pubDate>Tue, 29 Sep 2026 20:30:00 GMT</pubDate>
-    <description>Quito mi trayectoria y mis competencias de la portada. La web principal ahora habla solo del estudio, los precios y los proyectos.</description>
-    <content:encoded><![CDATA[<h2>Qué cambió</h2>
-<ul>
-<li>La portada ya no muestra mi currículum: he quitado el perfil, la trayectoria y las competencias.</li>
-<li>En su lugar hay una sección corta, <strong>El estudio</strong>, que cuenta quién hay detrás de Casa Iglesias y cómo trabajo.</li>
-<li>El creador de CV gratuito sale de la portada y pasa al menú de las tres rayas. El botón grande de la portada ahora es «Ver precios».</li>
-<li>El orden queda así: empieza aquí, precios, estudio, proyectos, opiniones y contacto.</li>
-</ul>
-<h2>Por qué</h2>
-<p>La web ya es la de un estudio que hace webs para negocios. A un cliente le interesa qué hago y cuánto cuesta, no dónde he trabajado antes.</p>
-<p>Mi CV completo sigue en <a href="/MarioIglesias/cv">/cv</a> para quien lo quiera ver.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Servicios y precios</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/servicios-y-precios/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/servicios-y-precios/</guid>
-    <pubDate>Tue, 29 Sep 2026 16:00:00 GMT</pubDate>
-    <description>Ya se pueden ver en la web los paquetes de Casa Iglesias, con sus precios, plazos y lo que incluye cada uno.</description>
-    <content:encoded><![CDATA[<p>He añadido a la portada un apartado con mis <a href="/MarioIglesias/#precios">servicios y precios</a>.</p>
-<h2>Qué hay</h2>
-<ul>
-<li>Tres paquetes: <strong>Esencial</strong> (390 €), <strong>Negocio</strong> (790 €) y <strong>Reservas</strong> (1.290 €).</li>
-<li>Un plan de mantenimiento de 29 € al mes.</li>
-<li>Extras: página adicional, versión en inglés y ficha de Google Business.</li>
-<li>Un descuento del 30 % para mis tres primeros clientes, a cambio de una opinión.</li>
-</ul>
-<h2>Cómo funciona</h2>
-<p>Los precios son cerrados. Se paga la mitad al empezar y la otra mitad al entregar la web. Para pedir presupuesto, basta con reservar una reunión de 30 minutos.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Nace Casa Iglesias</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/casa-iglesias/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/casa-iglesias/</guid>
+    <title>Por qué tu negocio necesita una marca, aunque sea pequeño</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/por-que-tu-negocio-necesita-una-marca/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/por-que-tu-negocio-necesita-una-marca/</guid>
     <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
-    <description>Mi estudio de diseño y desarrollo web ya tiene nombre, logo y colores. La web los estrena hoy.</description>
-    <content:encoded><![CDATA[<p>Hoy he creado la marca de mi estudio: <strong>Casa Iglesias, estudio de diseño y desarrollo web</strong>.</p>
-<h2>Qué cambió</h2>
+    <description>Una marca no es solo un logo. Es lo que hace que te reconozcan y que confíen en ti antes de conocerte.</description>
+    <content:encoded><![CDATA[<p>Muchos negocios empiezan con un logo hecho deprisa y colores distintos en cada sitio. Funciona, pero cuesta más que te recuerden.</p>
+<h2>Qué es una marca, en la práctica</h2>
 <ul>
-<li>Un logo nuevo: un sello con mis iniciales, CI.</li>
-<li>Los colores de siempre, pero ya fijos: burdeos, crema y amarillo bebé.</li>
-<li>La cabecera de la web, la portada, el icono de la pestaña y la imagen que sale al compartir el enlace llevan la marca.</li>
-<li>Un Instagram nuevo para el estudio: <a href="https://www.instagram.com/casaiglesias.studio/">@casaiglesias.studio</a>.</li>
+<li><strong>Un logo</strong> que se lee bien en grande y en pequeño.</li>
+<li><strong>Dos o tres colores</strong> que usas siempre.</li>
+<li><strong>Una o dos letras</strong> para títulos y textos.</li>
+<li><strong>Un tono</strong> para hablar con tus clientes.</li>
 </ul>
-<h2>Por qué</h2>
-<p>Quiero empezar a trabajar con negocios reales, y para eso necesitaba un nombre y una imagen que se reconozcan.</p>
+<h2>Qué ganas</h2>
+<ol>
+<li><strong>Te reconocen.</strong> En Instagram, en la puerta del local y en una tarjeta.</li>
+<li><strong>Pareces más grande.</strong> Un negocio coherente transmite seriedad.</li>
+<li><strong>Ahorras tiempo.</strong> Cada cartel o publicación nueva ya tiene sus reglas.</li>
+</ol>
+<h2>Por dónde empezar</h2>
+<p>Revisa dónde aparece tu negocio: rótulo, redes, tarjetas y web. Si cada sitio parece de una empresa distinta, ha llegado el momento de ordenar tu marca.</p>
 ]]></content:encoded>
   </item>
   <item>
-    <title>Web para un gimnasio</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/web-zona-4/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/web-zona-4/</guid>
-    <pubDate>Sun, 27 Sep 2026 23:45:00 GMT</pubDate>
-    <description>Hice la web de ZONA 4, un gimnasio inventado en Tenerife, para practicar con un proyecto distinto a mi web.</description>
-    <content:encoded><![CDATA[<p>He hecho mi primera web para un negocio que no es el mío: ZONA 4, un gimnasio inventado en Tenerife. Es práctica para el portfolio.</p>
-<h2>Qué tiene</h2>
+    <title>Tu ficha de Google, gratis y en 20 minutos</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/ficha-de-google/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/ficha-de-google/</guid>
+    <pubDate>Tue, 29 Sep 2026 11:00:00 GMT</pubDate>
+    <description>Antes que una web, muchos clientes ven tu ficha de Google. Así se crea y así se cuida.</description>
+    <content:encoded><![CDATA[<p>Cuando alguien busca «peluquería cerca de mí», lo primero que ve no son webs: son fichas de Google con mapa, fotos y estrellas.</p>
+<h2>Cómo crearla</h2>
+<ol>
+<li>Entra en Google Business Profile con tu cuenta de Google.</li>
+<li>Escribe el nombre del negocio y elige bien la categoría.</li>
+<li>Añade dirección (o la zona donde trabajas), teléfono y horario.</li>
+<li>Verifica el negocio. Google te dirá cómo: por teléfono, email o vídeo.</li>
+</ol>
+<h2>Cómo cuidarla</h2>
 <ul>
-<li>Portada con vídeo y la próxima clase del día.</li>
-<li>Clases con foto, horario por días y precios.</li>
-<li>Mapa con los centros y un botón para buscar el más cercano.</li>
+<li><strong>Sube fotos reales</strong> del local y de tu trabajo. Las fichas con fotos reciben más visitas.</li>
+<li><strong>Pide opiniones</strong> a tus clientes contentos. Un mensaje con el enlace directo es suficiente.</li>
+<li><strong>Responde a todas</strong>, también a las malas, con educación.</li>
+<li><strong>Enlaza tu web.</strong> Así quien te encuentra en el mapa puede ver todo lo que ofreces.</li>
 </ul>
-<h2>Cómo fue</h2>
-<p>Probé varias ideas hasta dar con una clara y sencilla. Antes de publicarla revisé errores, móvil, accesibilidad y velocidad, y lo arreglé todo.</p>
-<p>Está en la sección de proyectos de la portada: <a href="https://mariete431-svg.github.io/zona4/">ZONA 4</a>.</p>
+<p>Es gratis y trabaja para ti todos los días.</p>
 ]]></content:encoded>
   </item>
   <item>
-    <title>Segunda revisión</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/segunda-revision/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/segunda-revision/</guid>
-    <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
-    <description>Una revisión más completa de seguridad, privacidad, accesibilidad y velocidad, y el alta en Google.</description>
-    <content:encoded><![CDATA[<p>Hice una segunda revisión, esta vez más a fondo, y arreglé lo que salió.</p>
-<h2>Qué mejoré</h2>
+    <title>Reservas online, menos llamadas y más citas</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/reservas-online/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/reservas-online/</guid>
+    <pubDate>Tue, 29 Sep 2026 10:00:00 GMT</pubDate>
+    <description>Si tu negocio trabaja con citas, poder reservar desde la web te ahorra tiempo y te trae clientes a cualquier hora.</description>
+    <content:encoded><![CDATA[<p>Peluquerías, centros de estética, clínicas, clases… Si trabajas con citas, seguramente pasas parte del día al teléfono.</p>
+<h2>Qué ganas</h2>
 <ul>
-<li><strong>Seguridad:</strong> más protección para la web y para la agenda de reservas.</li>
-<li><strong>Privacidad:</strong> las letras de la web ya no se cargan desde Google.</li>
-<li><strong>Creador de CV:</strong> se puede guardar en PDF también desde el iPhone.</li>
-<li><strong>Accesibilidad:</strong> el menú del móvil funciona mejor con el teclado.</li>
-<li><strong>Velocidad:</strong> las fotos pesan hasta un 60 % menos.</li>
-<li><strong>Google:</strong> di de alta la web en Google Search Console.</li>
+<li><strong>Reservas a cualquier hora.</strong> Mucha gente decide por la noche, cuando tu negocio está cerrado.</li>
+<li><strong>Menos interrupciones.</strong> No tienes que dejar lo que estás haciendo para coger el teléfono.</li>
+<li><strong>Menos olvidos.</strong> El cliente recibe la confirmación por email y tú ves todas las citas en un solo sitio.</li>
 </ul>
-<p>Todo se comprobó en móvil y en ordenador antes de publicarlo.</p>
+<h2>Qué debe tener un buen sistema</h2>
+<ol>
+<li>Que se vean solo los huecos libres.</li>
+<li>Que se pueda reservar en menos de un minuto, sin registrarse.</li>
+<li>Que tú puedas bloquear días de vacaciones o festivos.</li>
+<li>Que funcione perfecto en el móvil.</li>
+</ol>
+<p>Si tus clientes ya te escriben para pedir cita, están listos para reservar solos.</p>
 ]]></content:encoded>
   </item>
   <item>
-    <title>Rediseño en burdeos</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-en-burdeos/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/rediseno-en-burdeos/</guid>
-    <pubDate>Sun, 27 Sep 2026 10:00:00 GMT</pubDate>
-    <description>Nuevo estilo con fondo burdeos, detalles en amarillo y animaciones al hacer scroll.</description>
-    <content:encoded><![CDATA[<p>Quería que la web tuviera más personalidad sin perder un aspecto cuidado.</p>
-<h2>Qué cambió</h2>
-<ul>
-<li>Toda la web pasó a tener fondo burdeos, con texto claro y detalles en amarillo.</li>
-<li>Al abrir la portada aparece una foto de Tenerife a pantalla completa.</li>
-<li>Los bloques aparecen con animaciones suaves al hacer scroll.</li>
-<li>Las opiniones aparecen en un recuadro claro y pasan solas.</li>
-</ul>
-<p>Antes de llegar a este resultado probé otras combinaciones de color que descarté. Después revisé cada página en móvil, tablet y ordenador para que todo se leyera bien.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Primera revisión de la web</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/primera-revision/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/primera-revision/</guid>
-    <pubDate>Sat, 26 Sep 2026 20:00:00 GMT</pubDate>
-    <description>Revisé la web página por página y arreglé fallos en móvil, accesibilidad, Google y velocidad.</description>
-    <content:encoded><![CDATA[<p>Con el diseño terminado, revisé la web entera en móvil y en ordenador.</p>
-<h2>Qué arreglé</h2>
-<ul>
-<li><strong>Formularios:</strong> mensajes claros cuando falta algo o un dato no es válido.</li>
-<li><strong>Móvil:</strong> el iPhone ya no amplía la pantalla al escribir, y los botones son más fáciles de tocar.</li>
-<li><strong>Accesibilidad:</strong> la web se puede usar con el teclado y las opiniones se pueden pausar.</li>
-<li><strong>Google:</strong> cada página tiene su título y su descripción, y hay un mapa del sitio.</li>
-<li><strong>Velocidad:</strong> la portada carga menos cosas al abrirse.</li>
-<li><strong>Privacidad:</strong> añadí una <a href="/MarioIglesias/privacidad">página de privacidad</a> y los comentarios se revisan antes de publicarse.</li>
-</ul>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Cambio de diseño</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/cambio-de-diseno/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/cambio-de-diseno/</guid>
-    <pubDate>Sat, 26 Sep 2026 15:00:00 GMT</pubDate>
-    <description>Probé varios diseños hasta quedarme con uno limpio y más fácil de usar.</description>
-    <content:encoded><![CDATA[<p>Probé tres diseños distintos en un día. Los dos primeros no me convencían, así que seguí probando.</p>
-<h2>El diseño final</h2>
-<p>Un estilo limpio, con una letra elegante para los títulos y otra muy legible para el texto. La web pasó a estar hecha con React, lo que permite reutilizar las mismas piezas en todas las páginas.</p>
-<h2>Más fácil de usar</h2>
-<ul>
-<li>Los botones de reservar y de crear CV están siempre visibles.</li>
-<li>Debajo de la portada hay dos accesos directos: reservar una reunión y el <a href="/MarioIglesias/crear-cv">creador de CV</a>.</li>
-<li>Añadí una sección con opiniones de la gente.</li>
-</ul>
-<p>Las direcciones antiguas siguen funcionando y redirigen a las nuevas.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Agenda de citas</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/agenda-de-citas/</guid>
-    <pubDate>Sat, 26 Sep 2026 08:00:00 GMT</pubDate>
-    <description>Añadí la posibilidad de reservar una reunión conmigo, con un panel privado para gestionar las citas.</description>
-    <content:encoded><![CDATA[<p>El siguiente paso fue que la gente pudiera reservar una reunión desde la web.</p>
-<h2>Qué añadí</h2>
-<ul>
-<li>Un calendario que muestra solo las horas libres, en bloques de 30 minutos y en hora de Canarias.</li>
-<li>Un panel privado con contraseña para ver las citas y organizar mi horario.</li>
-<li>Un aviso por email cada vez que alguien reserva.</li>
-</ul>
-<h2>Cómo</h2>
-<p>Para guardar las reservas usé Supabase, un servicio de base de datos. Lo primero que configuré fueron las reglas de acceso: los visitantes solo pueden ver qué horas están libres y reservar; todo lo demás solo lo veo yo.</p>
-]]></content:encoded>
-  </item>
-  <item>
-    <title>Mi primera web</title>
-    <link>https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/mi-primera-web/</guid>
-    <pubDate>Sat, 12 Sep 2026 21:00:00 GMT</pubDate>
-    <description>Una página sencilla para presentarme y una lista de tareas. Mi punto de partida.</description>
-    <content:encoded><![CDATA[<p>Esta web empezó el 12 de septiembre de 2026. Era la primera vez que publicaba algo así.</p>
-<h2>Qué tenía</h2>
-<ul>
-<li>Una portada con una presentación breve.</li>
-<li>Una sección de proyectos.</li>
-<li>Una lista de tareas que guarda los datos en el propio navegador de cada persona.</li>
-</ul>
-<h2>Cómo estaba hecha</h2>
-<p>HTML para el contenido, CSS para el diseño y un poco de JavaScript para la lista de tareas. La web se publica gratis con GitHub Pages: cada cambio se propone, se revisa y, al aceptarlo, se publica.</p>
+    <title>5 cosas que tu web necesita para conseguir clientes</title>
+    <link>https://mariete431-svg.github.io/MarioIglesias/blog/5-cosas-que-tu-web-necesita/</link>
+    <guid isPermaLink="true">https://mariete431-svg.github.io/MarioIglesias/blog/5-cosas-que-tu-web-necesita/</guid>
+    <pubDate>Tue, 29 Sep 2026 09:00:00 GMT</pubDate>
+    <description>No hace falta una web enorme. Hacen falta cinco cosas bien hechas para que quien entra acabe escribiéndote.</description>
+    <content:encoded><![CDATA[<p>Una web bonita que no trae clientes es solo decoración. Estas cinco cosas marcan la diferencia.</p>
+<h2>1. Tu teléfono y WhatsApp a la vista</h2>
+<p>Arriba del todo y en un botón fácil de tocar. Si el cliente tiene que buscarlo, se va.</p>
+<h2>2. Precios claros, o al menos «desde»</h2>
+<p>No hace falta la tarifa completa. Un «desde 30 €» evita dudas y filtra a quien no encaja.</p>
+<h2>3. Opiniones reales</h2>
+<p>Tres opiniones de clientes con nombre valen más que cualquier frase sobre lo buenos que sois.</p>
+<h2>4. Fotos tuyas, no de catálogo</h2>
+<p>Tu local, tu equipo y tu trabajo. Las fotos de banco de imágenes se reconocen enseguida.</p>
+<h2>5. Que cargue rápido en el móvil</h2>
+<p>La mayoría de tus clientes llegan desde el móvil. Si tarda más de tres segundos, muchos no esperan.</p>
 ]]></content:encoded>
   </item>
 </channel>
