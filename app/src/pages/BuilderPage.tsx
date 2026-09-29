@@ -39,7 +39,7 @@ function Field({ id, label, value, onChange, placeholder, type = "text", textare
 }
 
 export default function BuilderPage() {
-  usePageTitle("Creador de CV — Mario Iglesias");
+  usePageTitle("Creador de CV — Casa Iglesias");
   const [cv, setCv] = useState<Draft>(loadDraft);
   const [photo, setPhoto] = useState<string | null>(() => readStored<string | null>(PHOTO_KEY, null));
 

@@ -94,8 +94,8 @@ export function Entrance({ onReveal }: { onReveal?: () => void }) {
       </picture>
       <div className="intro-shade" />
       <motion.div className="intro-copy" animate={{ opacity: lifting ? 0 : 1, y: lifting ? -16 : 0 }} transition={{ duration: .45 }}>
-        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8, ease: EASE_OUT }}>ADEJE, TENERIFE</motion.p>
-        <h2>{Array.from("Mario Iglesias").map((character, i) => <span className="hero-letter-mask" key={i}><motion.span initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ delay: .7 + i * .035, duration: .8, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</h2>
+        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8, ease: EASE_OUT }}>ESTUDIO DE DISEÑO Y DESARROLLO WEB</motion.p>
+        <h2>{Array.from("Casa Iglesias").map((character, i) => <span className="hero-letter-mask" key={i}><motion.span initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ delay: .7 + i * .035, duration: .8, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</h2>
         <motion.span className="intro-line" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.3, duration: .9, ease: EASE_OUT }} />
       </motion.div>
     </motion.div>}

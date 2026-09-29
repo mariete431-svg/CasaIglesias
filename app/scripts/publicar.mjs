@@ -15,33 +15,33 @@ const SITE = `https://mariete431-svg.github.io${BASE}`;
 // index: si Google debe mostrar la página en sus resultados
 const pages = {
   "": {
-    title: "Mario Iglesias — Atención al cliente y desarrollo web",
-    description: "Mario Iglesias Martínez en Adeje, Tenerife. Atención al cliente, organización y desarrollo web. Conoce su trayectoria, proyectos y reserva una reunión.",
+    title: "Casa Iglesias — Estudio de diseño y desarrollo web",
+    description: "Casa Iglesias, estudio de diseño y desarrollo web de Mario Iglesias en Adeje, Tenerife. Webs cuidadas para negocios. Mira sus proyectos y reserva una reunión.",
     index: true,
   },
   cv: {
-    title: "CV — Mario Iglesias",
+    title: "CV — Casa Iglesias",
     description: "Currículum de Mario Iglesias Martínez: experiencia en atención al cliente, cocina y restauración, formación y habilidades. Descárgalo en PDF.",
     index: true,
   },
   "crear-cv": {
-    title: "Crea tu currículum gratis — Mario Iglesias",
+    title: "Crea tu currículum gratis — Casa Iglesias",
     description: "Herramienta gratuita para crear tu CV en directo y guardarlo en PDF. Sin registrarte y sin enviar tus datos a ningún sitio.",
     index: true,
   },
   privacidad: {
-    title: "Privacidad y aviso legal — Mario Iglesias",
+    title: "Privacidad y aviso legal — Casa Iglesias",
     description: "Qué datos guarda la web de Mario Iglesias, para qué se usan y cómo pedir que se borren.",
     index: true,
   },
   blog: {
-    title: "Blog — Mario Iglesias",
+    title: "Blog — Casa Iglesias",
     description: "Tengo 24 años y hago diseños web. Es mi primera vez en todo esto y estoy aprendiendo: aquí cuento lo que voy haciendo en mi web.",
     index: true,
   },
-  tareas: { title: "Lista de tareas — Mario Iglesias", description: "Una lista de tareas sencilla que se guarda en tu navegador.", index: false },
-  panel: { title: "Mi panel — Mario Iglesias", description: "Panel personal de Mario Iglesias.", index: false },
-  admin: { title: "Panel privado — Mario Iglesias", description: "Acceso privado.", index: false },
+  tareas: { title: "Lista de tareas — Casa Iglesias", description: "Una lista de tareas sencilla que se guarda en tu navegador.", index: false },
+  panel: { title: "Mi panel — Casa Iglesias", description: "Panel personal de Mario Iglesias.", index: false },
+  admin: { title: "Panel privado — Casa Iglesias", description: "Acceso privado.", index: false },
 };
 
 const escape = (text) => text.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
@@ -74,7 +74,8 @@ const personJson = JSON.stringify({
       "@id": `${SITE}#mario`,
       name: "Mario Iglesias Martínez",
       alternateName: "Mario Iglesias",
-      jobTitle: "Atención al cliente y desarrollo web",
+      jobTitle: "Diseño y desarrollo web",
+      worksFor: { "@id": `${SITE}#estudio` },
       url: SITE,
       image: `${SITE}og-imagen.jpg`,
       email: "mailto:mariete431@icloud.com",
@@ -82,7 +83,8 @@ const personJson = JSON.stringify({
       knowsLanguage: ["es", "en"],
       sameAs: ["https://www.instagram.com/Whsmario/"],
     },
-    { "@type": "WebSite", "@id": `${SITE}#web`, url: SITE, name: "Mario Iglesias", inLanguage: "es", publisher: { "@id": `${SITE}#mario` } },
+    { "@type": "WebSite", "@id": `${SITE}#web`, url: SITE, name: "Casa Iglesias", alternateName: "Casa Iglesias · Estudio de diseño y desarrollo web", inLanguage: "es", publisher: { "@id": `${SITE}#estudio` } },
+    { "@type": "ProfessionalService", "@id": `${SITE}#estudio`, name: "Casa Iglesias", description: "Estudio de diseño y desarrollo web", url: SITE, logo: `${SITE}apple-touch-icon.png`, image: `${SITE}og-imagen.jpg`, founder: { "@id": `${SITE}#mario` }, areaServed: "Tenerife", address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" } },
   ],
 });
 
@@ -125,7 +127,7 @@ for (const [route, meta] of Object.entries(pages)) {
 }
 
 // Página de error: nunca debe aparecer en Google
-writeFileSync(join(dist, "404.html"), pageHtml("", { ...pages[""], title: "Página no encontrada — Mario Iglesias", index: false }));
+writeFileSync(join(dist, "404.html"), pageHtml("", { ...pages[""], title: "Página no encontrada — Casa Iglesias", index: false }));
 
 // ---------- Blog ----------
 // Los artículos son archivos .md en src/content/blog (ver src/lib/blog.ts para el formato)

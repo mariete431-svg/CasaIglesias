@@ -10,6 +10,8 @@ import "@fontsource/cormorant-garamond/latin-500.css";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "@fontsource/inter/latin-600.css";
+// Letra del logo de Casa Iglesias (solo para el logo)
+import "@fontsource/bodoni-moda/latin-500.css";
 import "./styles.css";
 
 // Nadie puede mostrar esta web dentro de otra página (protección contra engaños por "clickjacking")

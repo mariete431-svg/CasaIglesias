@@ -23,7 +23,7 @@ export default function BlogPostPage() {
   const html = useMemo(() => post ? toHtml(post.body) : "", [post]);
   const navigate = useNavigate();
   const reduced = useMotionPreference();
-  usePageTitle(post ? `${post.title} — Mario Iglesias` : "Artículo no encontrado — Mario Iglesias");
+  usePageTitle(post ? `${post.title} — Casa Iglesias` : "Artículo no encontrado — Casa Iglesias");
   if (!post) return <NotFound />;
 
   const newer = posts[index - 1];

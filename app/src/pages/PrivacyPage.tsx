@@ -5,7 +5,7 @@ import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome"
 const EMAIL = "mariete431@icloud.com";
 
 export default function PrivacyPage() {
-  usePageTitle("Privacidad y aviso legal — Mario Iglesias");
+  usePageTitle("Privacidad y aviso legal — Casa Iglesias");
   return <main>
     <PageHero
       eyebrow="PRIVACIDAD — ACTUALIZADO EN SEPTIEMBRE DE 2026"

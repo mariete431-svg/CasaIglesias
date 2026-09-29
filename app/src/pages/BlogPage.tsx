@@ -8,7 +8,7 @@ import { formatPostDate, isoDay, posts } from "@/lib/blog";
 import { asset } from "@/lib/asset";
 
 export default function BlogPage() {
-  usePageTitle("Blog — Mario Iglesias");
+  usePageTitle("Blog — Casa Iglesias");
   const [tag, setTag] = useState<string | null>(null);
   const tags = useMemo(() => [...new Set(posts.flatMap(p => p.tags))].sort((a, b) => a.localeCompare(b, "es")), []);
   const visible = tag ? posts.filter(p => p.tags.includes(tag)) : posts;

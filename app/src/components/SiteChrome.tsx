@@ -15,6 +15,20 @@ const navigation = [
   { label: "Contacto", to: "/#contacto" },
 ];
 
+/** Sello de Casa Iglesias: dos aros y las iniciales CI. */
+export function BrandSeal({ size = 34 }: { size?: number }) {
+  return <svg className="brand-seal" width={size} height={size} viewBox="0 0 80 80" aria-hidden="true">
+    <circle cx="40" cy="40" r="37" fill="none" stroke="currentColor" strokeWidth="2.2" />
+    <circle cx="40" cy="40" r="31.5" fill="none" stroke="currentColor" strokeWidth="1.1" />
+    <text x="40" y="49.5" textAnchor="middle" fontFamily="'Bodoni Moda', Didot, Georgia, serif" fontWeight="500" fontSize="27" fill="currentColor">CI</text>
+  </svg>;
+}
+
+/** Logo horizontal de la cabecera: sello + nombre del estudio. */
+export function BrandLogo() {
+  return <span className="brand-logo" aria-label="Casa Iglesias, estudio de diseño y desarrollo web"><BrandSeal /><span className="brand-name" aria-hidden="true">Casa Iglesias</span></span>;
+}
+
 /** En la portada los enlaces de sección son anclas normales; en el resto, llevan a la portada. */
 function useHref(to: string) {
   const { pathname } = useLocation();
@@ -61,7 +75,7 @@ export function SiteHeader() {
   return <>
     <a className="skip-link" href="#pagina" onClick={skip}>Saltar al contenido</a>
     <header className="site-header"><div className="header-inner">
-      <NavItem to="/#inicio" className="brand"><span>Mario Iglesias<span className="brand-dot" aria-hidden="true">.</span></span></NavItem>
+      <NavItem to="/#inicio" className="brand"><BrandLogo /></NavItem>
       <nav className="desktop-nav" aria-label="Navegación principal">{navigation.map(item => <NavItem key={item.label} to={item.to} className="nav-link">{item.label}</NavItem>)}</nav>
       <div className="header-actions">
         <NavItem to="/crear-cv" className="header-book header-book-light">Crear CV <ArrowUpRight size={15} strokeWidth={1.5} /></NavItem>
@@ -82,7 +96,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return <footer className="footer"><div className="section-wrap">
-    <span>© 2026 Mario Iglesias · Adeje, Tenerife</span>
+    <span className="footer-brand"><BrandSeal size={26} />© 2026 Casa Iglesias · Mario Iglesias · Adeje, Tenerife</span>
     <nav aria-label="Enlaces legales">
       <Link to="/blog">Blog</Link>
       <Link to="/privacidad">Privacidad y aviso legal</Link>

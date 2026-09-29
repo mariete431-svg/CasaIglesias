@@ -746,22 +746,25 @@ h2 em { display: inline-block; }
    Fondo burdeos, letras crema y el amarillo bebé para los detalles.
    ========================================================= */
 :root {
-  --ink: oklch(0.255 0.072 14);
-  --background: oklch(0.255 0.072 14);
-  --foreground: oklch(0.975 0.035 98);
-  --primary: oklch(0.955 0.075 100);
-  --primary-foreground: oklch(0.255 0.072 14);
-  --secondary: oklch(0.29 0.08 14);
-  --secondary-foreground: oklch(0.975 0.035 98);
-  --muted: oklch(0.33 0.07 14);
-  --muted-foreground: oklch(0.84 0.045 75);
-  --accent-foreground: oklch(0.255 0.072 14);
-  --border: oklch(0.975 0.035 98 / .17);
-  --input: oklch(0.975 0.035 98 / .25);
-  --ring: oklch(0.955 0.075 100);
-  --card: oklch(0.29 0.08 14);
-  --card-foreground: oklch(0.975 0.035 98);
-  --marker: oklch(0.975 0.035 98 / .13);
+  /* Colores exactos de la marca Casa Iglesias (ver la guía de marca) */
+  --ink: #5E1624;
+  --background: #5E1624;
+  --foreground: #FBF6EE;
+  --primary: #F7E49A;
+  --primary-foreground: #5E1624;
+  --secondary: #6A1D2C;
+  --secondary-foreground: #FBF6EE;
+  --muted: #76283A;
+  --muted-foreground: #E8D3B6;
+  --accent: #F7E49A;
+  --accent-foreground: #5E1624;
+  --border: rgba(251, 246, 238, .17);
+  --input: rgba(251, 246, 238, .25);
+  --ring: #F7E49A;
+  --card: #6A1D2C;
+  --card-foreground: #FBF6EE;
+  --marker: rgba(251, 246, 238, .13);
+  --gold: #F7E49A;
   color-scheme: dark;
 }
 body { background: var(--background); }
@@ -850,12 +853,7 @@ html.lenis { scroll-behavior: auto !important; }
 /* ---------- Navegadores antiguos (iPhone con iOS 15.3 o anterior) ----------
    No entienden los colores "oklch": se les dan los mismos colores en formato clásico */
 @supports not (color: oklch(0 0 0)) {
-  :root {
-    --ink: #3d1119; --background: #3d1119; --foreground: #fbf6e6; --primary: #fbf0b3; --primary-foreground: #3d1119;
-    --secondary: #47151e; --secondary-foreground: #fbf6e6; --muted: #52202a; --muted-foreground: #e3cfae;
-    --accent: #fbf0b3; --accent-foreground: #3d1119; --border: rgba(251, 246, 230, .17); --input: rgba(251, 246, 230, .25);
-    --ring: #fbf0b3; --card: #47151e; --card-foreground: #fbf6e6; --gold: #f3dc7c; --marker: rgba(251, 246, 230, .13); --destructive: #c8553d;
-  }
+  :root { --muted-foreground: #E8D3B6; --destructive: #c8553d; }
 }
 
 /* Texto que llega dentro del HTML (para buscadores) mientras carga la web: ya con el estilo de la portada */
@@ -976,3 +974,12 @@ html.lenis { scroll-behavior: auto !important; }
 .post-main strong { font-size: clamp(26px, 2.6vw, 36px); }
 @media (max-width: 700px) { .post-header h1 { font-size: clamp(32px, 9vw, 44px); } .post-main strong { font-size: 27px; } }
 .post-body ul { list-style: disc; } .post-body ol { list-style: decimal; }
+
+/* ---------- Logo de Casa Iglesias en la cabecera y el pie ---------- */
+.brand-logo { display: inline-flex; align-items: center; gap: 12px; color: var(--accent); }
+.brand-seal { flex: none; }
+.brand-name { font: 500 17px/1 "Bodoni Moda", Didot, Georgia, serif; letter-spacing: .3em; text-transform: uppercase; color: var(--foreground); white-space: nowrap; }
+.footer-brand { display: inline-flex; align-items: center; gap: 10px; }
+.footer-brand .brand-seal { color: var(--accent); }
+@media (max-width: 700px) { .brand-logo { gap: 9px; } .brand-seal { width: 30px; height: 30px; } .brand-name { font-size: 14px; letter-spacing: .24em; } }
+@media (max-width: 370px) { .brand-name { font-size: 12px; letter-spacing: .18em; } }
