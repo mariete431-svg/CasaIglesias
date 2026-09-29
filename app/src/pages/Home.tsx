@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowUpRight, CalendarDays, Plus } from "lucide-react";
+import { ArrowDown, ArrowUpRight, CalendarDays, FileText, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Stamp, Tilt } from "@/components/EditorialEffects";
 import { usePageTitle } from "@/components/SiteChrome";
@@ -54,9 +54,9 @@ function Pricing() {
   </div></section>;
 }
 
-/* ---------- Lo principal: el desplegable para reservar una reunión ---------- */
+/* ---------- Lo principal: dos desplegables (reservar reunión y crear CV) ---------- */
 const shortDay = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
-type Panel = "reservar" | null;
+type Panel = "reservar" | "cv" | null;
 
 function StartHere() {
   const [open, setOpen] = useState<Panel>(null);
@@ -105,7 +105,7 @@ function StartHere() {
 
   return <section id="servicios" className="start-section"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">01 / EMPIEZA AQUÍ</span><span className="section-rule" /></div></Reveal>
-    <h2 className="sr-only">Empieza aquí: reserva una reunión</h2>
+    <h2 className="sr-only">Empieza aquí: reserva una reunión o crea tu currículum</h2>
     <div className="start-list">
       <Reveal><div id="reservar" className={`start-item ${open === "reservar" ? "is-open" : ""}`}>
         <button type="button" className="start-toggle" aria-expanded={open === "reservar"} aria-controls="start-reservar" onClick={() => toggle("reservar")} data-cursor={open === "reservar" ? "Cerrar" : "Abrir"}>
@@ -118,6 +118,24 @@ function StartHere() {
         </motion.div>
       </div></Reveal>
 
+      <Reveal delay={.06}><div className={`start-item ${open === "cv" ? "is-open" : ""}`}>
+        <button type="button" className="start-toggle" aria-expanded={open === "cv"} aria-controls="start-cv" onClick={() => toggle("cv")} data-cursor={open === "cv" ? "Cerrar" : "Abrir"}>
+          <span className="start-icon"><FileText strokeWidth={1.2} /></span>
+          <span className="start-text"><strong>Crea tu <em>currículum</em></strong><small>Herramienta gratuita · en directo · guárdalo en PDF</small></span>
+          <span className="start-plus" aria-hidden="true"><Plus /></span>
+        </button>
+        <motion.div id="start-cv" className="start-panel" inert={open !== "cv"} initial={false} animate={{ height: open === "cv" ? "auto" : 0, opacity: open === "cv" ? 1 : 0 }} transition={{ duration: .55, ease: [.22, 1, .36, 1] }}>
+          <div className="start-panel-inner start-cv">
+            <div className="feature-paper" aria-hidden="true"><span /><span /><span /><span /><span /></div>
+            <div>
+              <p>Rellena tus datos y míralo tomar forma en directo. Cuando esté listo, guárdalo en PDF. Sin registrarte y sin enviar nada a ningún sitio.</p>
+              <div className="hero-actions">
+                <Button variant="luxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Empezar mi CV <ArrowUpRight /></Link></Button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div></Reveal>
     </div>
   </div></section>;
 }
@@ -134,7 +152,7 @@ export default function Home() {
         <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ESTUDIO DE DISEÑO Y DESARROLLO WEB · TENERIFE <span className="status-pill"><i aria-hidden="true" />Disponible</span></p></Reveal>
           <HeroTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.35} />
           <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Diseño y desarrollo webs para negocios, por Mario Iglesias.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
-          <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="#precios" data-cursor="Ver">Ver precios <ArrowUpRight /></a></Button></Magnetic></motion.div>
+          <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><Link to="/crear-cv" data-cursor="Crear">Crear mi CV gratis <ArrowUpRight /></Link></Button></Magnetic></motion.div>
         </HeroDepth>
         <div className="hero-stamp"><Stamp show={heroReady} /></div>
         <div className="hero-bottom"><span>CASA IGLESIAS · POR MARIO IGLESIAS</span><a href="#servicios" aria-label="Bajar a los servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
