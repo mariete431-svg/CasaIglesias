@@ -9,7 +9,7 @@ etiquetas: Diseño, Proceso
 
 - La portada ya no muestra mi currículum: he quitado el perfil, la trayectoria y las competencias.
 - En su lugar hay una sección corta, **El estudio**, que cuenta quién hay detrás de Casa Iglesias y cómo trabajo.
-- El creador de CV gratuito pasa a un segundo plano: sigue en «Empieza aquí», en Proyectos y al final del menú del móvil. El botón grande de la portada ahora es «Ver precios».
+- El creador de CV gratuito solo aparece en el desplegable de «Empieza aquí». El botón grande de la portada ahora es «Ver precios».
 - El orden queda así: empieza aquí, precios, estudio, proyectos, opiniones y contacto.
 
 ## Por qué

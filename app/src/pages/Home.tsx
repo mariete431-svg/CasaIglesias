@@ -19,7 +19,6 @@ const projects = [
   { name: "Web personal", description: "Diseñada y programada por mí.", to: "#inicio" },
   { name: "Lista de tareas", description: "Organización sencilla para el día a día.", to: "/tareas" },
   { name: "Panel personal", description: "Un espacio para tenerlo todo en orden.", to: "/panel" },
-  { name: "Creador de CV", description: "Una herramienta para presentar tu experiencia.", to: "/crear-cv" },
   { name: "Blog", description: "Lo que voy haciendo y aprendiendo.", to: "/blog" },
   { name: "Edición de vídeo", description: "En proceso.", to: "" },
 ];

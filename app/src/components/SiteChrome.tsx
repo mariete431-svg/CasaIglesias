@@ -86,7 +86,6 @@ export function SiteHeader() {
         <NavItem to="/#reservar" className="mobile-cta mobile-cta-dark" onClick={() => setMenuOpen(false)}><small>RESERVA</small>Reservar reunión<ArrowUpRight /></NavItem>
       </motion.div>
       {navigation.map((item, i) => <motion.div key={item.label} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .12 + i * .05, duration: .45 }}><NavItem to={item.to} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{item.label}<ArrowUpRight /></NavItem></motion.div>)}
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .12 + navigation.length * .05, duration: .45 }}><NavItem to="/crear-cv" onClick={() => setMenuOpen(false)}><span>0{navigation.length + 1}</span>Crear mi CV<ArrowUpRight /></NavItem></motion.div>
       <p>Adeje, Tenerife — 2026</p>
     </motion.nav>}
   </>;
