@@ -15,6 +15,8 @@ const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: 
 export const CV_PDF = asset("cv-mario-iglesias.pdf");
 
 const projects = [
+  { name: "Obra Clara", description: "Web para una empresa de reformas, con calculadora de presupuesto y antes y después (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/obra-clara/" },
+  { name: "Garaje Nueve", description: "Web para un taller, con seguimiento de la reparación por matrícula (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/garaje-nueve/" },
   { name: "ZONA 4", description: "Web para un gimnasio (proyecto de práctica).", to: "https://mariete431-svg.github.io/zona4/" },
   { name: "Casa Iglesias", description: "La marca y la web de mi propio estudio.", to: "#inicio" },
 ];
