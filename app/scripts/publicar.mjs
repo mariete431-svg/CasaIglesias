@@ -9,7 +9,7 @@ import { marked } from "marked";
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(app, "dist");
 const root = join(app, "..");
-const BASE = "/MarioIglesias/";
+const BASE = "/CasaIglesias/";
 const SITE = `https://mariete431-svg.github.io${BASE}`;
 
 // index: si Google debe mostrar la página en sus resultados
@@ -79,10 +79,10 @@ const personJson = JSON.stringify({
       email: "mailto:mariete431@icloud.com",
       address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" },
       knowsLanguage: ["es", "en"],
-      sameAs: ["https://www.instagram.com/Whsmario/"],
+      sameAs: ["https://www.instagram.com/casaiglesias.studio/"],
     },
     { "@type": "WebSite", "@id": `${SITE}#web`, url: SITE, name: "Casa Iglesias", alternateName: "Casa Iglesias · Estudio de diseño y desarrollo web", inLanguage: "es", publisher: { "@id": `${SITE}#estudio` } },
-    { "@type": "ProfessionalService", "@id": `${SITE}#estudio`, name: "Casa Iglesias", description: "Estudio de diseño y desarrollo web", url: SITE, logo: `${SITE}apple-touch-icon.png`, image: `${SITE}og-imagen.jpg`, founder: { "@id": `${SITE}#mario` }, areaServed: "Tenerife", address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" } },
+    { "@type": "ProfessionalService", "@id": `${SITE}#estudio`, name: "Casa Iglesias", description: "Estudio de diseño y desarrollo web", url: SITE, logo: `${SITE}apple-touch-icon.png`, image: `${SITE}og-imagen.jpg`, founder: { "@id": `${SITE}#mario` }, sameAs: ["https://www.instagram.com/casaiglesias.studio/"], areaServed: "Tenerife", address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" } },
   ],
 });
 
@@ -242,7 +242,7 @@ ${posts.map(p => `  <url><loc>${SITE}blog/${p.slug}/</loc><lastmod>${day(p.date)
 const redirects = { "cv.html": "cv/", "tareas.html": "", "dashboard.html": "", "tareas/index.html": "", "panel/index.html": "", "crear-cv.html": "crear-cv/", "admin.html": "admin/" };
 for (const [file, target] of Object.entries(redirects)) {
   mkdirSync(dirname(join(dist, file)), { recursive: true });
-  writeFileSync(join(dist, file), `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Mario Iglesias</title>
+  writeFileSync(join(dist, file), `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Casa Iglesias</title>
 <link rel="canonical" href="${SITE}${target}">
 <script>location.replace("${BASE}${target}" + location.search + location.hash);</script>
 <meta http-equiv="refresh" content="0; url=${BASE}${target}"></head><body><a href="${BASE}${target}">Continuar</a></body></html>\n`);
