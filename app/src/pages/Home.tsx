@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, Plus } from "lucide-react";
@@ -69,8 +69,19 @@ function StartHere() {
   const [open, setOpen] = useState<Panel>(null);
   const [days, setDays] = useState<string[] | null>(null);
 
-  // Los próximos huecos se piden cuando la página ya ha cargado, para no retrasar la portada
+  // Los próximos huecos se piden al acercarse a esta sección, para no retrasar la portada
+  const sectionRef = useRef<HTMLElement>(null);
+  const [near, setNear] = useState(false);
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || !("IntersectionObserver" in window)) { setNear(true); return; }
+    const observer = new IntersectionObserver(entries => { if (entries[0]?.isIntersecting) { setNear(true); observer.disconnect(); } }, { rootMargin: "200px 0px" });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!near) return;
     let active = true;
     const load = () => {
       const now = new Date();
@@ -87,7 +98,7 @@ function StartHere() {
       active = false;
       if (hasIdle) window.cancelIdleCallback(idle); else window.clearTimeout(idle);
     };
-  }, []);
+  }, [near]);
 
   // Cualquier enlace a #reservar (cabecera, botones, otras páginas) abre el calendario
   useEffect(() => {
@@ -110,7 +121,7 @@ function StartHere() {
     : days.length ? `Próximos huecos: ${days.map(d => capitalize(shortDay.format(new Date(`${d}T12:00:00Z`)).replace(".", ""))).join(" · ")}`
       : "Consulta el calendario";
 
-  return <section id="servicios" className="start-section"><div className="section-wrap">
+  return <section ref={sectionRef} id="servicios" className="start-section"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">01 / EMPIEZA AQUÍ</span><span className="section-rule" /></div></Reveal>
     <h2 className="sr-only">Empieza aquí: reserva una reunión</h2>
     <div className="start-list">
@@ -144,7 +155,7 @@ export default function Home() {
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="#precios" data-cursor="Ver">Ver precios <ArrowUpRight /></a></Button></Magnetic></motion.div>
         </HeroDepth>
         <div className="hero-stamp"><Stamp show={heroReady} /></div>
-        <div className="hero-bottom"><span>CASA IGLESIAS · POR MARIO IGLESIAS</span><a href="#servicios" aria-label="Bajar a los servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
+        <div className="hero-bottom"><span>CASA IGLESIAS · POR MARIO IGLESIAS</span><a href="#servicios">DESLIZA PARA DESCUBRIR <ArrowDown size={15} strokeWidth={1.5} /></a></div>
       </section>
 
       <StartHere />

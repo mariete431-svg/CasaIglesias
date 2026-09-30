@@ -192,7 +192,7 @@ export function EditorialMarquee({ phrase = "Diseño web ✦ Identidad visual �
   // Al hacer scroll rápido el texto se inclina ligeramente y vuelve a su sitio al parar
   const skewX = useSpring(useTransform(velocity, [-2500, 0, 2500], [7, 0, -7], { clamp: true }), { stiffness: 200, damping: 30 });
   useEffect(() => velocity.on("change", value => setSpeed(Math.min(Math.abs(value) / 1300, .6))), [velocity]);
-  return <div className="marquee-band" aria-label={phrase}><motion.div style={reduced ? {} : { skewX }}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase.split("✦").map((word, j, all) => <span key={j}>{word}{j < all.length - 1 && <b className="marquee-star">✦</b>}</span>)}</span>)}</motion.div></motion.div></div>;
+  return <div className="marquee-band" role="img" aria-label={phrase}><motion.div style={reduced ? {} : { skewX }}><motion.div className="marquee-track" aria-hidden="true" animate={reduced ? false : { x: ["0%", "-50%"] }} transition={{ duration: 38 / (1 + speed), ease: "linear", repeat: Infinity }}>{Array.from({ length: 4 }, (_, i) => <span key={i}>{phrase.split("✦").map((word, j, all) => <span key={j}>{word}{j < all.length - 1 && <b className="marquee-star">✦</b>}</span>)}</span>)}</motion.div></motion.div></div>;
 }
 
 export function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {

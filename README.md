@@ -1,6 +1,6 @@
 # Mario Iglesias — web personal
 
-Web publicada: https://mariete431-svg.github.io/MarioIglesias/
+Web publicada: https://mariete431-svg.github.io/CasaIglesias/
 
 ## Dónde está cada cosa
 
