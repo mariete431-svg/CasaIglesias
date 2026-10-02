@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
     .update({ notified_at: new Date().toISOString() })
     .eq("id", id)
     .is("notified_at", null)
-    .select("id, name, email, phone, topic, starts_at")
+    .select("id, name, email, phone, topic, starts_at, meeting_type")
     .maybeSingle();
 
   if (error) {
@@ -80,7 +80,9 @@ Deno.serve(async (req) => {
     timeZone: TZ, hour: "2-digit", minute: "2-digit",
   }).format(when);
 
-  const subject = oneLine(`📅 Nueva cita: ${booking.name} · ${day}, ${time}`);
+  const TYPES: Record<string, string> = { primera: "Primera reunión", presupuesto: "Presupuesto", seguimiento: "Seguimiento" };
+  const type = TYPES[booking.meeting_type] ?? "Primera reunión";
+  const subject = oneLine(`📅 Nueva cita (${type.toLowerCase()}): ${booking.name} · ${day}, ${time}`);
 
   const row = (label: string, value: string) =>
     `<tr><td style="padding:6px 16px 6px 0;color:${MUTED};vertical-align:top">${label}</td><td style="padding:6px 0;color:${INK}">${value}</td></tr>`;
@@ -92,6 +94,7 @@ Deno.serve(async (req) => {
       <h1 style="margin:14px 0 4px;color:${INK};font-family:Georgia,serif;font-weight:400;font-size:30px">${esc(booking.name)}</h1>
       <p style="margin:0 0 24px;color:${INK};font-size:18px"><strong>${esc(day)} · ${esc(time)}</strong> <span style="color:${MUTED}">(hora de Canarias)</span></p>
       <table style="border-collapse:collapse;font-size:15px">
+        ${row("Tipo", esc(type))}
         ${row("Email", `<a href="mailto:${esc(booking.email)}" style="color:${INK}">${esc(booking.email)}</a>`)}
         ${booking.phone ? row("Teléfono", `<a href="tel:${esc(booking.phone)}" style="color:${INK}">${esc(booking.phone)}</a>`) : ""}
         ${booking.topic ? row("Tema", esc(booking.topic).replace(/\n/g, "<br>")) : ""}
@@ -106,6 +109,7 @@ Deno.serve(async (req) => {
   const text = [
     `Nueva cita: ${booking.name}`,
     `${day} · ${time} (hora de Canarias)`,
+    `Tipo: ${type}`,
     `Email: ${booking.email}`,
     booking.phone ? `Teléfono: ${booking.phone}` : "",
     booking.topic ? `Tema: ${booking.topic}` : "",

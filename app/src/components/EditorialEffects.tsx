@@ -238,6 +238,47 @@ export function HeroTitle({ lines = ["Mario", "Iglesias."], id = "hero-title", d
   </h1>;
 }
 
+/** Titular que se escribe letra a letra, como a máquina, con un cursor que parpadea al final.
+ *  Las letras ocupan su sitio desde el principio (invisibles), así el diseño no salta. */
+export function TypeTitle({ lines, id = "hero-title", delay = .3, play = true, speed = 95 }: { lines: string[]; id?: string; delay?: number; play?: boolean; speed?: number }) {
+  const reduced = useMotionPreference();
+  const total = lines.reduce((n, line) => n + Array.from(line).length, 0);
+  const [typed, setTyped] = useState(0);
+  useEffect(() => {
+    if (!play) return;
+    if (reduced) { setTyped(total); return; }
+    let count = 0;
+    let timer = 0;
+    // Un pequeño ritmo humano: más pausa al cambiar de línea
+    const next = () => {
+      count++;
+      setTyped(count);
+      if (count >= total) return;
+      const lineBreak = count === Array.from(lines[0] ?? "").length;
+      timer = window.setTimeout(next, lineBreak ? speed * 3.2 : speed * (.75 + Math.random() * .5));
+    };
+    timer = window.setTimeout(next, delay * 1000);
+    return () => window.clearTimeout(timer);
+  }, [play, reduced, total, delay, speed, lines]);
+
+  let index = 0;
+  const done = typed >= total;
+  return <h1 id={id} className="type-title" aria-label={lines.join(" ")}>
+    {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>
+      {Array.from(line).map(character => {
+        const i = index++;
+        const shown = i < typed;
+        return <span key={i} className={`type-letter ${lineIndex ? "hero-italic" : ""} ${shown ? "is-typed" : ""}`}>
+          {character === " " ? " " : character}
+          {i === typed - 1 && !done && <i className="type-caret" />}
+        </span>;
+      })}
+      {lineIndex === lines.length - 1 && done && <i className="type-caret is-idle" />}
+      {typed === 0 && lineIndex === 0 && <i className="type-caret is-idle" />}
+    </span></span>)}
+  </h1>;
+}
+
 /** Portada en 3D: al bajar, el bloque se inclina hacia atrás y se aleja, como una hoja que se tumba. */
 export function HeroDepth({ children, className = "" }: { children: ReactNode; className?: string }) {
   const reduced = useMotionPreference();

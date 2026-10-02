@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, Plus, RotateCcw, X } from "lucide-react";
+import { Download, Plus, Printer, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/EditorialEffects";
 import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome";
 import { newId, readStored, writeStored } from "@/lib/utils";
 
 const PHOTO_KEY = "mi-cv-foto";
+const LOGO_KEY = "mi-cv-logo";
+const COLOR_KEY = "mi-cv-color";
+const COLORS = ["#3d1119", "#1f2a44", "#2f4a3a", "#8a5a2b", "#222222"];
 const DRAFT_KEY = "mario-crear-cv";
 type Education = { id: string; title: string; center: string; dates: string };
 type Job = { id: string; title: string; company: string; dates: string; desc: string };
@@ -46,6 +49,41 @@ export default function BuilderPage() {
   useEffect(() => { writeStored(DRAFT_KEY, cv); }, [cv]);
   // La foto también se guarda (ya reducida) para que no se pierda al recargar
   useEffect(() => { writeStored(PHOTO_KEY, photo); }, [photo]);
+  // Tu marca: logo (PNG con transparencia) y color de los títulos y la línea
+  const [logo, setLogo] = useState<string | null>(() => readStored<string | null>(LOGO_KEY, null));
+  const [color, setColor] = useState<string>(() => readStored<string>(COLOR_KEY, COLORS[0]));
+  useEffect(() => { writeStored(LOGO_KEY, logo); }, [logo]);
+  useEffect(() => { writeStored(COLOR_KEY, color); }, [color]);
+  const [making, setMaking] = useState(false);
+
+  const pickLogo = (file?: File) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      // Los SVG a veces no traen tamaño: se les da uno razonable
+      const w0 = img.width || 600, h0 = img.height || 300;
+      const scale = Math.min(1, 600 / Math.max(w0, h0));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(w0 * scale);
+      canvas.height = Math.round(h0 * scale);
+      canvas.getContext("2d")?.drawImage(img, 0, 0, canvas.width, canvas.height);
+      setLogo(canvas.toDataURL("image/png"));
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); alert("No se ha podido abrir ese logo. Prueba con un PNG, JPG o SVG."); };
+    img.src = url;
+  };
+
+  const downloadPdf = async () => {
+    setMaking(true);
+    try {
+      const { downloadCvPdf } = await import("@/lib/cvPdf");
+      downloadCvPdf(cv, { photo, logo, color });
+    } catch {
+      alert("No se ha podido crear el PDF. Prueba con el botón «Imprimir / guardar como PDF».");
+    } finally { setMaking(false); }
+  };
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setCv(prev => ({ ...prev, [key]: value }));
   const setEdu = (i: number, key: Exclude<keyof Education, "id">, value: string) => set("education", cv.education.map((e, j) => j === i ? { ...e, [key]: value } : e));
@@ -81,16 +119,16 @@ export default function BuilderPage() {
 
   const reset = () => {
     if (!confirm("¿Borrar todo lo que has escrito y empezar de cero?")) return;
-    setCv(empty); setPhoto(null);
+    setCv(empty); setPhoto(null); setLogo(null); setColor(COLORS[0]);
   };
 
   const contact = [cv.email, cv.phone, cv.location].filter(Boolean);
 
   return <main>
     <PageHero
-      eyebrow="PROYECTO 04 — HERRAMIENTA"
+      eyebrow="HERRAMIENTA GRATIS — CREA TU CV"
       lines={["Crea tu", "currículum."]}
-      subtitle="Rellena tus datos y verás tu CV tomar forma en directo. Cuando esté listo, guárdalo en PDF. Se guarda solo en tu propio navegador y no se envía a ningún sitio."
+      subtitle="Gratis y sin registrarte. Rellena tus datos, añade tu logo y tu color, y verás tu CV tomar forma en directo. Cuando esté listo, descárgalo en PDF. Se guarda solo en tu propio navegador y no se envía a ningún sitio."
       bottomHref="#editor"
     />
 
@@ -113,6 +151,21 @@ export default function BuilderPage() {
               <Field id="cv-phone" type="tel" label="Teléfono" value={cv.phone} onChange={v => set("phone", v)} placeholder="600 000 000" />
             </div>
             <Field id="cv-location" label="Ubicación" value={cv.location} onChange={v => set("location", v)} placeholder="Ciudad, provincia" />
+          </div></Reveal>
+
+          <Reveal><div className="builder-group">
+            <h3>Tu <em>marca</em> <span className="optional">Opcional</span></h3>
+            <p className="form-note">Si tienes logo, súbelo y saldrá arriba de tu CV. Elige también el color de los títulos.</p>
+            <div className="photo-picker">
+              <div className="thumb logo-thumb">{logo ? <img src={logo} alt="Tu logo" /> : "SIN LOGO"}</div>
+              <Button variant="outlineLuxury" asChild><label htmlFor="cv-logo">Subir logo</label></Button>
+              <input id="cv-logo" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp" className="sr-only" onChange={e => pickLogo(e.target.files?.[0])} />
+              {logo && <Button variant="text" onClick={() => setLogo(null)}>Quitar</Button>}
+            </div>
+            <div className="color-picker" role="group" aria-label="Color de tu marca">
+              {COLORS.map(c => <button key={c} type="button" className="color-dot" style={{ background: c }} aria-label={`Color ${c}`} aria-pressed={color === c} onClick={() => setColor(c)} />)}
+              <label className="color-custom">Otro color<input type="color" value={color} onChange={e => setColor(e.target.value)} /></label>
+            </div>
           </div></Reveal>
 
           <Reveal><div className="builder-group">
@@ -154,17 +207,19 @@ export default function BuilderPage() {
           </div></Reveal>
 
           <div className="builder-group hero-actions" style={{ marginTop: 0 }}>
-            <Button variant="luxury" size="lg" onClick={printPreview} data-cursor="PDF"><Download /> Guardar como PDF</Button>
-            <Button variant="outlineLuxury" size="lg" onClick={reset}><RotateCcw /> Empezar de cero</Button>
-            <p className="form-note" style={{ flexBasis: "100%" }}>Se abrirá la ventana de imprimir. En ordenador, elige «Guardar como PDF» como impresora. En iPhone, toca Compartir y luego «Guardar en Archivos».</p>
+            <Button variant="luxury" size="lg" onClick={downloadPdf} disabled={making} data-cursor="PDF"><Download /> {making ? "Creando PDF…" : "Descargar PDF"}</Button>
+            <Button variant="outlineLuxury" size="lg" onClick={printPreview}><Printer /> Imprimir</Button>
+            <Button variant="text" size="lg" onClick={reset}><RotateCcw /> Empezar de cero</Button>
+            <p className="form-note" style={{ flexBasis: "100%" }}>«Descargar PDF» guarda el archivo directamente, con tu logo y tu color. En iPhone lo encontrarás en la app Archivos, en Descargas.</p>
           </div>
         </div>
 
         <div className="builder-preview-wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>VISTA PREVIA</span>
-          <motion.article className="cv-paper" aria-label="Vista previa del currículum" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
+          <motion.article className="cv-paper" style={{ "--cv-accent": color } as React.CSSProperties} aria-label="Vista previa del currículum" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
             <header className="cv-paper-head">
               <div>
+                {logo && <img className="cv-paper-logo" src={logo} alt="" />}
                 <h2>{cv.name || <span className="placeholder">Tu nombre</span>}</h2>
                 <p>{cv.role || <span className="placeholder">Tu título profesional</span>}</p>
                 {!!contact.length && <div className="cv-paper-contact">{contact.map(c => <span key={c}>{c}</span>)}</div>}
