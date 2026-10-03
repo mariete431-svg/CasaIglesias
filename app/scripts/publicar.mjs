@@ -15,7 +15,7 @@ const SITE = `https://casaiglesias.es${BASE}`;
 // index: si Google debe mostrar la página en sus resultados
 const pages = {
   "": {
-    title: "Casa Iglesias — Estudio de diseño y desarrollo web",
+    title: "Casa Iglesias — Diseño y desarrollo web en Tenerife",
     description: "Casa Iglesias, estudio de diseño y desarrollo web de Mario Iglesias en Adeje, Tenerife. Webs cuidadas para negocios. Mira sus proyectos y reserva una reunión.",
     index: true,
   },
@@ -93,12 +93,33 @@ const personJson = JSON.stringify({
   ],
 });
 
+// La misma ficha en cada idioma (el idioma y la descripción cambian)
+const studioJson = (lang, description) => {
+  const g = JSON.parse(personJson);
+  const url = lang === "es" ? SITE : `${SITE}${lang}/`;
+  for (const node of g["@graph"]) {
+    if (node["@type"] === "WebSite") Object.assign(node, { inLanguage: lang, url, description });
+    if (node["@type"] === "ProfessionalService") Object.assign(node, {
+      description, email: "hola@casaiglesias.es", priceRange: "€€", areaServed: [{ "@type": "Place", name: "Tenerife" }, { "@type": "Place", name: "Islas Canarias" }],
+      availableLanguage: ["es", "en", "it", "de", "fr", "he"],
+      knowsAbout: ["Diseño web", "Desarrollo web", "Reservas online", "Identidad visual", "SEO local"],
+    });
+  }
+  return JSON.stringify(g);
+};
+// El creador de CV es una herramienta gratuita: Google puede mostrarla como aplicación web
+const cvToolJson = (lang, title, description) => JSON.stringify({
+  "@context": "https://schema.org", "@type": "WebApplication", name: title.split(" — ")[0], description,
+  url: `${SITE}${lang === "es" ? "" : `${lang}/`}crear-cv/`, inLanguage: lang, applicationCategory: "BusinessApplication", operatingSystem: "Web",
+  isAccessibleForFree: true, offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" }, creator: { "@id": `${SITE}#estudio` },
+});
+
 // Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
 // React lo sustituye por la página completa en cuanto carga.
 const links = [["", "Inicio"], ["#precios", "Precios"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
 const fallback = (title, description, lang = "es") => `<div class="seo-fallback">
       <p>ADEJE, TENERIFE</p>
-      <h1>${escape(title.split(" — ")[0])}</h1>
+      <h1>${escape(title.startsWith("Casa Iglesias —") ? title : title.split(" — ")[0])}</h1>
       <p>${escape(description)}</p>
       <nav aria-label="Páginas">${links.map(([href, label], i) => {
         const translated = lang !== "es" ? LANG_PAGES[lang].nav[i] : label;
@@ -119,7 +140,7 @@ const OG_LOCALE = { es: "es_ES", en: "en_GB", it: "it_IT", de: "de_DE", fr: "fr_
 const LANG_PAGES = {
   en: {
     baja: { title: "Unsubscribe from the newsletter — Casa Iglesias", description: "Unsubscribe from the newsletter." },
-    "": { title: "Casa Iglesias — Web design and development studio in Tenerife", description: "Casa Iglesias is Mario Iglesias's web design and development studio in Adeje, Tenerife. Carefully crafted websites, online booking and branding for businesses. Book a free call." },
+    "": { title: "Casa Iglesias — Web design studio in Tenerife", description: "Mario Iglesias's web design studio in Adeje, Tenerife: carefully crafted websites, online booking and branding for businesses. Book a free call." },
     "crear-cv": { title: "Create your CV for free — Casa Iglesias", description: "Free tool to create your CV live, with your logo and colour, and download it as a PDF. No sign-up and your data never leaves your browser." },
     privacidad: { title: "Privacy and legal notice — Casa Iglesias", description: "What data the Casa Iglesias website stores, what it is used for and how to ask for it to be deleted." },
     cuestionario: { title: "Questionnaire to start your website — Casa Iglesias", description: "Tell me about your business in ten minutes and I'll prepare a tailor-made proposal." },
@@ -127,7 +148,7 @@ const LANG_PAGES = {
   },
   it: {
     baja: { title: "Annulla l'iscrizione alla newsletter — Casa Iglesias", description: "Annulla l'iscrizione alla newsletter." },
-    "": { title: "Casa Iglesias — Studio di web design e sviluppo a Tenerife", description: "Casa Iglesias è lo studio di web design e sviluppo di Mario Iglesias ad Adeje, Tenerife. Siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
+    "": { title: "Casa Iglesias — Web design a Tenerife", description: "Lo studio di web design di Mario Iglesias ad Adeje, Tenerife: siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
     "crear-cv": { title: "Crea il tuo CV gratis — Casa Iglesias", description: "Strumento gratuito per creare il tuo CV in diretta, con logo e colore, e scaricarlo in PDF. Senza registrazione: i tuoi dati restano nel tuo browser." },
     privacidad: { title: "Privacy e note legali — Casa Iglesias", description: "Quali dati conserva il sito di Casa Iglesias, a cosa servono e come chiederne la cancellazione." },
     cuestionario: { title: "Questionario per iniziare il tuo sito — Casa Iglesias", description: "Raccontami la tua attività in dieci minuti e preparo una proposta su misura." },
@@ -135,7 +156,7 @@ const LANG_PAGES = {
   },
   de: {
     baja: { title: "Vom Newsletter abmelden — Casa Iglesias", description: "Vom Newsletter abmelden." },
-    "": { title: "Casa Iglesias — Studio für Webdesign und Webentwicklung auf Teneriffa", description: "Casa Iglesias ist das Studio für Webdesign und Webentwicklung von Mario Iglesias in Adeje, Teneriffa. Sorgfältige Websites, Online-Buchungen und Corporate Design für Unternehmen. Kostenloses Gespräch buchen." },
+    "": { title: "Casa Iglesias — Webdesign auf Teneriffa", description: "Das Webdesign-Studio von Mario Iglesias in Adeje, Teneriffa: sorgfältige Websites, Online-Buchungen und Branding für Unternehmen." },
     "crear-cv": { title: "Erstelle deinen Lebenslauf kostenlos — Casa Iglesias", description: "Kostenloses Tool, um deinen Lebenslauf live mit Logo und Farbe zu erstellen und als PDF herunterzuladen. Ohne Anmeldung, deine Daten bleiben im Browser." },
     privacidad: { title: "Datenschutz und Impressum — Casa Iglesias", description: "Welche Daten die Website von Casa Iglesias speichert, wofür sie genutzt werden und wie du ihre Löschung verlangst." },
     cuestionario: { title: "Fragebogen für deine neue Website — Casa Iglesias", description: "Erzähl mir in zehn Minuten von deinem Unternehmen und ich bereite ein maßgeschneidertes Angebot vor." },
@@ -143,8 +164,8 @@ const LANG_PAGES = {
   },
   fr: {
     baja: { title: "Se désinscrire de la newsletter — Casa Iglesias", description: "Se désinscrire de la newsletter." },
-    "": { title: "Casa Iglesias — Studio de design et développement web à Tenerife", description: "Casa Iglesias est le studio de design et développement web de Mario Iglesias à Adeje, Tenerife. Sites soignés, réservations en ligne et identité visuelle pour les entreprises. Réservez un appel gratuit." },
-    "crear-cv": { title: "Créez votre CV gratuitement — Casa Iglesias", description: "Outil gratuit pour créer votre CV en direct, avec votre logo et votre couleur, et le télécharger en PDF. Sans inscription, vos données restent dans votre navigateur." },
+    "": { title: "Casa Iglesias — Création de sites web à Tenerife", description: "Le studio de création web de Mario Iglesias à Adeje, Tenerife : sites soignés, réservation en ligne et identité visuelle pour les entreprises." },
+    "crear-cv": { title: "Créez votre CV gratuitement — Casa Iglesias", description: "Outil gratuit pour créer votre CV en direct, avec votre logo et votre couleur, et le télécharger en PDF. Sans inscription ni envoi de données." },
     privacidad: { title: "Confidentialité et mentions légales — Casa Iglesias", description: "Quelles données le site de Casa Iglesias conserve, à quoi elles servent et comment demander leur suppression." },
     cuestionario: { title: "Questionnaire pour lancer votre site — Casa Iglesias", description: "Parlez-moi de votre entreprise en dix minutes et je prépare une proposition sur mesure." },
     nav: ["Accueil", "Tarifs", "Blog (en espagnol)", "Réserver un appel", "Confidentialité"],
@@ -173,7 +194,7 @@ const heroPreload = `
 // content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
 function pageHtml(route, { title, description, index, jsonLd, content, ogType }, lang = "es") {
   const url = pageUrl(lang, route);
-  const ld = route === "" && lang === "es" ? personJson : jsonLd;
+  const ld = route === "" ? studioJson(lang, description) : route === "crear-cv" ? cvToolJson(lang, title, description) : jsonLd;
   let html = template
     .replace('<meta property="og:type" content="website" />', `<meta property="og:type" content="${ogType ?? "website"}" />`)
     .replace(/<title>[^<]*<\/title>/, `<title>${escape(title)}</title>`)
@@ -182,6 +203,7 @@ function pageHtml(route, { title, description, index, jsonLd, content, ogType },
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
     .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
+    .replace(/\s*<meta property="og:locale" content="[^"]*" \/>/, "")
     .replace("</head>", `${securityMeta}${rssLink}${route === "" ? heroPreload : ""}${hreflang(route)}\n    <meta property="og:locale" content="${OG_LOCALE[lang]}" />${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
     .replace('<div id="root"></div>', `<div id="root">${content ?? fallback(title, description, lang)}</div>`);
   if (lang !== "es") html = html.replace(/<html lang="es"[^>]*>/, `<html lang="${lang}"${lang === "he" ? ' dir="rtl"' : ""}>`);
@@ -253,6 +275,12 @@ for (const post of posts) {
     publisher: author,
     isPartOf: { "@type": "Blog", name: "Blog de Casa Iglesias", url: `${SITE}blog/` },
   });
+  // Migas de pan (Inicio › Blog › artículo) para que Google las enseñe en los resultados
+  const crumbs = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Inicio", item: SITE },
+    { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE}blog/` },
+    { "@type": "ListItem", position: 3, name: post.title, item: `${SITE}${route}/` },
+  ] };
   const content = `<article class="seo-fallback is-article">
       <p><a href="${BASE}blog/">BLOG</a> · ${day(post.date)}</p>
       <h1>${escape(post.title)}</h1>
@@ -260,7 +288,7 @@ for (const post of posts) {
       ${post.html}
       <p>Mario Iglesias · Escrito con ayuda de IA (Claude).</p>
     </article>`;
-  writeFileSync(join(folder, "index.html"), pageHtml(route, { title: `${post.title} — Casa Iglesias`, description: post.summary, index: true, jsonLd, content, ogType: "article" }));
+  writeFileSync(join(folder, "index.html"), pageHtml(route, { title: post.title.length > 44 ? post.title : `${post.title} — Casa Iglesias`, description: post.summary, index: true, jsonLd: `[${jsonLd},${JSON.stringify(crumbs)}]`, content, ogType: "article" }));
 }
 
 // Portada del blog: lista de artículos también dentro del HTML

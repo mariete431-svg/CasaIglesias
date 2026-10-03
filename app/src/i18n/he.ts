@@ -33,6 +33,7 @@ export const he: Dict = {
     projectFloat: "פרויקט", explore: "לצפייה ↗",
   },
   hero: {
+    seoTitle: "עיצוב ופיתוח אתרים בטנריפה",
     eyebrow: "סטודיו לעיצוב ופיתוח אתרים · טנריפה",
     available: "פנוי לפרויקטים",
     subtitle1: "אתרים וזהות חזותית לעסקים, מאת מריו איגלסיאס.",

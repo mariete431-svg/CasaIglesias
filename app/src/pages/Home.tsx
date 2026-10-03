@@ -192,7 +192,7 @@ export default function Home() {
       <section className="hero section-wrap" aria-labelledby="hero-title">
         <HeroBackdrop />
         <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> {t.hero.eyebrow} <span className="status-pill"><i aria-hidden="true" />{t.hero.available}</span></p></Reveal>
-          <TypeTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.45} />
+          <TypeTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.45} extra={t.hero.seoTitle} />
           <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>{t.hero.subtitle1}<br className="desktop-break" /> {t.hero.subtitle2}</motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor={t.cursor.book}>{t.hero.book} <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="#precios" data-cursor={t.cursor.see}>{t.hero.prices} <ArrowUpRight /></a></Button></Magnetic></motion.div>
         </HeroDepth>

@@ -2,7 +2,7 @@ import type { Dict } from "./es";
 
 export const en: Dict = {
   meta: {
-    home: "Casa Iglesias — Web design and development studio in Tenerife",
+    home: "Casa Iglesias — Web design studio in Tenerife",
     builder: "Create your CV for free — Casa Iglesias",
     brief: "Questionnaire to start your website — Casa Iglesias",
     privacy: "Privacy and legal notice — Casa Iglesias",
@@ -32,6 +32,7 @@ export const en: Dict = {
     projectFloat: "PROJECT", explore: "EXPLORE ↗",
   },
   hero: {
+    seoTitle: "Web design and development in Tenerife",
     eyebrow: "WEB DESIGN AND DEVELOPMENT STUDIO · TENERIFE",
     available: "Available",
     subtitle1: "Websites and visual identity for businesses, by Mario Iglesias.",

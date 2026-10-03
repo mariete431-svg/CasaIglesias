@@ -2,7 +2,7 @@ import type { Dict } from "./es";
 
 export const de: Dict = {
   meta: {
-    home: "Casa Iglesias — Studio für Webdesign und Webentwicklung auf Teneriffa",
+    home: "Casa Iglesias — Webdesign auf Teneriffa",
     builder: "Erstelle deinen Lebenslauf kostenlos — Casa Iglesias",
     brief: "Fragebogen für deine neue Website — Casa Iglesias",
     privacy: "Datenschutz und Impressum — Casa Iglesias",
@@ -32,6 +32,7 @@ export const de: Dict = {
     projectFloat: "PROJEKT", explore: "ANSEHEN ↗",
   },
   hero: {
+    seoTitle: "Webdesign und Webentwicklung auf Teneriffa",
     eyebrow: "STUDIO FÜR WEBDESIGN UND WEBENTWICKLUNG · TENERIFFA",
     available: "Verfügbar",
     subtitle1: "Websites und Corporate Design für Unternehmen, von Mario Iglesias.",
