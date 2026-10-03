@@ -119,7 +119,7 @@ export function Faq() {
    Instagram: últimos posts (servicio gratuito Behold)
    ========================================================= */
 // Identificador del feed de Behold (behold.so → tu feed → "Feed ID"). Vacío = se enseña solo el enlace.
-const BEHOLD_FEED_ID = "";
+const BEHOLD_FEED_ID = "seeFyk5efICRESP1Mi3n";
 const INSTAGRAM_URL = "https://www.instagram.com/casaiglesias.studio/";
 type Post = { id: string; permalink: string; image: string; caption: string };
 const skeleton: Post[] = Array.from({ length: 6 }, (_, i) => ({ id: `s${i}`, permalink: "", image: "", caption: "" }));

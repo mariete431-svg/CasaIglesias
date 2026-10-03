@@ -1119,7 +1119,7 @@ html.lenis { scroll-behavior: auto !important; }
 .insta-head h2 { font-size: clamp(38px, 5vw, 72px); line-height: 1; margin: 14px 0 0; }
 .insta-head a svg { width: 16px; height: 16px; margin-right: 8px; }
 .insta-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
-.insta-post { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: var(--secondary); }
+.insta-post { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 4px; background: var(--secondary); }
 .insta-post img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-out), filter .5s; }
 .insta-post:hover img { transform: scale(1.06); filter: brightness(.85); }
 .insta-post.is-loading { animation: pulse 1.5s ease-in-out infinite; }
