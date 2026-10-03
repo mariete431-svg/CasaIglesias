@@ -10,7 +10,7 @@ export const LANG_NAMES: Record<Lang, string> = { es: "Español", en: "English",
 export const LOCALES: Record<Lang, string> = { es: "es-ES", en: "en-GB", it: "it-IT", de: "de-DE", fr: "fr-FR", he: "he-IL" };
 export const RTL: Lang[] = ["he"];
 /** Páginas que existen en todos los idiomas (el blog, el CV y el panel siguen solo en español). */
-export const LOCALIZED = ["", "crear-cv", "cuestionario", "privacidad"];
+export const LOCALIZED = ["", "crear-cv", "cuestionario", "privacidad", "baja"];
 
 const isLang = (value: string): value is Lang => (LANGS as readonly string[]).includes(value);
 

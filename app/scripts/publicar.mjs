@@ -44,6 +44,7 @@ const pages = {
     description: "Cuéntame tu negocio en diez minutos: qué haces, a quién te diriges y qué necesitas. Con tus respuestas preparo una propuesta a tu medida.",
     index: false,
   },
+  baja: { title: "Darse de baja del boletín — Casa Iglesias", description: "Darse de baja del boletín de Casa Iglesias.", index: false },
   admin: { title: "Panel privado — Casa Iglesias", description: "Acceso privado.", index: false },
 };
 
@@ -113,10 +114,11 @@ const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="B
 // ---------- Idiomas ----------
 // El español vive en la raíz; los demás idiomas en /en/, /it/, /de/, /fr/ y /he/ (mismas páginas).
 // Los textos de la web están en src/i18n; aquí solo el título y la descripción para Google.
-const LOCALIZED = ["", "crear-cv", "cuestionario", "privacidad"];
+const LOCALIZED = ["", "crear-cv", "cuestionario", "privacidad", "baja"];
 const OG_LOCALE = { es: "es_ES", en: "en_GB", it: "it_IT", de: "de_DE", fr: "fr_FR", he: "he_IL" };
 const LANG_PAGES = {
   en: {
+    baja: { title: "Unsubscribe from the newsletter — Casa Iglesias", description: "Unsubscribe from the newsletter." },
     "": { title: "Casa Iglesias — Web design and development studio in Tenerife", description: "Casa Iglesias is Mario Iglesias's web design and development studio in Adeje, Tenerife. Carefully crafted websites, online booking and branding for businesses. Book a free call." },
     "crear-cv": { title: "Create your CV for free — Casa Iglesias", description: "Free tool to create your CV live, with your logo and colour, and download it as a PDF. No sign-up and your data never leaves your browser." },
     privacidad: { title: "Privacy and legal notice — Casa Iglesias", description: "What data the Casa Iglesias website stores, what it is used for and how to ask for it to be deleted." },
@@ -124,6 +126,7 @@ const LANG_PAGES = {
     nav: ["Home", "Pricing", "Blog (in Spanish)", "Book a call", "Privacy"],
   },
   it: {
+    baja: { title: "Annulla l'iscrizione alla newsletter — Casa Iglesias", description: "Annulla l'iscrizione alla newsletter." },
     "": { title: "Casa Iglesias — Studio di web design e sviluppo a Tenerife", description: "Casa Iglesias è lo studio di web design e sviluppo di Mario Iglesias ad Adeje, Tenerife. Siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
     "crear-cv": { title: "Crea il tuo CV gratis — Casa Iglesias", description: "Strumento gratuito per creare il tuo CV in diretta, con logo e colore, e scaricarlo in PDF. Senza registrazione: i tuoi dati restano nel tuo browser." },
     privacidad: { title: "Privacy e note legali — Casa Iglesias", description: "Quali dati conserva il sito di Casa Iglesias, a cosa servono e come chiederne la cancellazione." },
@@ -131,6 +134,7 @@ const LANG_PAGES = {
     nav: ["Home", "Prezzi", "Blog (in spagnolo)", "Prenota una call", "Privacy"],
   },
   de: {
+    baja: { title: "Vom Newsletter abmelden — Casa Iglesias", description: "Vom Newsletter abmelden." },
     "": { title: "Casa Iglesias — Studio für Webdesign und Webentwicklung auf Teneriffa", description: "Casa Iglesias ist das Studio für Webdesign und Webentwicklung von Mario Iglesias in Adeje, Teneriffa. Sorgfältige Websites, Online-Buchungen und Corporate Design für Unternehmen. Kostenloses Gespräch buchen." },
     "crear-cv": { title: "Erstelle deinen Lebenslauf kostenlos — Casa Iglesias", description: "Kostenloses Tool, um deinen Lebenslauf live mit Logo und Farbe zu erstellen und als PDF herunterzuladen. Ohne Anmeldung, deine Daten bleiben im Browser." },
     privacidad: { title: "Datenschutz und Impressum — Casa Iglesias", description: "Welche Daten die Website von Casa Iglesias speichert, wofür sie genutzt werden und wie du ihre Löschung verlangst." },
@@ -138,6 +142,7 @@ const LANG_PAGES = {
     nav: ["Startseite", "Preise", "Blog (auf Spanisch)", "Gespräch buchen", "Datenschutz"],
   },
   fr: {
+    baja: { title: "Se désinscrire de la newsletter — Casa Iglesias", description: "Se désinscrire de la newsletter." },
     "": { title: "Casa Iglesias — Studio de design et développement web à Tenerife", description: "Casa Iglesias est le studio de design et développement web de Mario Iglesias à Adeje, Tenerife. Sites soignés, réservations en ligne et identité visuelle pour les entreprises. Réservez un appel gratuit." },
     "crear-cv": { title: "Créez votre CV gratuitement — Casa Iglesias", description: "Outil gratuit pour créer votre CV en direct, avec votre logo et votre couleur, et le télécharger en PDF. Sans inscription, vos données restent dans votre navigateur." },
     privacidad: { title: "Confidentialité et mentions légales — Casa Iglesias", description: "Quelles données le site de Casa Iglesias conserve, à quoi elles servent et comment demander leur suppression." },
@@ -145,6 +150,7 @@ const LANG_PAGES = {
     nav: ["Accueil", "Tarifs", "Blog (en espagnol)", "Réserver un appel", "Confidentialité"],
   },
   he: {
+    baja: { title: "ביטול הרשמה לניוזלטר — Casa Iglesias", description: "ביטול הרשמה לניוזלטר." },
     "": { title: "Casa Iglesias — סטודיו לעיצוב ופיתוח אתרים בטנריפה", description: "Casa Iglesias הוא הסטודיו לעיצוב ופיתוח אתרים של מריו איגלסיאס באדחה, טנריפה. אתרים מוקפדים, הזמנות אונליין ומיתוג לעסקים. קבעו שיחה חינם." },
     "crear-cv": { title: "יצירת קורות חיים בחינם — Casa Iglesias", description: "כלי חינמי ליצירת קורות חיים בזמן אמת, עם לוגו וצבע, והורדה כ-PDF. בלי הרשמה, והמידע נשאר בדפדפן שלכם." },
     privacidad: { title: "פרטיות ומידע משפטי — Casa Iglesias", description: "איזה מידע האתר של Casa Iglesias שומר, למה הוא משמש ואיך מבקשים למחוק אותו." },
@@ -159,6 +165,11 @@ const hreflang = (route) => !LOCALIZED.includes(route) ? "" : LANGS.map(l => `
   + `
     <link rel="alternate" hreflang="x-default" href="${pageUrl("es", route)}" />`;
 
+// La foto del inicio se pide nada más empezar (es lo más grande que se ve al abrir la web)
+const heroPreload = `
+    <link rel="preload" as="image" href="${BASE}estudio-movil.webp" type="image/webp" media="(max-width: 700px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="${BASE}estudio.webp" type="image/webp" media="(min-width: 701px)" fetchpriority="high" />`;
+
 // content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
 function pageHtml(route, { title, description, index, jsonLd, content, ogType }, lang = "es") {
   const url = pageUrl(lang, route);
@@ -171,7 +182,7 @@ function pageHtml(route, { title, description, index, jsonLd, content, ogType },
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
     .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
-    .replace("</head>", `${securityMeta}${rssLink}${hreflang(route)}\n    <meta property="og:locale" content="${OG_LOCALE[lang]}" />${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
+    .replace("</head>", `${securityMeta}${rssLink}${route === "" ? heroPreload : ""}${hreflang(route)}\n    <meta property="og:locale" content="${OG_LOCALE[lang]}" />${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
     .replace('<div id="root"></div>', `<div id="root">${content ?? fallback(title, description, lang)}</div>`);
   if (lang !== "es") html = html.replace(/<html lang="es"[^>]*>/, `<html lang="${lang}"${lang === "he" ? ' dir="rtl"' : ""}>`);
   if (!index) html = html.replace("<head>", '<head>\n    <meta name="robots" content="noindex, nofollow" />');

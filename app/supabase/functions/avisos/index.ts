@@ -6,7 +6,7 @@
 // La llama el panel /admin (con la sesión de Mario):
 //   { tipo: "boletin", asunto, texto }                            → boletín a los suscriptores
 // Y los suscriptores, desde el enlace del email:
-//   GET ?baja=<token>                                              → darse de baja
+//   POST ?baja=<token>                                             → darse de baja (desde casaiglesias.es/baja/)
 //
 // Es segura aunque sea pública: cada aviso se "reserva" con notified_at / reminded_at,
 // así que nunca se manda dos veces, y el boletín exige una sesión de administrador.
@@ -38,6 +38,91 @@ const TYPES: Record<string, string> = {
   seguimiento: "Seguimiento",
 };
 
+/* ---------- Textos para el cliente en su idioma (el de la web desde la que reservó o se apuntó) ---------- */
+type L = "es" | "en" | "it" | "de" | "fr" | "he";
+const LOCALE: Record<L, string> = { es: "es-ES", en: "en-GB", it: "it-IT", de: "de-DE", fr: "fr-FR", he: "he-IL" };
+const LANG_NAME: Record<L, string> = { es: "español", en: "inglés", it: "italiano", de: "alemán", fr: "francés", he: "hebreo" };
+const asLang = (v: unknown): L => (["es", "en", "it", "de", "fr", "he"] as const).includes(v as L) ? v as L : "es";
+const CT: Record<L, {
+  types: Record<string, string>; reminderPill: string; reminderSubject: (t: string) => string; reminderTitle: (n: string) => string;
+  reminderBody: (type: string, day: string, time: string) => string; reminderText: (type: string, day: string, time: string) => string;
+  welcomePill: string; welcomeSubject: string; welcomeTitle: string; welcomeBody: string; visit: string; unsubscribe: string; welcomeText: (u: string) => string;
+  newsletterNote: string;
+}> = {
+  es: {
+    types: TYPES, reminderPill: "Recordatorio",
+    reminderSubject: (t) => `Recordatorio: nuestra reunión es mañana a las ${t}`,
+    reminderTitle: (n) => `Hasta mañana, ${n}`,
+    reminderBody: (type, day, time) => `Te recuerdo nuestra reunión (${type.toLowerCase()}): ${day} a las ${time}, hora de Canarias. Dura unos 30 minutos.\n\nSi no puedes venir o quieres cambiar la hora, responde a este email y lo organizamos.\n\nMario · Casa Iglesias`,
+    reminderText: (type, day, time) => `Recordatorio: ${type}, ${day} a las ${time} (hora de Canarias). Si necesitas cambiarla, responde a este email.`,
+    welcomePill: "Bienvenida", welcomeSubject: "Bienvenido al boletín de Casa Iglesias", welcomeTitle: "Gracias por apuntarte",
+    welcomeBody: "Una vez al mes te mandaré un consejo práctico para cuidar la web y la imagen de tu negocio: cosas sencillas que puedes hacer tú en diez minutos.\n\nNada de publicidad ni de correos cada semana. Si algún día no te sirve, te das de baja con un clic.\n\nUn saludo,\nMario · Casa Iglesias",
+    visit: "Visitar la web", unsubscribe: "Darme de baja",
+    welcomeText: (u) => `Gracias por apuntarte al boletín de Casa Iglesias. Una vez al mes, un consejo práctico.\n\nDarte de baja: ${u}`,
+    newsletterNote: "",
+  },
+  en: {
+    types: { primera: "First meeting", presupuesto: "Quote", seguimiento: "Follow-up" }, reminderPill: "Reminder",
+    reminderSubject: (t) => `Reminder: our meeting is tomorrow at ${t}`,
+    reminderTitle: (n) => `See you tomorrow, ${n}`,
+    reminderBody: (type, day, time) => `Just a reminder of our meeting (${type.toLowerCase()}): ${day} at ${time}, Canary Islands time. It lasts about 30 minutes.\n\nIf you can't make it or want to change the time, reply to this email and we'll sort it out.\n\nMario · Casa Iglesias`,
+    reminderText: (type, day, time) => `Reminder: ${type}, ${day} at ${time} (Canary Islands time). If you need to change it, reply to this email.`,
+    welcomePill: "Welcome", welcomeSubject: "Welcome to the Casa Iglesias newsletter", welcomeTitle: "Thanks for signing up",
+    welcomeBody: "Once a month I'll send you one practical tip to look after your business's website and image: simple things you can do yourself in ten minutes.\n\nNo advertising and no weekly emails. If it's ever not useful, you can unsubscribe in one click.\n\nBest,\nMario · Casa Iglesias",
+    visit: "Visit the website", unsubscribe: "Unsubscribe",
+    welcomeText: (u) => `Thanks for signing up to the Casa Iglesias newsletter. One practical tip a month.\n\nUnsubscribe: ${u}`,
+    newsletterNote: "Note: the monthly newsletter is written in Spanish.",
+  },
+  it: {
+    types: { primera: "Primo incontro", presupuesto: "Preventivo", seguimiento: "Aggiornamento" }, reminderPill: "Promemoria",
+    reminderSubject: (t) => `Promemoria: il nostro incontro è domani alle ${t}`,
+    reminderTitle: (n) => `A domani, ${n}`,
+    reminderBody: (type, day, time) => `Ti ricordo il nostro incontro (${type.toLowerCase()}): ${day} alle ${time}, ora delle Canarie. Dura circa 30 minuti.\n\nSe non puoi esserci o vuoi cambiare orario, rispondi a questa email e ci organizziamo.\n\nMario · Casa Iglesias`,
+    reminderText: (type, day, time) => `Promemoria: ${type}, ${day} alle ${time} (ora delle Canarie). Se devi cambiarlo, rispondi a questa email.`,
+    welcomePill: "Benvenuto", welcomeSubject: "Benvenuto nella newsletter di Casa Iglesias", welcomeTitle: "Grazie per l'iscrizione",
+    welcomeBody: "Una volta al mese ti invierò un consiglio pratico per curare il sito e l'immagine della tua attività: cose semplici da fare da solo in dieci minuti.\n\nNiente pubblicità né email ogni settimana. Se un giorno non ti serve più, ti cancelli con un clic.\n\nUn saluto,\nMario · Casa Iglesias",
+    visit: "Visita il sito", unsubscribe: "Cancellami",
+    welcomeText: (u) => `Grazie per esserti iscritto alla newsletter di Casa Iglesias. Un consiglio pratico al mese.\n\nCancellati: ${u}`,
+    newsletterNote: "Nota: la newsletter mensile è scritta in spagnolo.",
+  },
+  de: {
+    types: { primera: "Erstgespräch", presupuesto: "Angebot", seguimiento: "Folgetermin" }, reminderPill: "Erinnerung",
+    reminderSubject: (t) => `Erinnerung: Unser Gespräch ist morgen um ${t} Uhr`,
+    reminderTitle: (n) => `Bis morgen, ${n}`,
+    reminderBody: (type, day, time) => `Ich erinnere dich an unser Gespräch (${type}): ${day} um ${time} Uhr, kanarische Zeit. Es dauert etwa 30 Minuten.\n\nWenn du nicht kannst oder die Uhrzeit ändern möchtest, antworte einfach auf diese E-Mail.\n\nMario · Casa Iglesias`,
+    reminderText: (type, day, time) => `Erinnerung: ${type}, ${day} um ${time} Uhr (kanarische Zeit). Für Änderungen einfach auf diese E-Mail antworten.`,
+    welcomePill: "Willkommen", welcomeSubject: "Willkommen beim Newsletter von Casa Iglesias", welcomeTitle: "Danke für deine Anmeldung",
+    welcomeBody: "Einmal im Monat schicke ich dir einen praktischen Tipp für die Website und den Auftritt deines Unternehmens: einfache Dinge, die du in zehn Minuten selbst umsetzen kannst.\n\nKeine Werbung, keine wöchentlichen Mails. Abmeldung jederzeit mit einem Klick.\n\nViele Grüße,\nMario · Casa Iglesias",
+    visit: "Zur Website", unsubscribe: "Abmelden",
+    welcomeText: (u) => `Danke für deine Anmeldung zum Newsletter von Casa Iglesias. Ein praktischer Tipp pro Monat.\n\nAbmelden: ${u}`,
+    newsletterNote: "Hinweis: Der monatliche Newsletter ist auf Spanisch.",
+  },
+  fr: {
+    types: { primera: "Premier rendez-vous", presupuesto: "Devis", seguimiento: "Suivi" }, reminderPill: "Rappel",
+    reminderSubject: (t) => `Rappel : notre rendez-vous est demain à ${t}`,
+    reminderTitle: (n) => `À demain, ${n}`,
+    reminderBody: (type, day, time) => `Je vous rappelle notre rendez-vous (${type.toLowerCase()}) : ${day} à ${time}, heure des Canaries. Il dure environ 30 minutes.\n\nSi vous ne pouvez pas venir ou souhaitez changer l'horaire, répondez à cet e-mail et nous nous organiserons.\n\nMario · Casa Iglesias`,
+    reminderText: (type, day, time) => `Rappel : ${type}, ${day} à ${time} (heure des Canaries). Pour le modifier, répondez à cet e-mail.`,
+    welcomePill: "Bienvenue", welcomeSubject: "Bienvenue dans la newsletter de Casa Iglesias", welcomeTitle: "Merci pour votre inscription",
+    welcomeBody: "Une fois par mois, je vous enverrai un conseil pratique pour prendre soin du site et de l'image de votre entreprise : des choses simples à faire vous-même en dix minutes.\n\nNi publicité ni e-mails chaque semaine. Si un jour cela ne vous sert plus, désinscription en un clic.\n\nBien à vous,\nMario · Casa Iglesias",
+    visit: "Visiter le site", unsubscribe: "Me désinscrire",
+    welcomeText: (u) => `Merci pour votre inscription à la newsletter de Casa Iglesias. Un conseil pratique par mois.\n\nSe désinscrire : ${u}`,
+    newsletterNote: "Remarque : la newsletter mensuelle est rédigée en espagnol.",
+  },
+  he: {
+    types: { primera: "פגישת היכרות", presupuesto: "הצעת מחיר", seguimiento: "פגישת המשך" }, reminderPill: "תזכורת",
+    reminderSubject: (t) => `תזכורת: הפגישה שלנו מחר בשעה ${t}`,
+    reminderTitle: (n) => `נתראה מחר, ${n}`,
+    reminderBody: (type, day, time) => `רק מזכיר את הפגישה שלנו (${type}): ${day} בשעה ${time}, שעון האיים הקנריים. היא נמשכת כ-30 דקות.\n\nאם לא תוכלו להגיע או שתרצו לשנות את השעה, השיבו למייל הזה ונסדר.\n\nמריו · Casa Iglesias`,
+    reminderText: (type, day, time) => `תזכורת: ${type}, ${day} בשעה ${time} (שעון האיים הקנריים). לשינוי, השיבו למייל הזה.`,
+    welcomePill: "ברוכים הבאים", welcomeSubject: "ברוכים הבאים לניוזלטר של Casa Iglesias", welcomeTitle: "תודה שנרשמתם",
+    welcomeBody: "פעם בחודש אשלח לכם טיפ מעשי לטיפוח האתר והתדמית של העסק: דברים פשוטים שאפשר לעשות לבד בעשר דקות.\n\nבלי פרסומות ובלי מיילים כל שבוע. אם זה כבר לא מועיל, מבטלים בלחיצה.\n\nבברכה,\nמריו · Casa Iglesias",
+    visit: "לאתר", unsubscribe: "ביטול הרשמה",
+    welcomeText: (u) => `תודה שנרשמתם לניוזלטר של Casa Iglesias. טיפ מעשי אחד בחודש.\n\nביטול הרשמה: ${u}`,
+    newsletterNote: "שימו לב: הניוזלטר החודשי נכתב בספרדית.",
+  },
+};
+
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, content-type, apikey, x-client-info",
@@ -60,9 +145,9 @@ const fmtTime = (d: Date) =>
 const row = (label: string, value: string) =>
   `<tr><td style="padding:6px 16px 6px 0;color:${MUTED};vertical-align:top">${esc(label)}</td><td style="padding:6px 0;color:${INK}">${value}</td></tr>`;
 
-function layout(pill: string, title: string, body: string, footer = "") {
+function layout(pill: string, title: string, body: string, footer = "", lang: L = "es") {
   return `
-  <div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:32px 16px">
+  <div dir="${lang === "he" ? "rtl" : "ltr"}" lang="${lang}" style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:32px 16px">
     <div style="max-width:540px;margin:0 auto;background:${CREAM};border-radius:20px;padding:32px">
       <p style="margin:0 0 8px"><span style="display:inline-block;background:${BUTTER};color:${INK};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:999px">${esc(pill)}</span></p>
       <h1 style="margin:14px 0 18px;color:${INK};font-family:Georgia,serif;font-weight:400;font-size:28px;line-height:1.2">${esc(title)}</h1>
@@ -150,24 +235,27 @@ async function brief(id: string) {
 
 /* ---------- Nuevo suscriptor del boletín ---------- */
 const unsubscribeUrl = (token: unknown) => `${FN_URL}?baja=${token}`;
+const unsubscribeLink = (token: unknown, lang: unknown = "es") => `${WEB}${asLang(lang) === "es" ? "" : `${asLang(lang)}/`}baja/?t=${token}`;
+// Baja en un clic desde el botón del propio programa de correo (Gmail, Apple Mail…)
+const unsubscribeHeaders = (token: unknown) => ({ "List-Unsubscribe": `<${unsubscribeUrl(token)}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" });
 async function subscriber(id: string) {
-  const s = await claim("subscribers", id, "id, email, token");
+  const s = await claim("subscribers", id, "id, email, token, lang");
   if (!s) return json({ ok: true, skipped: true });
   await send({
     from: FROM_MARIO, to: await adminEmails(),
-    subject: oneLine(`💌 Nuevo suscriptor del boletín: ${s.email}`),
+    subject: oneLine(`💌 Nuevo suscriptor del boletín: ${s.email}${s.lang && s.lang !== "es" ? ` (${LANG_NAME[asLang(s.lang)]})` : ""}`),
     html: layout("Boletín", "Alguien se ha apuntado", `<p style="color:${INK};font-size:16px">${esc(s.email)}</p>${button(PANEL_URL, "Ver suscriptores")}`),
     text: `Nuevo suscriptor del boletín: ${s.email}`,
   });
   if (FROM_CLIENTS) {
+    const lang = asLang(s.lang), c = CT[lang], web = lang === "es" ? WEB : `${WEB}${lang}/`;
     const ok = await send({
       from: FROM_CLIENTS, to: [s.email], reply_to: (await adminEmails())[0],
-      subject: "Bienvenido al boletín de Casa Iglesias",
-      html: layout("Bienvenida", "Gracias por apuntarte", paragraphs(
-        "Una vez al mes te mandaré un consejo práctico para cuidar la web y la imagen de tu negocio: cosas sencillas que puedes hacer tú en diez minutos.\n\nNada de publicidad ni de correos cada semana. Si algún día no te sirve, te das de baja con un clic.\n\nUn saludo,\nMario · Casa Iglesias",
-      ) + button(WEB, "Visitar la web"), `<a href="${unsubscribeUrl(s.token)}" style="color:${MUTED}">Darme de baja</a>`),
-      text: `Gracias por apuntarte al boletín de Casa Iglesias. Una vez al mes, un consejo práctico.\n\nDarte de baja: ${unsubscribeUrl(s.token)}`,
-      headers: { "List-Unsubscribe": `<${unsubscribeUrl(s.token)}>` },
+      subject: c.welcomeSubject,
+      html: layout(c.welcomePill, c.welcomeTitle, paragraphs(c.welcomeBody + (c.newsletterNote ? `\n\n${c.newsletterNote}` : "")) + button(web, c.visit),
+        `<a href="${unsubscribeLink(s.token, lang)}" style="color:${MUTED}">${esc(c.unsubscribe)}</a>`, lang),
+      text: c.welcomeText(unsubscribeLink(s.token, lang)),
+      headers: unsubscribeHeaders(s.token),
     });
     if (ok) await supabase.from("subscribers").update({ welcomed_at: new Date().toISOString() }).eq("id", id);
   }
@@ -186,7 +274,7 @@ async function reminders() {
   for (const { id } of due ?? []) {
     const { data: b } = await supabase.from("bookings").update({ reminded_at: new Date().toISOString() })
       .eq("id", id).is("reminded_at", null)
-      .select("id, name, email, phone, topic, starts_at, meeting_type").maybeSingle();
+      .select("id, name, email, phone, topic, starts_at, meeting_type, lang").maybeSingle();
     if (!b) continue;
     const when = new Date(b.starts_at);
     const day = fmtDay(when), time = fmtTime(when), type = TYPES[b.meeting_type] ?? "Reunión";
@@ -204,15 +292,17 @@ async function reminders() {
         FROM_CLIENTS ? `A ${esc(b.name)} también le ha llegado su recordatorio.` : "Cuando tengas dominio propio, este recordatorio también le llegará al cliente."),
       text: `Mañana: ${type} con ${b.name}\n${day} · ${time}\n${b.email}${b.phone ? ` · ${b.phone}` : ""}`,
     });
+    const lang = asLang(b.lang), c = CT[lang];
+    const cDay = new Intl.DateTimeFormat(LOCALE[lang], { timeZone: TZ, weekday: "long", day: "numeric", month: "long" }).format(when);
+    const cTime = new Intl.DateTimeFormat(LOCALE[lang], { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(when);
+    const cType = c.types[b.meeting_type] ?? c.types.primera;
     // Para el cliente (solo con dominio propio)
     if (FROM_CLIENTS) {
       await send({
         from: FROM_CLIENTS, to: [b.email], reply_to: admins[0],
-        subject: oneLine(`Recordatorio: nuestra reunión es mañana a las ${time}`),
-        html: layout("Recordatorio", `Hasta mañana, ${String(b.name).split(" ")[0]}`, paragraphs(
-          `Te recuerdo nuestra reunión (${type.toLowerCase()}): ${day} a las ${time}, hora de Canarias. Dura unos 30 minutos.\n\nSi no puedes venir o quieres cambiar la hora, responde a este email y lo organizamos.\n\nMario · Casa Iglesias`,
-        )),
-        text: `Recordatorio: ${type}, ${day} a las ${time} (hora de Canarias). Si necesitas cambiarla, responde a este email.`,
+        subject: oneLine(c.reminderSubject(cTime)),
+        html: layout(c.reminderPill, c.reminderTitle(String(b.name).split(" ")[0] ?? ""), paragraphs(c.reminderBody(cType, cDay, cTime)), "", lang),
+        text: c.reminderText(cType, cDay, cTime),
       });
     }
     if (ok) sent++;
@@ -231,14 +321,14 @@ async function newsletter(req: Request, asunto: unknown, texto: unknown) {
     return json({ error: "bad_request" }, 400);
   }
   if (!FROM_CLIENTS) return json({ error: "sin_dominio" }, 409);
-  const { data: subs } = await supabase.from("subscribers").select("email, token").eq("unsubscribed", false);
+  const { data: subs } = await supabase.from("subscribers").select("email, token, lang").eq("unsubscribed", false);
   const replyTo = (await adminEmails())[0];
   const emails = (subs ?? []).map((s) => ({
     from: FROM_CLIENTS, to: [s.email], reply_to: replyTo, subject: oneLine(asunto),
     html: layout("Consejo del mes", asunto, paragraphs(texto) + button(WEB, "Visitar Casa Iglesias"),
-      `Recibes este boletín porque te apuntaste en la web de Casa Iglesias. <a href="${unsubscribeUrl(s.token)}" style="color:${MUTED}">Darme de baja</a>`),
-    text: `${texto}\n\nDarte de baja: ${unsubscribeUrl(s.token)}`,
-    headers: { "List-Unsubscribe": `<${unsubscribeUrl(s.token)}>` },
+      `Recibes este boletín porque te apuntaste en la web de Casa Iglesias. <a href="${unsubscribeLink(s.token, s.lang)}" style="color:${MUTED}">Darme de baja</a>`),
+    text: `${texto}\n\nDarte de baja: ${unsubscribeLink(s.token, s.lang)}`,
+    headers: unsubscribeHeaders(s.token),
   }));
   let sent = 0;
   for (let i = 0; i < emails.length; i += 100) {
@@ -253,24 +343,24 @@ async function newsletter(req: Request, asunto: unknown, texto: unknown) {
   return json({ ok: true, sent, total: emails.length });
 }
 
-/* ---------- Baja del boletín ---------- */
+/* ---------- Baja del boletín ----------
+   Supabase no deja mostrar páginas web desde sus funciones (las enseña como texto),
+   así que el enlace del email lleva a casaiglesias.es/baja/, que tiene el botón de confirmar.
+   La baja la hace este POST (desde esa página o desde el botón del programa de correo). */
+const bajaPage = (token: unknown, lang: L = "es") => `${WEB}${lang === "es" ? "" : `${lang}/`}baja/?t=${token}`;
+const validToken = (token: string) => /^[0-9a-f-]{36}$/i.test(token);
 async function unsubscribe(token: string) {
-  const page = (title: string, text: string) => new Response(
-    `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>` +
-      layout("Boletín", title, paragraphs(text) + button(WEB, "Volver a la web")),
-    { headers: { "Content-Type": "text/html; charset=utf-8" } },
-  );
-  if (!/^[0-9a-f-]{36}$/i.test(token)) return page("Enlace no válido", "Este enlace de baja no es correcto.");
+  if (!validToken(token)) return json({ error: "bad_token" }, 400);
   await supabase.from("subscribers").update({ unsubscribed: true }).eq("token", token);
-  return page("Te has dado de baja", "Ya no recibirás más el boletín de Casa Iglesias. Gracias por haber estado ahí.");
+  return json({ ok: true });
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
-  if (req.method === "GET") {
-    const token = new URL(req.url).searchParams.get("baja");
-    return token ? unsubscribe(token) : json({ error: "not_found" }, 404);
-  }
+  const baja = new URL(req.url).searchParams.get("baja");
+  // Enlaces antiguos de baja: llevan a la página de la web
+  if (req.method === "GET") return baja ? Response.redirect(bajaPage(baja), 302) : json({ error: "not_found" }, 404);
+  if (req.method === "POST" && baja) return unsubscribe(baja);
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
   if (!Deno.env.get("RESEND_API_KEY")) return json({ error: "not_configured" }, 503);
 

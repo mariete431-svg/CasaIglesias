@@ -1266,3 +1266,55 @@ html[dir="rtl"] .phone-ltr, html[dir="rtl"] input[type="email"], html[dir="rtl"]
 }
 html[dir="rtl"] .hero-stamp { right: auto; left: 0; }
 html[dir="rtl"] .calendar-heading svg { transform: scaleX(-1); }
+
+/* Instagram en movimiento: cinta de publicaciones que pasa sola y se para al tocarla */
+.insta-section { overflow: hidden; }
+.insta-profile { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.insta-profile > span:last-child { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.insta-profile strong { font: 400 clamp(32px, 4.4vw, 62px)/1 var(--font-display); }
+.insta-profile strong em { color: var(--accent); font-style: italic; }
+.insta-profile small { font-size: 13px; color: var(--muted-foreground); max-width: 46ch; line-height: 1.5; }
+.insta-ring { flex: none; display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; padding: 3px; background: conic-gradient(from 210deg, #f7e49a, #f58529, #dd2a7b, #8134af, #f7e49a); }
+.insta-ring img, .insta-ring svg { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--background); object-fit: cover; background: var(--secondary); }
+.insta-ring svg { padding: 14px; }
+@media (prefers-reduced-motion: no-preference) { .insta-ring { animation: ring-spin 6s linear infinite; } .insta-ring img, .insta-ring svg { animation: ring-spin 6s linear infinite reverse; } }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+
+.insta-marquee { position: relative; margin-top: 6px; padding: 26px 0 34px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.insta-track { display: flex; width: max-content; animation: insta-scroll calc(var(--n) * 7s) linear infinite; }
+.insta-marquee.is-paused .insta-track { animation-play-state: paused; }
+@keyframes insta-scroll { to { transform: translateX(-50%); } }
+html[dir="rtl"] .insta-track { animation-name: insta-scroll-rtl; }
+@keyframes insta-scroll-rtl { to { transform: translateX(50%); } }
+.insta-card { position: relative; flex: none; width: clamp(200px, 21vw, 290px); aspect-ratio: 4 / 5; margin-inline-end: clamp(14px, 2vw, 26px); border-radius: 14px; overflow: hidden; background: var(--secondary); box-shadow: 0 26px 50px -26px rgb(0 0 0 / .7); transform: rotate(var(--r)); transition: transform .6s var(--ease-out), box-shadow .6s var(--ease-out); }
+.insta-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); }
+.insta-card:hover, .insta-card:focus-visible { transform: rotate(0deg) translateY(-10px) scale(1.04); box-shadow: 0 36px 60px -24px rgb(0 0 0 / .8); z-index: 2; }
+.insta-card:hover img { transform: scale(1.06); }
+.insta-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.insta-card.is-loading { animation: pulse 1.5s ease-in-out infinite; }
+.insta-caption { position: absolute; inset: auto 0 0 0; display: flex; flex-direction: column; gap: 6px; padding: 46px 16px 16px; background: linear-gradient(to top, rgb(40 8 16 / .92), rgb(40 8 16 / .55) 60%, transparent); color: #fbf6ee; font-size: 12.5px; line-height: 1.45; transform: translateY(28%); opacity: .0; transition: transform .5s var(--ease-out), opacity .5s; }
+.insta-caption time { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.insta-caption > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.insta-card:hover .insta-caption, .insta-card:focus-visible .insta-caption { transform: none; opacity: 1; }
+.insta-badge { position: absolute; top: 12px; inset-inline-end: 12px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: rgb(40 8 16 / .55); color: #fff; font-size: 15px; backdrop-filter: blur(6px); }
+/* En el móvil no hay ratón: el texto se ve siempre y la cinta va un poco más despacio */
+@media (hover: none) { .insta-caption { opacity: 1; transform: none; } .insta-track { animation-duration: calc(var(--n) * 9s); } }
+@media (max-width: 700px) { .insta-card { width: 62vw; } .insta-ring { width: 60px; height: 60px; } .insta-profile small { display: none; } }
+/* Reducir movimiento: sin cinta automática, se desliza con el dedo */
+.insta-marquee.is-static { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-mask-image: none; mask-image: none; padding-inline: max(20px, calc((100vw - 1312px) / 2)); }
+.insta-marquee.is-static .insta-track { animation: none; }
+.insta-marquee.is-static .insta-card { scroll-snap-align: start; }
+
+/* Arreglos de la auditoría */
+.insta-profile strong { direction: ltr; unicode-bidi: isolate; }
+/* Casillas más grandes y fáciles de tocar */
+.consent-row input { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 0; border-color: var(--muted-foreground); }
+.consent-row { min-height: 24px; }
+/* Los títulos de la hoja del CV (ahora h3) mantienen su aspecto */
+.cv-paper-section h3.cv-h { font: 500 .8em/1 var(--font-sans); letter-spacing: .2em; color: var(--cv-accent); margin: 0 0 1em; }
+/* Más contraste en los textos de ejemplo del CV */
+.cv-paper .placeholder { color: oklch(0.45 0.04 15); opacity: 1; }
+.photo-picker .thumb { color: var(--foreground); }
+.builder-group h2.builder-h { font-size: 34px; line-height: 1; margin: 0 0 4px; }
+.builder-group h2.builder-h .optional { font: 400 11px var(--font-sans); color: var(--muted-foreground); margin-left: 8px; letter-spacing: 0; }
+.photo-picker .thumb.logo-thumb { color: var(--ink); }

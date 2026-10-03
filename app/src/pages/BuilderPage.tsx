@@ -142,7 +142,7 @@ export default function BuilderPage() {
       <div className="builder">
         <div className="builder-form">
           <Reveal><div className="builder-group" style={{ borderTop: 0, paddingTop: 0 }}>
-            <h3>{t.personal} <em>{t.personalEm}</em></h3>
+            <h2 className="builder-h">{t.personal} <em>{t.personalEm}</em></h2>
             <div className="photo-picker">
               <div className="thumb">{photo ? <img src={photo} alt={t.yourPhoto} /> : t.noPhoto}</div>
               <Button variant="outlineLuxury" asChild><label htmlFor="cv-photo">{t.uploadPhoto}</label></Button>
@@ -159,7 +159,7 @@ export default function BuilderPage() {
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>{t.brand} <em>{t.brandEm}</em> <span className="optional">{t.optional}</span></h3>
+            <h2 className="builder-h">{t.brand} <em>{t.brandEm}</em> <span className="optional">{t.optional}</span></h2>
             <p className="form-note">{t.brandNote}</p>
             <div className="photo-picker">
               <div className="thumb logo-thumb">{logo ? <img src={logo} alt={t.yourLogo} /> : t.noLogo}</div>
@@ -174,12 +174,12 @@ export default function BuilderPage() {
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>{t.profile}</h3>
+            <h2 className="builder-h">{t.profile}</h2>
             <Field id="cv-summary" textarea label={t.summary} value={cv.summary} onChange={v => set("summary", v)} placeholder={t.summaryPh} />
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>{t.education}</h3>
+            <h2 className="builder-h">{t.education}</h2>
             <AnimatePresence initial={false}>{cv.education.map((e, i) => <motion.div key={e.id} className="builder-entry" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
               <button type="button" className="icon-button" aria-label={t.removeEdu} onClick={() => set("education", cv.education.filter((_, j) => j !== i))}><X /></button>
               <Field id={`edu-t-${i}`} label={t.degree} value={e.title} onChange={v => setEdu(i, "title", v)} placeholder={t.degreePh} />
@@ -192,7 +192,7 @@ export default function BuilderPage() {
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>{t.experience}</h3>
+            <h2 className="builder-h">{t.experience}</h2>
             <AnimatePresence initial={false}>{cv.jobs.map((e, i) => <motion.div key={e.id} className="builder-entry" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
               <button type="button" className="icon-button" aria-label={t.removeJob} onClick={() => set("jobs", cv.jobs.filter((_, j) => j !== i))}><X /></button>
               <Field id={`job-t-${i}`} label={t.job} value={e.title} onChange={v => setJob(i, "title", v)} placeholder={t.jobPh} />
@@ -206,7 +206,7 @@ export default function BuilderPage() {
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>{t.skills} <em>{t.skillsEm}</em></h3>
+            <h2 className="builder-h">{t.skills} <em>{t.skillsEm}</em></h2>
             <Field id="cv-skills" label={t.skillsLabel} value={cv.skills} onChange={v => set("skills", v)} placeholder={t.skillsPh} />
             <Field id="cv-langs" label={t.langsLabel} value={cv.langs} onChange={v => set("langs", v)} placeholder={t.langsPh} />
           </div></Reveal>
@@ -231,15 +231,15 @@ export default function BuilderPage() {
               </div>
               {photo && <img src={photo} alt="" />}
             </header>
-            <div className="cv-paper-section"><h4>{t.pProfile}</h4><p>{cv.summary || <span className="placeholder">{t.pSummary}</span>}</p></div>
-            <div className="cv-paper-section"><h4>{t.pExperience}</h4>{cv.jobs.length
+            <div className="cv-paper-section"><h3 className="cv-h">{t.pProfile}</h3><p>{cv.summary || <span className="placeholder">{t.pSummary}</span>}</p></div>
+            <div className="cv-paper-section"><h3 className="cv-h">{t.pExperience}</h3>{cv.jobs.length
               ? cv.jobs.map(j => <div className="cv-paper-item" key={j.id}><strong>{j.title || t.pJob}</strong><span>{[j.company, j.dates].filter(Boolean).join(" · ")}</span>{j.desc && <p>{j.desc}</p>}</div>)
               : <p className="placeholder">{t.pNoJobs}</p>}</div>
-            <div className="cv-paper-section"><h4>{t.pEducation}</h4>{cv.education.length
+            <div className="cv-paper-section"><h3 className="cv-h">{t.pEducation}</h3>{cv.education.length
               ? cv.education.map(e => <div className="cv-paper-item" key={e.id}><strong>{e.title || t.pDegree}</strong><span>{[e.center, e.dates].filter(Boolean).join(" · ")}</span></div>)
               : <p className="placeholder">{t.pNoEdu}</p>}</div>
-            {!!list(cv.skills).length && <div className="cv-paper-section"><h4>{t.pSkills}</h4><div className="cv-paper-chips">{list(cv.skills).map(s => <span key={s}>{s}</span>)}</div></div>}
-            {!!list(cv.langs).length && <div className="cv-paper-section"><h4>{t.pLangs}</h4><div className="cv-paper-chips">{list(cv.langs).map(s => <span key={s}>{s}</span>)}</div></div>}
+            {!!list(cv.skills).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pSkills}</h3><div className="cv-paper-chips">{list(cv.skills).map(s => <span key={s}>{s}</span>)}</div></div>}
+            {!!list(cv.langs).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pLangs}</h3><div className="cv-paper-chips">{list(cv.langs).map(s => <span key={s}>{s}</span>)}</div></div>}
           </motion.article>
         </div>
       </div>

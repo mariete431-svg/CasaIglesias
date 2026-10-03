@@ -359,6 +359,7 @@ export const de: Dict = {
     home: "Zur Startseite",
     newTab: " (öffnet in einem neuen Tab)",
   },
+  unsub: { eyebrow: "NEWSLETTER — CASA IGLESIAS", lines: ["Vom Newsletter", "abmelden."], text: "Drück auf den Button und du bekommst den Newsletter von Casa Iglesias nicht mehr.", button: "Abmelden", doing: "Einen Moment…", doneTitle: "Erledigt.", done: "Du bekommst den Newsletter nicht mehr. Danke, dass du dabei warst.", invalid: "Dieser Abmeldelink ist ungültig. Schreib an hola@casaiglesias.es und ich trage dich von Hand aus.", error: "Das hat nicht geklappt. Bitte versuche es gleich noch einmal.", home: "Zur Website" },
   notFound: {
     eyebrow: "FEHLER 404 — SEITE NICHT GEFUNDEN",
     lines: ["Hier gibt", "es nichts."],

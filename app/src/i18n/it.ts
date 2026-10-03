@@ -359,6 +359,7 @@ export const it: Dict = {
     home: "Torna alla home",
     newTab: " (si apre in una nuova scheda)",
   },
+  unsub: { eyebrow: "NEWSLETTER — CASA IGLESIAS", lines: ["Annulla", "l'iscrizione."], text: "Premi il pulsante e non riceverai più la newsletter di Casa Iglesias.", button: "Cancellami", doing: "Un momento…", doneTitle: "Fatto.", done: "Non riceverai più la newsletter. Grazie per essere stato con noi.", invalid: "Questo link non è valido. Scrivi a hola@casaiglesias.es e ti cancello a mano.", error: "Non è stato possibile completare. Riprova tra un momento.", home: "Torna al sito" },
   notFound: {
     eyebrow: "ERRORE 404 — PAGINA NON TROVATA",
     lines: ["Qui non", "c'è niente."],

@@ -359,6 +359,7 @@ export const en: Dict = {
     home: "Back to home",
     newTab: " (opens in a new tab)",
   },
+  unsub: { eyebrow: "NEWSLETTER — CASA IGLESIAS", lines: ["Unsub-", "scribe."], text: "Press the button and you'll stop receiving the Casa Iglesias newsletter.", button: "Unsubscribe me", doing: "One moment…", doneTitle: "Done.", done: "You won't receive the newsletter any more. Thank you for having been here.", invalid: "This unsubscribe link isn't valid. Write to hola@casaiglesias.es and I'll remove you by hand.", error: "It couldn't be completed. Please try again in a moment.", home: "Back to the website" },
   notFound: {
     eyebrow: "ERROR 404 — PAGE NOT FOUND",
     lines: ["Nothing", "here."],
