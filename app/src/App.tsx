@@ -7,6 +7,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ToastProvider } from "@/components/Toast";
 import Home from "@/pages/Home";
 import { LANGS, applyHtmlLang, langFromPath } from "@/i18n";
+import { countVisit } from "@/lib/visitas";
 
 // El resto de páginas se descargan solo cuando se visitan
 const CvPage = lazy(() => import("@/pages/CvPage"));
@@ -37,6 +38,9 @@ export default function App() {
 
   // Idioma y dirección del texto (el hebreo va de derecha a izquierda)
   useEffect(() => { applyHtmlLang(langFromPath(location.pathname)); }, [location.pathname]);
+
+  // Contador de visitas propio (sin cookies): solo página, idioma, procedencia y tipo de pantalla
+  useEffect(() => { countVisit(location.pathname, langFromPath(location.pathname)); }, [location.pathname]);
 
   // Primera carga con #seccion en la dirección
   useEffect(() => { if (location.hash) scrollToLocation(location.hash); }, []); // eslint-disable-line react-hooks/exhaustive-deps

@@ -346,7 +346,7 @@ export const it: Dict = {
         ["Behold e Instagram:", "se la home mostra i miei ultimi post di Instagram, le foto vengono caricate dai loro server, che possono vedere il tuo indirizzo IP (Stati Uniti)."],
         ["GitHub Pages:", "ospita il sito (Stati Uniti)."],
       ], after: ["I font, le foto e gli altri file vengono serviti da questo stesso sito: mentre navighi non ci si collega a Google né ad altre aziende, salvo per le foto di Instagram indicate sopra."] },
-      { h: "Cookie", p: ["Questo sito non usa cookie pubblicitari né di analisi. Salva nel tuo browser solo ciò che serve per funzionare: la bozza del tuo CV (con foto e logo, se li carichi), la bozza del questionario e se hai già visto l'animazione iniziale."] },
+      { h: "Cookie", p: ["Questo sito non usa cookie pubblicitari né di analisi. Salva nel tuo browser solo ciò che serve per funzionare: la bozza del tuo CV (con foto e logo, se li carichi), la bozza del questionario e se hai già visto l'animazione iniziale.", "Per sapere quante persone visitano il sito, contiamo le visite senza cookie: salviamo solo la pagina vista, la lingua, il sito da cui arrivi (solo il nome) e se usi un telefono o un computer. Non salviamo il tuo IP; un'impronta cifrata della connessione serve a fermare gli abusi e viene cancellata dopo 30 giorni. Se il tuo browser ha attivo «Do Not Track», la tua visita non viene contata."] },
       { h: "I tuoi diritti", p: ["Puoi chiedermi di accedere ai tuoi dati, correggerli, cancellarli, limitarne l'uso o opporti scrivendo a {email}. Se ritieni che non li abbia trattati correttamente, puoi presentare reclamo all'{aepd}."] },
     ],
     aepd: "Agenzia spagnola per la protezione dei dati (AEPD)",
