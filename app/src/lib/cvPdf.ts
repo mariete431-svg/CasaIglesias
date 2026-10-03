@@ -15,7 +15,9 @@ const hexToRgb = (hex: string): [number, number, number] => {
 };
 const list = (value: string) => value.split(",").map(s => s.trim()).filter(Boolean);
 
-export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: string | null; color: string }) {
+export type CvLabels = { profile: string; experience: string; education: string; skills: string; langs: string; name: string; job: string; degree: string; file: string };
+export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: string | null; color: string; labels: CvLabels }) {
+  const L = opts.labels;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const W = 210, M = 18, BOTTOM = 280;
   const accent = hexToRgb(opts.color);
@@ -37,7 +39,7 @@ export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: st
   }
 
   doc.setFont("times", "normal").setFontSize(30).setTextColor(...ink);
-  const nameLines = doc.splitTextToSize(cv.name || "Tu nombre", textRight - M);
+  const nameLines = doc.splitTextToSize(cv.name || L.name, textRight - M);
   doc.text(nameLines, M, y + 8);
   y += 8 + (nameLines.length - 1) * 11 + 6;
   if (cv.role) { doc.setFont("helvetica", "normal").setFontSize(11).setTextColor(...muted); doc.text(cv.role, M, y); y += 6; }
@@ -58,13 +60,13 @@ export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: st
     for (const line of doc.splitTextToSize(text, W - 2 * M)) { ensure(5); doc.text(line, M, y); y += size * .45; }
   };
 
-  if (cv.summary) { heading("PERFIL"); paragraph(cv.summary); y += 5; }
+  if (cv.summary) { heading(L.profile); paragraph(cv.summary); y += 5; }
 
   if (cv.jobs.length) {
-    heading("EXPERIENCIA");
+    heading(L.experience);
     for (const job of cv.jobs) {
       ensure(14);
-      doc.setFont("times", "normal").setFontSize(14).setTextColor(...ink); doc.text(job.title || "Puesto", M, y); y += 5;
+      doc.setFont("times", "normal").setFontSize(14).setTextColor(...ink); doc.text(job.title || L.job, M, y); y += 5;
       const meta = [job.company, job.dates].filter(Boolean).join(" · ");
       if (meta) paragraph(meta, 8.5, muted);
       if (job.desc) { y += .5; paragraph(job.desc); }
@@ -74,10 +76,10 @@ export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: st
   }
 
   if (cv.education.length) {
-    heading("FORMACIÓN");
+    heading(L.education);
     for (const e of cv.education) {
       ensure(12);
-      doc.setFont("times", "normal").setFontSize(14).setTextColor(...ink); doc.text(e.title || "Titulación", M, y); y += 5;
+      doc.setFont("times", "normal").setFontSize(14).setTextColor(...ink); doc.text(e.title || L.degree, M, y); y += 5;
       const meta = [e.center, e.dates].filter(Boolean).join(" · ");
       if (meta) paragraph(meta, 8.5, muted);
       y += 4;
@@ -85,9 +87,9 @@ export function downloadCvPdf(cv: CvData, opts: { photo: string | null; logo: st
     y += 1;
   }
 
-  if (list(cv.skills).length) { heading("HABILIDADES"); paragraph(list(cv.skills).join("   ·   ")); y += 5; }
-  if (list(cv.langs).length) { heading("IDIOMAS"); paragraph(list(cv.langs).join("   ·   ")); }
+  if (list(cv.skills).length) { heading(L.skills); paragraph(list(cv.skills).join("   ·   ")); y += 5; }
+  if (list(cv.langs).length) { heading(L.langs); paragraph(list(cv.langs).join("   ·   ")); }
 
   const file = (cv.name.trim() || "mi").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  doc.save(`cv-${file || "mi"}.pdf`);
+  doc.save(`${L.file}-${file || "mi"}.pdf`);
 }

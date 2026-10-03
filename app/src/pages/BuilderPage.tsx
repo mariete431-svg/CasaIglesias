@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/EditorialEffects";
 import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome";
 import { newId, readStored, writeStored } from "@/lib/utils";
+import { useT } from "@/i18n";
 
 const PHOTO_KEY = "mi-cv-foto";
 const LOGO_KEY = "mi-cv-logo";
@@ -42,7 +43,9 @@ function Field({ id, label, value, onChange, placeholder, type = "text", textare
 }
 
 export default function BuilderPage() {
-  usePageTitle("Creador de CV — Casa Iglesias");
+  const tr = useT();
+  const t = tr.builder;
+  usePageTitle(tr.meta.builder);
   const [cv, setCv] = useState<Draft>(loadDraft);
   const [photo, setPhoto] = useState<string | null>(() => readStored<string | null>(PHOTO_KEY, null));
 
@@ -71,17 +74,19 @@ export default function BuilderPage() {
       setLogo(canvas.toDataURL("image/png"));
       URL.revokeObjectURL(url);
     };
-    img.onerror = () => { URL.revokeObjectURL(url); alert("No se ha podido abrir ese logo. Prueba con un PNG, JPG o SVG."); };
+    img.onerror = () => { URL.revokeObjectURL(url); alert(t.logoError); };
     img.src = url;
   };
 
   const downloadPdf = async () => {
+    // Las letras del PDF no tienen caracteres hebreos: en ese caso se usa la ventana de imprimir del navegador
+    if (/[\u0590-\u05FF]/.test(JSON.stringify(cv) + t.pProfile)) { printPreview(); return; }
     setMaking(true);
     try {
       const { downloadCvPdf } = await import("@/lib/cvPdf");
-      downloadCvPdf(cv, { photo, logo, color });
+      downloadCvPdf(cv, { photo, logo, color, labels: { profile: t.pProfile, experience: t.pExperience, education: t.pEducation, skills: t.pSkills, langs: t.pLangs, name: t.phName, job: t.pJob, degree: t.pDegree, file: t.fileName } });
     } catch {
-      alert("No se ha podido crear el PDF. Prueba con el botón «Imprimir / guardar como PDF».");
+      alert(t.pdfError);
     } finally { setMaking(false); }
   };
 
@@ -103,7 +108,7 @@ export default function BuilderPage() {
       setPhoto(canvas.toDataURL("image/jpeg", .85));
       URL.revokeObjectURL(url);
     };
-    img.onerror = () => { URL.revokeObjectURL(url); alert("No se ha podido abrir esa foto. Prueba con una en formato JPG o PNG."); };
+    img.onerror = () => { URL.revokeObjectURL(url); alert(t.photoError); };
     img.src = url;
   };
 
@@ -118,7 +123,7 @@ export default function BuilderPage() {
   };
 
   const reset = () => {
-    if (!confirm("¿Borrar todo lo que has escrito y empezar de cero?")) return;
+    if (!confirm(t.resetConfirm)) return;
     setCv(empty); setPhoto(null); setLogo(null); setColor(COLORS[0]);
   };
 
@@ -126,115 +131,115 @@ export default function BuilderPage() {
 
   return <main>
     <PageHero
-      eyebrow="HERRAMIENTA GRATIS — CREA TU CV"
-      lines={["Crea tu", "currículum."]}
-      subtitle="Gratis y sin registrarte. Rellena tus datos, añade tu logo y tu color, y verás tu CV tomar forma en directo. Cuando esté listo, descárgalo en PDF. Se guarda solo en tu propio navegador y no se envía a ningún sitio."
+      eyebrow={t.eyebrow}
+      lines={t.lines}
+      subtitle={t.subtitle}
       bottomHref="#editor"
     />
 
     <section id="editor" className="section-pad"><div className="section-wrap">
-      <SectionHeading label="01 / TUS DATOS" />
+      <SectionHeading label={t.label} />
       <div className="builder">
         <div className="builder-form">
           <Reveal><div className="builder-group" style={{ borderTop: 0, paddingTop: 0 }}>
-            <h3>Datos <em>personales</em></h3>
+            <h3>{t.personal} <em>{t.personalEm}</em></h3>
             <div className="photo-picker">
-              <div className="thumb">{photo ? <img src={photo} alt="Tu foto" /> : "SIN FOTO"}</div>
-              <Button variant="outlineLuxury" asChild><label htmlFor="cv-photo">Subir foto</label></Button>
+              <div className="thumb">{photo ? <img src={photo} alt={t.yourPhoto} /> : t.noPhoto}</div>
+              <Button variant="outlineLuxury" asChild><label htmlFor="cv-photo">{t.uploadPhoto}</label></Button>
               <input id="cv-photo" type="file" accept="image/*" className="sr-only" onChange={e => pickPhoto(e.target.files?.[0])} />
-              {photo && <Button variant="text" onClick={() => setPhoto(null)}>Quitar</Button>}
+              {photo && <Button variant="text" onClick={() => setPhoto(null)}>{t.remove}</Button>}
             </div>
-            <Field id="cv-name" label="Nombre completo" value={cv.name} onChange={v => set("name", v)} placeholder="Ej: Laura Martín Ruiz" />
-            <Field id="cv-role" label="Título o perfil profesional" value={cv.role} onChange={v => set("role", v)} placeholder="Ej: Diseñadora gráfica junior" />
+            <Field id="cv-name" label={t.fullName} value={cv.name} onChange={v => set("name", v)} placeholder={t.fullNamePh} />
+            <Field id="cv-role" label={t.role} value={cv.role} onChange={v => set("role", v)} placeholder={t.rolePh} />
             <div className="builder-two">
-              <Field id="cv-email" type="email" label="Email" value={cv.email} onChange={v => set("email", v)} placeholder="tucorreo@email.com" />
-              <Field id="cv-phone" type="tel" label="Teléfono" value={cv.phone} onChange={v => set("phone", v)} placeholder="600 000 000" />
+              <Field id="cv-email" type="email" label={t.email} value={cv.email} onChange={v => set("email", v)} placeholder={t.emailPh} />
+              <Field id="cv-phone" type="tel" label={t.phone} value={cv.phone} onChange={v => set("phone", v)} placeholder={t.phonePh} />
             </div>
-            <Field id="cv-location" label="Ubicación" value={cv.location} onChange={v => set("location", v)} placeholder="Ciudad, provincia" />
+            <Field id="cv-location" label={t.location} value={cv.location} onChange={v => set("location", v)} placeholder={t.locationPh} />
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>Tu <em>marca</em> <span className="optional">Opcional</span></h3>
-            <p className="form-note">Si tienes logo, súbelo y saldrá arriba de tu CV. Elige también el color de los títulos.</p>
+            <h3>{t.brand} <em>{t.brandEm}</em> <span className="optional">{t.optional}</span></h3>
+            <p className="form-note">{t.brandNote}</p>
             <div className="photo-picker">
-              <div className="thumb logo-thumb">{logo ? <img src={logo} alt="Tu logo" /> : "SIN LOGO"}</div>
-              <Button variant="outlineLuxury" asChild><label htmlFor="cv-logo">Subir logo</label></Button>
+              <div className="thumb logo-thumb">{logo ? <img src={logo} alt={t.yourLogo} /> : t.noLogo}</div>
+              <Button variant="outlineLuxury" asChild><label htmlFor="cv-logo">{t.uploadLogo}</label></Button>
               <input id="cv-logo" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp" className="sr-only" onChange={e => pickLogo(e.target.files?.[0])} />
-              {logo && <Button variant="text" onClick={() => setLogo(null)}>Quitar</Button>}
+              {logo && <Button variant="text" onClick={() => setLogo(null)}>{t.remove}</Button>}
             </div>
-            <div className="color-picker" role="group" aria-label="Color de tu marca">
-              {COLORS.map(c => <button key={c} type="button" className="color-dot" style={{ background: c }} aria-label={`Color ${c}`} aria-pressed={color === c} onClick={() => setColor(c)} />)}
-              <label className="color-custom">Otro color<input type="color" value={color} onChange={e => setColor(e.target.value)} /></label>
+            <div className="color-picker" role="group" aria-label={t.colorGroup}>
+              {COLORS.map(c => <button key={c} type="button" className="color-dot" style={{ background: c }} aria-label={t.color(c)} aria-pressed={color === c} onClick={() => setColor(c)} />)}
+              <label className="color-custom">{t.otherColor}<input type="color" value={color} onChange={e => setColor(e.target.value)} /></label>
             </div>
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>Perfil</h3>
-            <Field id="cv-summary" textarea label="Resumen breve" value={cv.summary} onChange={v => set("summary", v)} placeholder="2-3 líneas sobre ti, tu experiencia y lo que buscas." />
+            <h3>{t.profile}</h3>
+            <Field id="cv-summary" textarea label={t.summary} value={cv.summary} onChange={v => set("summary", v)} placeholder={t.summaryPh} />
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>Formación</h3>
+            <h3>{t.education}</h3>
             <AnimatePresence initial={false}>{cv.education.map((e, i) => <motion.div key={e.id} className="builder-entry" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
-              <button type="button" className="icon-button" aria-label="Quitar formación" onClick={() => set("education", cv.education.filter((_, j) => j !== i))}><X /></button>
-              <Field id={`edu-t-${i}`} label="Título / titulación" value={e.title} onChange={v => setEdu(i, "title", v)} placeholder="Ej: Grado en Diseño" />
+              <button type="button" className="icon-button" aria-label={t.removeEdu} onClick={() => set("education", cv.education.filter((_, j) => j !== i))}><X /></button>
+              <Field id={`edu-t-${i}`} label={t.degree} value={e.title} onChange={v => setEdu(i, "title", v)} placeholder={t.degreePh} />
               <div className="builder-two">
-                <Field id={`edu-c-${i}`} label="Centro" value={e.center} onChange={v => setEdu(i, "center", v)} placeholder="Nombre del centro" />
-                <Field id={`edu-d-${i}`} label="Fechas" value={e.dates} onChange={v => setEdu(i, "dates", v)} placeholder="2020 – 2024" />
+                <Field id={`edu-c-${i}`} label={t.center} value={e.center} onChange={v => setEdu(i, "center", v)} placeholder={t.centerPh} />
+                <Field id={`edu-d-${i}`} label={t.dates} value={e.dates} onChange={v => setEdu(i, "dates", v)} placeholder={t.eduDatesPh} />
               </div>
             </motion.div>)}</AnimatePresence>
-            <Button variant="outlineLuxury" onClick={() => set("education", [...cv.education, { id: newId(), title: "", center: "", dates: "" }])}><Plus /> Añadir formación</Button>
+            <Button variant="outlineLuxury" onClick={() => set("education", [...cv.education, { id: newId(), title: "", center: "", dates: "" }])}><Plus /> {t.addEdu}</Button>
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>Experiencia</h3>
+            <h3>{t.experience}</h3>
             <AnimatePresence initial={false}>{cv.jobs.map((e, i) => <motion.div key={e.id} className="builder-entry" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
-              <button type="button" className="icon-button" aria-label="Quitar experiencia" onClick={() => set("jobs", cv.jobs.filter((_, j) => j !== i))}><X /></button>
-              <Field id={`job-t-${i}`} label="Puesto" value={e.title} onChange={v => setJob(i, "title", v)} placeholder="Ej: Auxiliar administrativo" />
+              <button type="button" className="icon-button" aria-label={t.removeJob} onClick={() => set("jobs", cv.jobs.filter((_, j) => j !== i))}><X /></button>
+              <Field id={`job-t-${i}`} label={t.job} value={e.title} onChange={v => setJob(i, "title", v)} placeholder={t.jobPh} />
               <div className="builder-two">
-                <Field id={`job-c-${i}`} label="Empresa" value={e.company} onChange={v => setJob(i, "company", v)} placeholder="Nombre de la empresa" />
-                <Field id={`job-d-${i}`} label="Fechas" value={e.dates} onChange={v => setJob(i, "dates", v)} placeholder="Marzo 2023 – Actualidad" />
+                <Field id={`job-c-${i}`} label={t.company} value={e.company} onChange={v => setJob(i, "company", v)} placeholder={t.companyPh} />
+                <Field id={`job-d-${i}`} label={t.dates} value={e.dates} onChange={v => setJob(i, "dates", v)} placeholder={t.jobDatesPh} />
               </div>
-              <Field id={`job-x-${i}`} label="Descripción breve" value={e.desc} onChange={v => setJob(i, "desc", v)} placeholder="Qué hacías en este puesto" />
+              <Field id={`job-x-${i}`} label={t.desc} value={e.desc} onChange={v => setJob(i, "desc", v)} placeholder={t.descPh} />
             </motion.div>)}</AnimatePresence>
-            <Button variant="outlineLuxury" onClick={() => set("jobs", [...cv.jobs, { id: newId(), title: "", company: "", dates: "", desc: "" }])}><Plus /> Añadir experiencia</Button>
+            <Button variant="outlineLuxury" onClick={() => set("jobs", [...cv.jobs, { id: newId(), title: "", company: "", dates: "", desc: "" }])}><Plus /> {t.addJob}</Button>
           </div></Reveal>
 
           <Reveal><div className="builder-group">
-            <h3>Habilidades <em>e idiomas</em></h3>
-            <Field id="cv-skills" label="Habilidades (separadas por comas)" value={cv.skills} onChange={v => set("skills", v)} placeholder="Photoshop, Illustrator, Trabajo en equipo" />
-            <Field id="cv-langs" label="Idiomas (separados por comas)" value={cv.langs} onChange={v => set("langs", v)} placeholder="Español — nativo, Inglés — medio" />
+            <h3>{t.skills} <em>{t.skillsEm}</em></h3>
+            <Field id="cv-skills" label={t.skillsLabel} value={cv.skills} onChange={v => set("skills", v)} placeholder={t.skillsPh} />
+            <Field id="cv-langs" label={t.langsLabel} value={cv.langs} onChange={v => set("langs", v)} placeholder={t.langsPh} />
           </div></Reveal>
 
           <div className="builder-group hero-actions" style={{ marginTop: 0 }}>
-            <Button variant="luxury" size="lg" onClick={downloadPdf} disabled={making} data-cursor="PDF"><Download /> {making ? "Creando PDF…" : "Descargar PDF"}</Button>
-            <Button variant="outlineLuxury" size="lg" onClick={printPreview}><Printer /> Imprimir</Button>
-            <Button variant="text" size="lg" onClick={reset}><RotateCcw /> Empezar de cero</Button>
-            <p className="form-note" style={{ flexBasis: "100%" }}>«Descargar PDF» guarda el archivo directamente, con tu logo y tu color. En iPhone lo encontrarás en la app Archivos, en Descargas.</p>
+            <Button variant="luxury" size="lg" onClick={downloadPdf} disabled={making} data-cursor="PDF"><Download /> {making ? t.making : t.download}</Button>
+            <Button variant="outlineLuxury" size="lg" onClick={printPreview}><Printer /> {t.print}</Button>
+            <Button variant="text" size="lg" onClick={reset}><RotateCcw /> {t.reset}</Button>
+            <p className="form-note" style={{ flexBasis: "100%" }}>{t.downloadNote}</p>
           </div>
         </div>
 
         <div className="builder-preview-wrap">
-          <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>VISTA PREVIA</span>
-          <motion.article className="cv-paper" style={{ "--cv-accent": color } as React.CSSProperties} aria-label="Vista previa del currículum" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
+          <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>{t.preview}</span>
+          <motion.article className="cv-paper" style={{ "--cv-accent": color } as React.CSSProperties} aria-label={t.previewLabel} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
             <header className="cv-paper-head">
               <div>
                 {logo && <img className="cv-paper-logo" src={logo} alt="" />}
-                <h2>{cv.name || <span className="placeholder">Tu nombre</span>}</h2>
-                <p>{cv.role || <span className="placeholder">Tu título profesional</span>}</p>
+                <h2>{cv.name || <span className="placeholder">{t.phName}</span>}</h2>
+                <p>{cv.role || <span className="placeholder">{t.phRole}</span>}</p>
                 {!!contact.length && <div className="cv-paper-contact">{contact.map(c => <span key={c}>{c}</span>)}</div>}
               </div>
               {photo && <img src={photo} alt="" />}
             </header>
-            <div className="cv-paper-section"><h4>PERFIL</h4><p>{cv.summary || <span className="placeholder">Escribe tu resumen para verlo aquí.</span>}</p></div>
-            <div className="cv-paper-section"><h4>EXPERIENCIA</h4>{cv.jobs.length
-              ? cv.jobs.map(j => <div className="cv-paper-item" key={j.id}><strong>{j.title || "Puesto"}</strong><span>{[j.company, j.dates].filter(Boolean).join(" · ")}</span>{j.desc && <p>{j.desc}</p>}</div>)
-              : <p className="placeholder">Añade tu experiencia para verla aquí.</p>}</div>
-            <div className="cv-paper-section"><h4>FORMACIÓN</h4>{cv.education.length
-              ? cv.education.map(e => <div className="cv-paper-item" key={e.id}><strong>{e.title || "Titulación"}</strong><span>{[e.center, e.dates].filter(Boolean).join(" · ")}</span></div>)
-              : <p className="placeholder">Añade tu formación para verla aquí.</p>}</div>
-            {!!list(cv.skills).length && <div className="cv-paper-section"><h4>HABILIDADES</h4><div className="cv-paper-chips">{list(cv.skills).map(s => <span key={s}>{s}</span>)}</div></div>}
-            {!!list(cv.langs).length && <div className="cv-paper-section"><h4>IDIOMAS</h4><div className="cv-paper-chips">{list(cv.langs).map(s => <span key={s}>{s}</span>)}</div></div>}
+            <div className="cv-paper-section"><h4>{t.pProfile}</h4><p>{cv.summary || <span className="placeholder">{t.pSummary}</span>}</p></div>
+            <div className="cv-paper-section"><h4>{t.pExperience}</h4>{cv.jobs.length
+              ? cv.jobs.map(j => <div className="cv-paper-item" key={j.id}><strong>{j.title || t.pJob}</strong><span>{[j.company, j.dates].filter(Boolean).join(" · ")}</span>{j.desc && <p>{j.desc}</p>}</div>)
+              : <p className="placeholder">{t.pNoJobs}</p>}</div>
+            <div className="cv-paper-section"><h4>{t.pEducation}</h4>{cv.education.length
+              ? cv.education.map(e => <div className="cv-paper-item" key={e.id}><strong>{e.title || t.pDegree}</strong><span>{[e.center, e.dates].filter(Boolean).join(" · ")}</span></div>)
+              : <p className="placeholder">{t.pNoEdu}</p>}</div>
+            {!!list(cv.skills).length && <div className="cv-paper-section"><h4>{t.pSkills}</h4><div className="cv-paper-chips">{list(cv.skills).map(s => <span key={s}>{s}</span>)}</div></div>}
+            {!!list(cv.langs).length && <div className="cv-paper-section"><h4>{t.pLangs}</h4><div className="cv-paper-chips">{list(cv.langs).map(s => <span key={s}>{s}</span>)}</div></div>}
           </motion.article>
         </div>
       </div>

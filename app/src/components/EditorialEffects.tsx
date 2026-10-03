@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTrans
 import { createPortal } from "react-dom";
 import { readStored, writeStored } from "@/lib/utils";
 import { asset } from "@/lib/asset";
+import { useT } from "@/i18n";
 
 export function useMotionPreference() {
   const [reduced, setReduced] = useState(false);
@@ -33,6 +34,7 @@ export function introPending() {
  * para que su titular empiece justo cuando la foto se va.
  */
 export function Entrance({ onReveal }: { onReveal?: () => void }) {
+  const t = useT().effects;
   const [phase, setPhase] = useState<"off" | "loading" | "show" | "lift">(() => introPending() ? "loading" : "off");
   const revealed = useRef(false);
   const reveal = () => {
@@ -94,7 +96,7 @@ export function Entrance({ onReveal }: { onReveal?: () => void }) {
       </picture>
       <div className="intro-shade" />
       <motion.div className="intro-copy" animate={{ opacity: lifting ? 0 : 1, y: lifting ? -16 : 0 }} transition={{ duration: .45 }}>
-        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8, ease: EASE_OUT }}>ESTUDIO DE DISEÑO Y DESARROLLO WEB</motion.p>
+        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8, ease: EASE_OUT }}>{t.introEyebrow}</motion.p>
         <h2>{Array.from("Casa Iglesias").map((character, i) => <span className="hero-letter-mask" key={i}><motion.span initial={{ y: "110%" }} animate={{ y: "0%" }} transition={{ delay: .7 + i * .035, duration: .8, ease: [.2, .75, .2, 1] }}>{character === " " ? " " : character}</motion.span></span>)}</h2>
         <motion.span className="intro-line" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ delay: 1.3, duration: .9, ease: EASE_OUT }} />
       </motion.div>
@@ -154,13 +156,15 @@ export function CustomCursor() {
   const springY = useSpring(y, { stiffness: 550, damping: 40 });
   const [label, setLabel] = useState("");
   const [inside, setInside] = useState(false);
+  const cursorText = useRef(useT().cursor);
+  cursorText.current = useT().cursor;
   useEffect(() => setMounted(true), []);
   useEffect(() => {
     if (reduced || !window.matchMedia("(pointer: fine) and (min-width: 901px)").matches) return;
     const move = (event: PointerEvent) => {
       x.set(event.clientX); y.set(event.clientY); setInside(true);
       const target = (event.target as Element).closest("a, button");
-      setLabel(target?.getAttribute("data-cursor") ?? (target?.matches(".project-row") ? "Ver" : target?.matches("a[href$='#reservar']") ? "Reservar" : target ? "Abrir" : ""));
+      setLabel(target?.getAttribute("data-cursor") ?? (target?.matches(".project-row") ? cursorText.current.see : target?.matches("a[href$='#reservar']") ? cursorText.current.book : target ? cursorText.current.open : ""));
     };
     const leave = () => setInside(false);
     document.addEventListener("pointermove", move, { passive: true });
@@ -184,7 +188,9 @@ export function Magnetic({ children, className = "" }: { children: ReactNode; cl
   return <motion.div className={className} style={{ x, y }} onMouseMove={onMove} onMouseLeave={() => { x.set(0); y.set(0); }}>{children}</motion.div>;
 }
 
-export function EditorialMarquee({ phrase = "Diseño web ✦ Identidad visual ✦ Reservas online ✦ Tenerife ✦ Detalle ✦ " }: { phrase?: string }) {
+export function EditorialMarquee({ phrase: custom }: { phrase?: string }) {
+  const t = useT();
+  const phrase = custom ?? t.effects.marquee;
   const reduced = useMotionPreference();
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
@@ -293,12 +299,13 @@ export function HeroDepth({ children, className = "" }: { children: ReactNode; c
 
 export function ProjectPreview({ name, children }: { name: string; children: ReactNode }) {
   const reduced = useMotionPreference();
+  const t = useT();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [hovered, setHovered] = useState(false);
   return <div className="project-preview-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onMouseMove={event => { x.set(event.clientX + 18); y.set(event.clientY - 45); }}>
     {children}
-    {!reduced && createPortal(<AnimatePresence>{hovered && <motion.div className="project-float" style={{ x, y }} initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .94 }} transition={{ duration: .2 }} aria-hidden="true"><span>PROYECTO / MI</span><strong>{name}</strong><span>EXPLORAR ↗</span></motion.div>}</AnimatePresence>, document.body)}
+    {!reduced && createPortal(<AnimatePresence>{hovered && <motion.div className="project-float" style={{ x, y }} initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .94 }} transition={{ duration: .2 }} aria-hidden="true"><span>{t.effects.projectFloat}</span><strong>{name}</strong><span>{t.effects.explore}</span></motion.div>}</AnimatePresence>, document.body)}
   </div>;
 }
 
@@ -330,9 +337,11 @@ export function Tilt({ children, className = "", max = 5 }: { children: ReactNod
 }
 
 /** Sello redondo con texto que gira despacio alrededor de una flecha. Es un enlace (por defecto, a reservar). */
-export function Stamp({ text = "RESERVA TU REUNIÓN ✦ 30 MINUTOS ✦ ", href = "#reservar", show = true }: { text?: string; href?: string; show?: boolean }) {
+export function Stamp({ text: custom, href = "#reservar", show = true }: { text?: string; href?: string; show?: boolean }) {
   const reduced = useMotionPreference();
-  return <motion.a href={href} className="stamp" aria-label="Reservar una reunión" data-cursor="Reservar"
+  const t = useT();
+  const text = custom ?? t.effects.stamp;
+  return <motion.a href={href} className="stamp" aria-label={t.effects.stampLabel} data-cursor={t.cursor.book}
     initial={{ opacity: 0, scale: .6, rotate: -40 }} animate={show ? { opacity: 1, scale: 1, rotate: 0 } : undefined}
     transition={{ type: "spring", bounce: .25, duration: 1.1, delay: 1.1 }} whileTap={{ scale: .94 }}>
     <svg viewBox="0 0 200 200" aria-hidden="true" className={reduced ? "" : "stamp-spin"}>

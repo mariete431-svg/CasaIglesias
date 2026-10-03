@@ -5,7 +5,8 @@
 export type Frase = { texto: string; fecha?: string };
 
 export const frases: Frase[] = [
-  { texto: "Un buen proceso tranquiliza más que una buena promesa.", fecha: "2026-10-03" },
+  { texto: "Hablar el idioma de tu cliente es la primera forma de cuidarlo.", fecha: "2026-10-03" },
+  { texto: "Un buen proceso tranquiliza más que una buena promesa." },
   { texto: "Un nombre propio es una promesa. Cúmplela en cada detalle." },
   { texto: "Una web no es un gasto. Es el escaparate que nunca cierra." },
   { texto: "El buen diseño no grita. Se nota." },

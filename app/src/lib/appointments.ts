@@ -10,15 +10,15 @@ export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.
 
 export const dateFromKey = (key: string) => new Date(`${key}T12:00:00Z`);
 
-export const formatDay = (key: string) => new Intl.DateTimeFormat("es-ES", {
+export const formatDay = (key: string, locale = "es-ES") => new Intl.DateTimeFormat(locale, {
   timeZone: ZONE, weekday: "long", day: "numeric", month: "long", year: "numeric",
 }).format(dateFromKey(key));
 
-export const formatTime = (iso: string) => new Intl.DateTimeFormat("es-ES", {
+export const formatTime = (iso: string, locale = "es-ES") => new Intl.DateTimeFormat(locale, {
   timeZone: ZONE, hour: "2-digit", minute: "2-digit", hour12: false,
 }).format(new Date(iso));
 
-export function downloadCalendarEvent(iso: string, type = "Reunión") {
+export function downloadCalendarEvent(iso: string, text: { summary: string; description: string; alarm: string }) {
   const start = new Date(iso);
   const end = new Date(start.getTime() + 30 * 60_000);
   const stamp = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
@@ -26,7 +26,7 @@ export function downloadCalendarEvent(iso: string, type = "Reunión") {
     "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Mario Iglesias//Reuniones//ES", "BEGIN:VEVENT",
     `UID:${stamp(start)}-mario-iglesias@reuniones`, `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`,
-    `SUMMARY:${type} con Mario Iglesias (Casa Iglesias)`, "DESCRIPTION:Reunión de 30 minutos por teléfono o videollamada.", "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Reunión con Mario mañana", "TRIGGER:-P1D", "END:VALARM",
+    `SUMMARY:${text.summary}`, `DESCRIPTION:${text.description}`, "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${text.alarm}`, "TRIGGER:-P1D", "END:VALARM",
     "END:VEVENT", "END:VCALENDAR",
   ];
   const blob = new Blob([lines.join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8" });
