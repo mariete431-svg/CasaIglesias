@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal, useMotionPreference } from "@/components/EditorialEffects";
 import { useToast } from "@/components/Toast";
 import { loadSupabase } from "@/lib/asset";
+import { LOCALES, useLang, useLocalize, useT } from "@/i18n";
 
 type Comment = { id: number; name: string; message: string; created_at: string; sector: string | null; photo_url: string | null };
 
@@ -27,13 +28,15 @@ function shrinkPhoto(file: File) {
     img.src = url;
   });
 }
-const fmtDate = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "long", year: "numeric", timeZone: "Atlantic/Canary" });
+const fmtDate = (locale: string) => new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric", timeZone: "Atlantic/Canary" });
 
 const EVERY = 6000;
 
 /** Formulario para dejar una opinión: se publica cuando Mario la aprueba desde /admin. */
 function OpinionForm({ onDone }: { onDone: () => void }) {
   const toast = useToast();
+  const t = useT().reviews;
+  const local = useLocalize();
   const [name, setName] = useState("");
   const [sector, setSector] = useState("");
   const [message, setMessage] = useState("");
@@ -53,9 +56,9 @@ function OpinionForm({ onDone }: { onDone: () => void }) {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     const n = name.trim(), msg = message.trim();
-    if (!n || !msg) return toast("Escribe tu nombre y tu opinión.", true);
-    if (photo && !photoConsent) return toast("Marca la casilla para que podamos publicar tu foto, o quítala.", true);
-    const thanks = "¡Gracias! Tu opinión se publicará cuando Mario la revise.";
+    if (!n || !msg) return toast(t.missing, true);
+    if (photo && !photoConsent) return toast(t.needConsent, true);
+    const thanks = t.thanks;
     if (trap) { setName(""); setMessage(""); onDone(); return toast(thanks); }
     setSending(true);
     const { publicClient } = await loadSupabase();
@@ -69,37 +72,40 @@ function OpinionForm({ onDone }: { onDone: () => void }) {
         photo_url = publicClient.storage.from("opiniones").getPublicUrl(path).data.publicUrl;
       } catch {
         setSending(false);
-        return toast("No se ha podido subir la foto. Prueba con otra o envía la opinión sin foto.", true);
+        return toast(t.photoError, true);
       }
     }
     const { error } = await publicClient.from("comments").insert({ name: n.slice(0, 50), sector: sector.trim().slice(0, 60) || null, message: msg.slice(0, 500), photo_url, photo_consent: !!photo_url });
     setSending(false);
-    if (error) return toast(error.message.includes("too_many") ? "Se han enviado muchas opiniones seguidas. Prueba dentro de unos minutos." : "No se ha podido enviar. Inténtalo de nuevo.", true);
+    if (error) return toast(error.message.includes("too_many") ? t.tooMany : t.error, true);
     setName(""); setSector(""); setMessage(""); setPhoto(null); setPhotoConsent(false); onDone();
     toast(thanks);
   };
 
   return <form className="booking-form opinion-form" onSubmit={submit}>
     <div className="builder-two">
-      <div className="form-row"><label htmlFor="op-name">Tu nombre</label><input id="op-name" value={name} onChange={e => setName(e.target.value)} maxLength={50} placeholder="Nombre y apellido" /></div>
-      <div className="form-row"><label htmlFor="op-sector">Negocio o sector <span className="optional">Opcional</span></label><input id="op-sector" value={sector} onChange={e => setSector(e.target.value)} maxLength={60} placeholder="Ej: Peluquería en Adeje" /></div>
+      <div className="form-row"><label htmlFor="op-name">{t.name}</label><input id="op-name" value={name} onChange={e => setName(e.target.value)} maxLength={50} placeholder={t.namePh} /></div>
+      <div className="form-row"><label htmlFor="op-sector">{t.sector} <span className="optional">{useT().contact.optional}</span></label><input id="op-sector" value={sector} onChange={e => setSector(e.target.value)} maxLength={60} placeholder={t.sectorPh} /></div>
     </div>
-    <div className="form-row"><label htmlFor="op-msg">Tu opinión</label><textarea id="op-msg" rows={4} value={message} onChange={e => setMessage(e.target.value)} maxLength={500} placeholder="¿Qué tal fue trabajar con Casa Iglesias?" /></div>
+    <div className="form-row"><label htmlFor="op-msg">{t.opinion}</label><textarea id="op-msg" rows={4} value={message} onChange={e => setMessage(e.target.value)} maxLength={500} placeholder={t.opinionPh} /></div>
     <div className="photo-picker">
-      <div className="thumb round">{preview ? <img src={preview} alt="Tu foto" /> : "FOTO"}</div>
-      <Button variant="outlineLuxury" asChild><label htmlFor="op-photo">{photo ? "Cambiar foto" : "Añadir tu foto"}</label></Button>
+      <div className="thumb round">{preview ? <img src={preview} alt={t.yourPhoto} /> : t.photo}</div>
+      <Button variant="outlineLuxury" asChild><label htmlFor="op-photo">{photo ? t.changePhoto : t.addPhoto}</label></Button>
       <input id="op-photo" type="file" accept="image/*" className="sr-only" onChange={e => { const f = e.target.files?.[0]; if (f && f.type.startsWith("image/")) setPhoto(f); }} />
-      {photo && <Button type="button" variant="text" onClick={() => { setPhoto(null); setPhotoConsent(false); }}>Quitar</Button>}
+      {photo && <Button type="button" variant="text" onClick={() => { setPhoto(null); setPhotoConsent(false); }}>{t.remove}</Button>}
     </div>
-    {photo && <label className="consent-row"><input type="checkbox" checked={photoConsent} onChange={e => setPhotoConsent(e.target.checked)} /><span>Autorizo a Casa Iglesias a publicar mi foto junto a mi nombre y mi opinión en esta web. Puedo pedir que la quiten cuando quiera.</span></label>}
-    <div className="hp-field" aria-hidden="true"><label htmlFor="op-website">No rellenes este campo</label><input id="op-website" tabIndex={-1} autoComplete="off" value={trap} onChange={e => setTrap(e.target.value)} /></div>
-    <p className="form-note">Tu nombre{sector.trim() ? ", tu sector" : ""}{photo ? ", tu foto" : ""} y tu opinión se publicarán en esta web cuando Mario los revise. Más información en la <Link to="/privacidad">política de privacidad</Link>.</p>
-    <div className="form-actions"><small style={{ color: "var(--muted-foreground)" }}>{message.length}/500</small><Button type="submit" variant="luxury" disabled={sending}>{sending ? "Enviando…" : "Enviar opinión"} {!sending && <ArrowRight />}</Button></div>
+    {photo && <label className="consent-row"><input type="checkbox" checked={photoConsent} onChange={e => setPhotoConsent(e.target.checked)} /><span>{t.photoConsent}</span></label>}
+    <div className="hp-field" aria-hidden="true"><label htmlFor="op-website">{t.trap}</label><input id="op-website" tabIndex={-1} autoComplete="off" value={trap} onChange={e => setTrap(e.target.value)} /></div>
+    <p className="form-note">{t.note(!!sector.trim(), !!photo)}<Link to={local("/privacidad")}>{t.privacyLink}</Link>.</p>
+    <div className="form-actions"><small style={{ color: "var(--muted-foreground)" }}>{message.length}/500</small><Button type="submit" variant="luxury" disabled={sending}>{sending ? t.sending : t.send} {!sending && <ArrowRight />}</Button></div>
   </form>;
 }
 
 /** Opiniones de la gente (tabla comments): pasan solas una a una, sin flechas. */
 export function Testimonials({ label }: { label: string }) {
+  const tr = useT();
+  const t = tr.reviews;
+  const dateFmt = fmtDate(LOCALES[useLang()]);
   const reduced = useMotionPreference();
   const [comments, setComments] = useState<Comment[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -145,9 +151,9 @@ export function Testimonials({ label }: { label: string }) {
     <Reveal><div className="section-heading"><span className="eyebrow">{label}</span><span className="section-rule" /></div></Reveal>
     <div className="testimonials-grid">
       <Reveal><div className="testimonials-intro">
-        <h2>Lo que <em>dicen.</em></h2>
-        <p>{comments === null ? "Cargando opiniones…" : count ? `${count} ${count === 1 ? "opinión" : "opiniones"}.` : "Todavía no hay opiniones. ¿Has trabajado conmigo? Cuéntalo aquí."}</p>
-        {!writing && <Button variant="outlineLuxury" size="lg" onClick={() => setWriting(true)} data-cursor="Escribir">Dejar mi opinión <ArrowRight /></Button>}
+        <h2>{t.title1} <em>{t.titleEm}</em></h2>
+        <p>{comments === null ? t.loading : count ? t.count(count) : t.empty}</p>
+        {!writing && <Button variant="outlineLuxury" size="lg" onClick={() => setWriting(true)} data-cursor={tr.cursor.write}>{t.leave} <ArrowRight /></Button>}
         {writing && <OpinionForm onDone={() => setWriting(false)} />}
       </div></Reveal>
 
@@ -159,8 +165,8 @@ export function Testimonials({ label }: { label: string }) {
             {current && <motion.div key={current.id} initial={reduced ? { opacity: 0 } : { opacity: 0, y: 28, rotateX: -24 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -18, rotateX: 18 }} transition={{ type: "spring", bounce: 0, duration: .75, opacity: { duration: .45 } }} style={{ transformPerspective: 900, transformOrigin: "50% 50%" }}>
               <blockquote>{current.message}</blockquote>
               <figcaption>
-                {current.photo_url && <img className="testimonial-photo" src={current.photo_url} alt={`Foto de ${current.name}`} loading="lazy" width={56} height={56} />}
-                <span className="testimonial-who"><strong>{current.name}</strong><span>{current.sector ? `${current.sector} · ` : ""}{fmtDate.format(new Date(current.created_at))}</span></span>
+                {current.photo_url && <img className="testimonial-photo" src={current.photo_url} alt={t.photoOf(current.name)} loading="lazy" width={56} height={56} />}
+                <span className="testimonial-who"><strong>{current.name}</strong><span>{current.sector ? `${current.sector} · ` : ""}{dateFmt.format(new Date(current.created_at))}</span></span>
               </figcaption>
             </motion.div>}
           </AnimatePresence>
@@ -170,8 +176,8 @@ export function Testimonials({ label }: { label: string }) {
           <div className="testimonial-timer" aria-hidden="true">{playing && <motion.span key={`${index}-${current?.id}`} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: EVERY / 1000, ease: "linear" }} />}</div>
           <div className="testimonial-nav">
             <span className="testimonial-count">{String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}</span>
-            <div className="testimonial-dots">{comments!.map((c, i) => <button key={c.id} type="button" aria-label={`Opinión de ${c.name}`} aria-current={i === index} onClick={() => setIndex(i)}>{i === index && <motion.i layoutId="testimonial-dot" transition={{ type: "spring", stiffness: 400, damping: 34 }} />}</button>)}</div>
-            <button type="button" className="icon-button testimonial-pause" aria-label={stopped ? "Pasar las opiniones solas" : "Pausar las opiniones"} onClick={() => setStopped(value => !value)}>{stopped ? <Play /> : <Pause />}</button>
+            <div className="testimonial-dots">{comments!.map((c, i) => <button key={c.id} type="button" aria-label={t.reviewBy(c.name)} aria-current={i === index} onClick={() => setIndex(i)}>{i === index && <motion.i layoutId="testimonial-dot" transition={{ type: "spring", stiffness: 400, damping: 34 }} />}</button>)}</div>
+            <button type="button" className="icon-button testimonial-pause" aria-label={stopped ? t.play : t.pause} onClick={() => setStopped(value => !value)}>{stopped ? <Play /> : <Pause />}</button>
           </div>
         </>}
       </figure></Reveal>}

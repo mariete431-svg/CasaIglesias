@@ -82,7 +82,7 @@ const personJson = JSON.stringify({
       worksFor: { "@id": `${SITE}#estudio` },
       url: SITE,
       image: `${SITE}og-imagen.jpg`,
-      email: "mailto:mariete431@icloud.com",
+      email: "mailto:hola@casaiglesias.es",
       address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" },
       knowsLanguage: ["es", "en"],
       sameAs: ["https://www.instagram.com/casaiglesias.studio/"],
@@ -95,21 +95,74 @@ const personJson = JSON.stringify({
 // Texto real dentro del HTML para buscadores y para quien no tenga JavaScript.
 // React lo sustituye por la página completa en cuanto carga.
 const links = [["", "Inicio"], ["#precios", "Precios"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
-const fallback = (title, description) => `<div class="seo-fallback">
+const fallback = (title, description, lang = "es") => `<div class="seo-fallback">
       <p>ADEJE, TENERIFE</p>
       <h1>${escape(title.split(" — ")[0])}</h1>
       <p>${escape(description)}</p>
-      <nav aria-label="Páginas">${links.map(([href, label]) => `<a href="${BASE}${href}">${label}</a>`).join(" · ")}</nav>
-      <p><a href="mailto:mariete431@icloud.com">mariete431@icloud.com</a></p>
+      <nav aria-label="Páginas">${links.map(([href, label], i) => {
+        const translated = lang !== "es" ? LANG_PAGES[lang].nav[i] : label;
+        const prefix = lang !== "es" && !href.startsWith("blog") ? `${lang}/` : "";
+        return `<a href="${BASE}${prefix}${href}">${escape(translated)}</a>`;
+      }).join(" · ")}</nav>
+      <p><a href="mailto:hola@casaiglesias.es">hola@casaiglesias.es</a></p>
     </div>`;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
 const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Blog de Casa Iglesias" href="${SITE}blog/feed.xml" />`;
 
+// ---------- Idiomas ----------
+// El español vive en la raíz; los demás idiomas en /en/, /it/, /de/, /fr/ y /he/ (mismas páginas).
+// Los textos de la web están en src/i18n; aquí solo el título y la descripción para Google.
+const LOCALIZED = ["", "crear-cv", "cuestionario", "privacidad"];
+const OG_LOCALE = { es: "es_ES", en: "en_GB", it: "it_IT", de: "de_DE", fr: "fr_FR", he: "he_IL" };
+const LANG_PAGES = {
+  en: {
+    "": { title: "Casa Iglesias — Web design and development studio in Tenerife", description: "Casa Iglesias is Mario Iglesias's web design and development studio in Adeje, Tenerife. Carefully crafted websites, online booking and branding for businesses. Book a free call." },
+    "crear-cv": { title: "Create your CV for free — Casa Iglesias", description: "Free tool to create your CV live, with your logo and colour, and download it as a PDF. No sign-up and your data never leaves your browser." },
+    privacidad: { title: "Privacy and legal notice — Casa Iglesias", description: "What data the Casa Iglesias website stores, what it is used for and how to ask for it to be deleted." },
+    cuestionario: { title: "Questionnaire to start your website — Casa Iglesias", description: "Tell me about your business in ten minutes and I'll prepare a tailor-made proposal." },
+    nav: ["Home", "Pricing", "Blog (in Spanish)", "Book a call", "Privacy"],
+  },
+  it: {
+    "": { title: "Casa Iglesias — Studio di web design e sviluppo a Tenerife", description: "Casa Iglesias è lo studio di web design e sviluppo di Mario Iglesias ad Adeje, Tenerife. Siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
+    "crear-cv": { title: "Crea il tuo CV gratis — Casa Iglesias", description: "Strumento gratuito per creare il tuo CV in diretta, con logo e colore, e scaricarlo in PDF. Senza registrazione: i tuoi dati restano nel tuo browser." },
+    privacidad: { title: "Privacy e note legali — Casa Iglesias", description: "Quali dati conserva il sito di Casa Iglesias, a cosa servono e come chiederne la cancellazione." },
+    cuestionario: { title: "Questionario per iniziare il tuo sito — Casa Iglesias", description: "Raccontami la tua attività in dieci minuti e preparo una proposta su misura." },
+    nav: ["Home", "Prezzi", "Blog (in spagnolo)", "Prenota una call", "Privacy"],
+  },
+  de: {
+    "": { title: "Casa Iglesias — Studio für Webdesign und Webentwicklung auf Teneriffa", description: "Casa Iglesias ist das Studio für Webdesign und Webentwicklung von Mario Iglesias in Adeje, Teneriffa. Sorgfältige Websites, Online-Buchungen und Corporate Design für Unternehmen. Kostenloses Gespräch buchen." },
+    "crear-cv": { title: "Erstelle deinen Lebenslauf kostenlos — Casa Iglesias", description: "Kostenloses Tool, um deinen Lebenslauf live mit Logo und Farbe zu erstellen und als PDF herunterzuladen. Ohne Anmeldung, deine Daten bleiben im Browser." },
+    privacidad: { title: "Datenschutz und Impressum — Casa Iglesias", description: "Welche Daten die Website von Casa Iglesias speichert, wofür sie genutzt werden und wie du ihre Löschung verlangst." },
+    cuestionario: { title: "Fragebogen für deine neue Website — Casa Iglesias", description: "Erzähl mir in zehn Minuten von deinem Unternehmen und ich bereite ein maßgeschneidertes Angebot vor." },
+    nav: ["Startseite", "Preise", "Blog (auf Spanisch)", "Gespräch buchen", "Datenschutz"],
+  },
+  fr: {
+    "": { title: "Casa Iglesias — Studio de design et développement web à Tenerife", description: "Casa Iglesias est le studio de design et développement web de Mario Iglesias à Adeje, Tenerife. Sites soignés, réservations en ligne et identité visuelle pour les entreprises. Réservez un appel gratuit." },
+    "crear-cv": { title: "Créez votre CV gratuitement — Casa Iglesias", description: "Outil gratuit pour créer votre CV en direct, avec votre logo et votre couleur, et le télécharger en PDF. Sans inscription, vos données restent dans votre navigateur." },
+    privacidad: { title: "Confidentialité et mentions légales — Casa Iglesias", description: "Quelles données le site de Casa Iglesias conserve, à quoi elles servent et comment demander leur suppression." },
+    cuestionario: { title: "Questionnaire pour lancer votre site — Casa Iglesias", description: "Parlez-moi de votre entreprise en dix minutes et je prépare une proposition sur mesure." },
+    nav: ["Accueil", "Tarifs", "Blog (en espagnol)", "Réserver un appel", "Confidentialité"],
+  },
+  he: {
+    "": { title: "Casa Iglesias — סטודיו לעיצוב ופיתוח אתרים בטנריפה", description: "Casa Iglesias הוא הסטודיו לעיצוב ופיתוח אתרים של מריו איגלסיאס באדחה, טנריפה. אתרים מוקפדים, הזמנות אונליין ומיתוג לעסקים. קבעו שיחה חינם." },
+    "crear-cv": { title: "יצירת קורות חיים בחינם — Casa Iglesias", description: "כלי חינמי ליצירת קורות חיים בזמן אמת, עם לוגו וצבע, והורדה כ-PDF. בלי הרשמה, והמידע נשאר בדפדפן שלכם." },
+    privacidad: { title: "פרטיות ומידע משפטי — Casa Iglesias", description: "איזה מידע האתר של Casa Iglesias שומר, למה הוא משמש ואיך מבקשים למחוק אותו." },
+    cuestionario: { title: "שאלון להתחלת האתר שלכם — Casa Iglesias", description: "ספרו לי על העסק בעשר דקות ואכין הצעה מותאמת אישית." },
+    nav: ["דף הבית", "מחירים", "בלוג (בספרדית)", "קביעת שיחה", "פרטיות"],
+  },
+};
+const LANGS = ["es", ...Object.keys(LANG_PAGES)];
+const pageUrl = (lang, route) => `${SITE}${lang === "es" ? "" : `${lang}/`}${route ? `${route}/` : ""}`;
+const hreflang = (route) => !LOCALIZED.includes(route) ? "" : LANGS.map(l => `
+    <link rel="alternate" hreflang="${l}" href="${pageUrl(l, route)}" />`).join("")
+  + `
+    <link rel="alternate" hreflang="x-default" href="${pageUrl("es", route)}" />`;
+
 // content: HTML propio para el bloque de buscadores (los artículos llevan su texto completo)
-function pageHtml(route, { title, description, index, jsonLd, content, ogType }) {
-  const url = `${SITE}${route ? `${route}/` : ""}`;
-  const ld = route === "" ? personJson : jsonLd;
+function pageHtml(route, { title, description, index, jsonLd, content, ogType }, lang = "es") {
+  const url = pageUrl(lang, route);
+  const ld = route === "" && lang === "es" ? personJson : jsonLd;
   let html = template
     .replace('<meta property="og:type" content="website" />', `<meta property="og:type" content="${ogType ?? "website"}" />`)
     .replace(/<title>[^<]*<\/title>/, `<title>${escape(title)}</title>`)
@@ -118,8 +171,9 @@ function pageHtml(route, { title, description, index, jsonLd, content, ogType })
     .replace(/(<meta property="og:description" content=")[^"]*/, `$1${escape(description)}`)
     .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
     .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`)
-    .replace("</head>", `${securityMeta}${rssLink}${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
-    .replace('<div id="root"></div>', `<div id="root">${content ?? fallback(title, description)}</div>`);
+    .replace("</head>", `${securityMeta}${rssLink}${hreflang(route)}\n    <meta property="og:locale" content="${OG_LOCALE[lang]}" />${ld ? `\n    <script type="application/ld+json">${ld}</script>` : ""}\n  </head>`)
+    .replace('<div id="root"></div>', `<div id="root">${content ?? fallback(title, description, lang)}</div>`);
+  if (lang !== "es") html = html.replace(/<html lang="es"[^>]*>/, `<html lang="${lang}"${lang === "he" ? ' dir="rtl"' : ""}>`);
   if (!index) html = html.replace("<head>", '<head>\n    <meta name="robots" content="noindex, nofollow" />');
   return html;
 }
@@ -128,6 +182,14 @@ for (const [route, meta] of Object.entries(pages)) {
   const folder = route ? join(dist, route) : dist;
   mkdirSync(folder, { recursive: true });
   writeFileSync(join(folder, "index.html"), pageHtml(route, meta));
+}
+// Las mismas páginas en los otros idiomas
+for (const lang of Object.keys(LANG_PAGES)) {
+  for (const route of LOCALIZED) {
+    const folder = join(dist, lang, route);
+    mkdirSync(folder, { recursive: true });
+    writeFileSync(join(folder, "index.html"), pageHtml(route, { ...pages[route], ...LANG_PAGES[lang][route] }, lang));
+  }
 }
 
 // Página de error: nunca debe aparecer en Google
@@ -239,6 +301,7 @@ const today = new Date().toISOString().slice(0, 10);
 writeFileSync(join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${Object.entries(pages).filter(([, meta]) => meta.index).map(([route]) => `  <url><loc>${SITE}${route ? `${route}/` : ""}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
+${Object.keys(LANG_PAGES).flatMap(lang => LOCALIZED.filter(route => pages[route]?.index).map(route => `  <url><loc>${pageUrl(lang, route)}</loc><lastmod>${today}</lastmod></url>`)).join("\n")}
 ${posts.map(p => `  <url><loc>${SITE}blog/${p.slug}/</loc><lastmod>${day(p.date)}</lastmod></url>`).join("\n")}
 </urlset>
 `);

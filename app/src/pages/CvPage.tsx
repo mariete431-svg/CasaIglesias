@@ -25,7 +25,7 @@ export default function CvPage() {
       subtitle={<>Mario Iglesias Martínez. Atención al cliente y trabajo administrativo.<br className="desktop-break" /> Aprendiendo programación web.</>}
       actions={<>
         <Magnetic><Button variant="luxury" size="lg" asChild><a href={CV_PDF} target="_blank" rel="noopener noreferrer" data-cursor="Bajar">Descargar CV (PDF) <ArrowUpRight /></a></Button></Magnetic>
-        <Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="mailto:mariete431@icloud.com" data-cursor="Escribir">Escribirme <ArrowUpRight /></a></Button></Magnetic>
+        <Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="mailto:hola@casaiglesias.es" data-cursor="Escribir">Escribirme <ArrowUpRight /></a></Button></Magnetic>
         <Magnetic><Button variant="outlineLuxury" size="lg" onClick={() => window.print()} data-cursor="Imprimir">Imprimir <Printer /></Button></Magnetic>
       </>}
       bottomHref="#sobre-mi"
@@ -79,7 +79,7 @@ export default function CvPage() {
     <section className="contact-section section-pad no-print"><div className="section-wrap"><Reveal>
       <SectionHeading label="06 / CONTACTO" />
       <h2 style={{ fontSize: "clamp(72px, 16vw, 230px)" }}>¿Hablamos<span>?</span></h2>
-      <a className="contact-email" href="mailto:mariete431@icloud.com">mariete431@icloud.com <ArrowUpRight strokeWidth={1.2} /></a>
+      <a className="contact-email" href="mailto:hola@casaiglesias.es">hola@casaiglesias.es <ArrowUpRight strokeWidth={1.2} /></a>
       <div className="contact-links"><Link to="/#reservar">Reservar una reunión <ArrowUpRight size={16} /></Link><a href={CV_PDF} target="_blank" rel="noopener noreferrer">Descargar PDF <ArrowUpRight size={16} /></a></div>
     </Reveal></div></section>
   </main>;

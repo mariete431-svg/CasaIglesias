@@ -56,7 +56,7 @@ export default function BlogPostPage() {
         <div className="post-body" onClick={onArticleClick} dangerouslySetInnerHTML={{ __html: html }} />
 
         <Reveal><footer className="post-footer">
-          <p className="post-signature">Mario Iglesias · Escrito con ayuda de IA (Claude). ¿Dudas o sugerencias? <a href="mailto:mariete431@icloud.com">Escríbeme</a>.</p>
+          <p className="post-signature">Mario Iglesias · Escrito con ayuda de IA (Claude). ¿Dudas o sugerencias? <a href="mailto:hola@casaiglesias.es">Escríbeme</a>.</p>
           <nav className="post-nav" aria-label="Más artículos">
             {older ? <Link to={`/blog/${older.slug}`} className="post-nav-link"><small><ArrowLeft size={13} /> ANTERIOR</small><span>{older.title}</span></Link> : <span />}
             {newer ? <Link to={`/blog/${newer.slug}`} className="post-nav-link post-nav-next"><small>SIGUIENTE <ArrowRight size={13} /></small><span>{newer.title}</span></Link> : <Link to="/blog" className="post-nav-link post-nav-next"><small>BLOG <ArrowUpRight size={13} /></small><span>Todos los artículos</span></Link>}
