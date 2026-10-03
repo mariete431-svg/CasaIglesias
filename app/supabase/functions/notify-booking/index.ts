@@ -10,7 +10,7 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
-const PANEL_URL = "https://mariete431-svg.github.io/CasaIglesias/admin/";
+const PANEL_URL = "https://casaiglesias.es/admin/";
 const TZ = "Atlantic/Canary";
 
 // Colores de la web: burdeos, crema y amarillo bebé

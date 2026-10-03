@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
   <title>Blog de Casa Iglesias</title>
-  <link>https://mariete431-svg.github.io/CasaIglesias/blog/</link>
-  <atom:link href="https://mariete431-svg.github.io/CasaIglesias/blog/feed.xml" rel="self" type="application/rss+xml" />
+  <link>https://casaiglesias.es/blog/</link>
+  <atom:link href="https://casaiglesias.es/blog/feed.xml" rel="self" type="application/rss+xml" />
   <description>Consejos prácticos de Casa Iglesias para que tu negocio se vea bien en internet y consiga más clientes: webs, reservas online, Google y marca.</description>
   <language>es</language>
   <item>
     <title>Cómo hacer buenas fotos para tu web con el móvil</title>
-    <link>https://mariete431-svg.github.io/CasaIglesias/blog/fotos-para-tu-web/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/CasaIglesias/blog/fotos-para-tu-web/</guid>
+    <link>https://casaiglesias.es/blog/fotos-para-tu-web/</link>
+    <guid isPermaLink="true">https://casaiglesias.es/blog/fotos-para-tu-web/</guid>
     <pubDate>Tue, 29 Sep 2026 13:00:00 GMT</pubDate>
     <description>No hace falta un fotógrafo para empezar. Con tu móvil y cinco trucos, tus fotos pueden verse profesionales.</description>
     <content:encoded><![CDATA[<p>Las fotos son lo primero que se mira. Y las tuyas, aunque no sean perfectas, transmiten más confianza que cualquier foto de catálogo.</p>
@@ -32,8 +32,8 @@
   </item>
   <item>
     <title>Por qué tu negocio necesita una marca, aunque sea pequeño</title>
-    <link>https://mariete431-svg.github.io/CasaIglesias/blog/por-que-tu-negocio-necesita-una-marca/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/CasaIglesias/blog/por-que-tu-negocio-necesita-una-marca/</guid>
+    <link>https://casaiglesias.es/blog/por-que-tu-negocio-necesita-una-marca/</link>
+    <guid isPermaLink="true">https://casaiglesias.es/blog/por-que-tu-negocio-necesita-una-marca/</guid>
     <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
     <description>Una marca no es solo un logo. Es lo que hace que te reconozcan y que confíen en ti antes de conocerte.</description>
     <content:encoded><![CDATA[<p>Muchos negocios empiezan con un logo hecho deprisa y colores distintos en cada sitio. Funciona, pero cuesta más que te recuerden.</p>
@@ -56,8 +56,8 @@
   </item>
   <item>
     <title>Tu ficha de Google, gratis y en 20 minutos</title>
-    <link>https://mariete431-svg.github.io/CasaIglesias/blog/ficha-de-google/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/CasaIglesias/blog/ficha-de-google/</guid>
+    <link>https://casaiglesias.es/blog/ficha-de-google/</link>
+    <guid isPermaLink="true">https://casaiglesias.es/blog/ficha-de-google/</guid>
     <pubDate>Tue, 29 Sep 2026 11:00:00 GMT</pubDate>
     <description>Antes que una web, muchos clientes ven tu ficha de Google. Así se crea y así se cuida.</description>
     <content:encoded><![CDATA[<p>Cuando alguien busca «peluquería cerca de mí», lo primero que ve no son webs: son fichas de Google con mapa, fotos y estrellas.</p>
@@ -80,8 +80,8 @@
   </item>
   <item>
     <title>Reservas online, menos llamadas y más citas</title>
-    <link>https://mariete431-svg.github.io/CasaIglesias/blog/reservas-online/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/CasaIglesias/blog/reservas-online/</guid>
+    <link>https://casaiglesias.es/blog/reservas-online/</link>
+    <guid isPermaLink="true">https://casaiglesias.es/blog/reservas-online/</guid>
     <pubDate>Tue, 29 Sep 2026 10:00:00 GMT</pubDate>
     <description>Si tu negocio trabaja con citas, poder reservar desde la web te ahorra tiempo y te trae clientes a cualquier hora.</description>
     <content:encoded><![CDATA[<p>Peluquerías, centros de estética, clínicas, clases… Si trabajas con citas, seguramente pasas parte del día al teléfono.</p>
@@ -103,8 +103,8 @@
   </item>
   <item>
     <title>5 cosas que tu web necesita para conseguir clientes</title>
-    <link>https://mariete431-svg.github.io/CasaIglesias/blog/5-cosas-que-tu-web-necesita/</link>
-    <guid isPermaLink="true">https://mariete431-svg.github.io/CasaIglesias/blog/5-cosas-que-tu-web-necesita/</guid>
+    <link>https://casaiglesias.es/blog/5-cosas-que-tu-web-necesita/</link>
+    <guid isPermaLink="true">https://casaiglesias.es/blog/5-cosas-que-tu-web-necesita/</guid>
     <pubDate>Tue, 29 Sep 2026 09:00:00 GMT</pubDate>
     <description>No hace falta una web enorme. Hacen falta cinco cosas bien hechas para que quien entra acabe escribiéndote.</description>
     <content:encoded><![CDATA[<p>Una web bonita que no trae clientes es solo decoración. Estas cinco cosas marcan la diferencia.</p>

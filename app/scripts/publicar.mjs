@@ -9,8 +9,8 @@ import { marked } from "marked";
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(app, "dist");
 const root = join(app, "..");
-const BASE = "/CasaIglesias/";
-const SITE = `https://mariete431-svg.github.io${BASE}`;
+const BASE = "/";
+const SITE = `https://casaiglesias.es${BASE}`;
 
 // index: si Google debe mostrar la página en sus resultados
 const pages = {

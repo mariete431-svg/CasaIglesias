@@ -20,7 +20,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const URL_SB = Deno.env.get("SUPABASE_URL")!;
 const supabase = createClient(URL_SB, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
-const WEB = "https://mariete431-svg.github.io/CasaIglesias/";
+const WEB = "https://casaiglesias.es/";
 const PANEL_URL = `${WEB}admin/`;
 const FN_URL = `${URL_SB}/functions/v1/avisos`;
 const TZ = "Atlantic/Canary";
