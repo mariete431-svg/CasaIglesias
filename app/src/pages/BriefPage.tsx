@@ -8,7 +8,7 @@ import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome"
 import { useToast } from "@/components/Toast";
 import { loadSupabase } from "@/lib/asset";
 import { readStored, writeStored } from "@/lib/utils";
-import { useLocalize, useT } from "@/i18n";
+import { useLang, useLocalize, useT } from "@/i18n";
 
 /* Cuestionario para clientes nuevos: Mario lo manda por email o WhatsApp
    (/cuestionario) y las respuestas le llegan por email y a su panel. */
@@ -21,6 +21,7 @@ export default function BriefPage() {
   const t = tr.brief;
   const BLOCKS = t.blocks;
   const local = useLocalize();
+  const lang = useLang();
   usePageTitle(tr.meta.brief);
   const toast = useToast();
   const saved = readStored<{ name?: string; email?: string; business?: string; answers?: Answers }>(DRAFT_KEY, {});
@@ -55,7 +56,7 @@ export default function BriefPage() {
     setSending(true);
     const { publicClient } = await loadSupabase();
     const clean = Object.fromEntries(Object.entries(answers).filter(([, v]) => v.trim()));
-    const { error } = await publicClient.from("briefs").insert({ name: name.trim().slice(0, 80), email: email.trim().slice(0, 120), business: business.trim().slice(0, 120), answers: clean });
+    const { error } = await publicClient.from("briefs").insert({ name: name.trim().slice(0, 80), email: email.trim().slice(0, 120), business: business.trim().slice(0, 120), answers: clean, lang });
     setSending(false);
     if (error) return toast(error.message.includes("too_many") ? t.tooMany : t.error, true);
     writeStored(DRAFT_KEY, {});

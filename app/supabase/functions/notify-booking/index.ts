@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
     .update({ notified_at: new Date().toISOString() })
     .eq("id", id)
     .is("notified_at", null)
-    .select("id, name, email, phone, topic, starts_at, meeting_type")
+    .select("id, name, email, phone, topic, starts_at, meeting_type, lang")
     .maybeSingle();
 
   if (error) {
@@ -95,6 +95,7 @@ Deno.serve(async (req) => {
       <p style="margin:0 0 24px;color:${INK};font-size:18px"><strong>${esc(day)} · ${esc(time)}</strong> <span style="color:${MUTED}">(hora de Canarias)</span></p>
       <table style="border-collapse:collapse;font-size:15px">
         ${row("Tipo", esc(type))}
+        ${booking.lang && booking.lang !== "es" ? row("Idioma de la web", esc(({ en: "inglés", it: "italiano", de: "alemán", fr: "francés", he: "hebreo" } as Record<string, string>)[booking.lang] ?? booking.lang)) : ""}
         ${row("Email", `<a href="mailto:${esc(booking.email)}" style="color:${INK}">${esc(booking.email)}</a>`)}
         ${booking.phone ? row("Teléfono", `<a href="tel:${esc(booking.phone)}" style="color:${INK}">${esc(booking.phone)}</a>`) : ""}
         ${booking.topic ? row("Tema", esc(booking.topic).replace(/\n/g, "<br>")) : ""}

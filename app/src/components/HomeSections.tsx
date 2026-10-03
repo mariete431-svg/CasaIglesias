@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal, useMotionPreference } from "@/components/EditorialEffects";
 import { useToast } from "@/components/Toast";
 import { asset, loadSupabase } from "@/lib/asset";
-import { useLocalize, useT } from "@/i18n";
+import { LOCALES, useLang, useLocalize, useT } from "@/i18n";
 
 const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: m.Booking })));
 
@@ -81,7 +81,7 @@ export function CvMagnet() {
         <ul>{t.points.map(x => <li key={x}>{x}</li>)}</ul>
         <Button variant="luxury" size="lg" asChild><Link to={local("/crear-cv")} data-cursor={useT().cursor.create}>{t.cta} <ArrowUpRight /></Link></Button>
       </div></Reveal>
-      <Reveal delay={.1}><Link to={local("/crear-cv")} className="cv-magnet-paper" aria-label={t.open} tabIndex={-1}>
+      <Reveal delay={.1}><Link to={local("/crear-cv")} className="cv-magnet-paper" aria-hidden="true" tabIndex={-1}>
         <span className="cv-magnet-logo" aria-hidden="true">{t.yourLogo}</span>
         <strong>{t.sampleName}</strong>
         <small>{t.sampleRole}</small>
@@ -121,13 +121,19 @@ export function Faq() {
 // Identificador del feed de Behold (behold.so → tu feed → "Feed ID"). Vacío = se enseña solo el enlace.
 const BEHOLD_FEED_ID = "seeFyk5efICRESP1Mi3n";
 const INSTAGRAM_URL = "https://www.instagram.com/casaiglesias.studio/";
-type Post = { id: string; permalink: string; image: string; caption: string };
-const skeleton: Post[] = Array.from({ length: 6 }, (_, i) => ({ id: `s${i}`, permalink: "", image: "", caption: "" }));
+type Post = { id: string; permalink: string; image: string; caption: string; date: string; album: boolean };
+type Profile = { picture: string; bio: string };
+// Cada tarjeta va un poco girada, como fotos sueltas sobre la mesa
+const TILTS = [-3, 2, -1.5, 3, -2.5, 1.5];
 
 export function InstagramFeed() {
   const t = useT().insta;
+  const locale = LOCALES[useLang()];
+  const reduced = useMotionPreference();
   const [ref, near] = useNear<HTMLElement>("500px 0px");
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (!near || !BEHOLD_FEED_ID) return;
     let active = true;
@@ -135,32 +141,59 @@ export function InstagramFeed() {
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => {
         const list: Record<string, any>[] = Array.isArray(data) ? data : data?.posts ?? [];
-        const clean = list.slice(0, 6).map(p => ({
+        const clean = list.slice(0, 8).map(p => ({
           id: String(p.id),
           permalink: String(p.permalink ?? INSTAGRAM_URL),
           image: String(p.sizes?.medium?.mediaUrl ?? p.thumbnailUrl ?? p.mediaUrl ?? ""),
-          caption: String(p.prunedCaption ?? p.caption ?? "").slice(0, 120),
+          caption: String(p.prunedCaption ?? p.caption ?? "").replace(/\s+/g, " ").trim().slice(0, 140),
+          date: String(p.timestamp ?? ""),
+          album: p.mediaType === "CAROUSEL_ALBUM",
         })).filter(p => p.image);
-        if (active) setPosts(clean);
+        if (!active) return;
+        setPosts(clean);
+        if (!Array.isArray(data) && data?.profilePictureUrl) setProfile({ picture: String(data.profilePictureUrl), bio: String(data.biography ?? "") });
       })
       .catch(() => { if (active) setPosts([]); });
     return () => { active = false; };
   }, [near]);
 
+  const day = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" });
+  const list = posts ?? [];
+  // La cinta se repite dos veces para que el movimiento no tenga cortes
+  const loop = reduced ? list : [...list, ...list];
+
   return <section ref={ref} className="insta-section section-pad"><div className="section-wrap">
     <Reveal><div className="insta-head">
-      <div><span className="eyebrow">{t.label}</span><h2>@casaiglesias<em>.studio</em></h2></div>
+      <a className="insta-profile" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+        <span className="insta-ring">{profile ? <img src={profile.picture} alt="" width={64} height={64} /> : <AtSign />}</span>
+        <span><span className="eyebrow">{t.label}</span><strong>@casaiglesias<em>.studio</em></strong>{profile?.bio && <small>{profile.bio}</small>}</span>
+      </a>
       <Button variant="outlineLuxury" size="lg" asChild><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer"><AtSign /> {t.follow}</a></Button>
     </div></Reveal>
-    {BEHOLD_FEED_ID && posts?.length !== 0 && <div className="insta-grid">
-      {(posts ?? skeleton).map((post, i) => post.image
-        ? <motion.a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer" className="insta-post" initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * .06, duration: .6 }}>
-          <img src={post.image} alt={post.caption || t.alt} loading="lazy" />
-          <span className="sr-only">{t.opens}</span>
-        </motion.a>
-        : <span key={post.id} className="insta-post is-loading" aria-hidden="true" />)}
+  </div>
+    {BEHOLD_FEED_ID && posts?.length !== 0 && <div className={`insta-marquee ${paused ? "is-paused" : ""} ${reduced ? "is-static" : ""}`}
+      onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
+      <div className="insta-track" style={{ "--n": Math.max(list.length, 1) } as React.CSSProperties}>
+        {posts === null
+          ? Array.from({ length: 6 }, (_, i) => <span key={i} className="insta-card is-loading" style={{ "--r": `${TILTS[i % 6]}deg` } as React.CSSProperties} aria-hidden="true" />)
+          : loop.map((post, i) => {
+            const copy = i >= list.length;
+            return <a key={`${post.id}-${i}`} href={post.permalink} target="_blank" rel="noopener noreferrer" className="insta-card"
+              style={{ "--r": `${TILTS[i % TILTS.length]}deg` } as React.CSSProperties}
+              aria-hidden={copy || undefined} tabIndex={copy ? -1 : undefined}>
+              <img src={post.image} alt={post.caption || t.alt} loading="lazy" draggable={false} />
+              {post.album && <span className="insta-badge" aria-hidden="true">❐</span>}
+              <span className="insta-caption">
+                {post.date && <time dateTime={post.date}>{day.format(new Date(post.date))}</time>}
+                <span>{post.caption}</span>
+              </span>
+              <span className="sr-only">{t.opens}</span>
+            </a>;
+          })}
+      </div>
     </div>}
-  </div></section>;
+  </section>;
 }
 
 /* =========================================================
@@ -170,6 +203,7 @@ export function Newsletter() {
   const toast = useToast();
   const t = useT().newsletter;
   const tr = useT();
+  const lang = useLang();
   const local = useLocalize();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -185,7 +219,7 @@ export function Newsletter() {
     if (trap) { setDone(true); return; }
     setSending(true);
     const { publicClient } = await loadSupabase();
-    const { error } = await publicClient.from("subscribers").insert({ email: value });
+    const { error } = await publicClient.from("subscribers").insert({ email: value, lang });
     setSending(false);
     // 23505 = ya estaba apuntado: para la persona es lo mismo
     if (error && error.code !== "23505") return toast(error.message.includes("too_many") ? t.tooMany : t.error, true);
@@ -225,6 +259,7 @@ function ContactForm() {
   const t = useT().contact;
   const tr = useT();
   const local = useLocalize();
+  const lang = useLang();
   const [form, setForm] = useState({ name: "", email: "", kind: "", message: "" });
   const [consent, setConsent] = useState(false);
   const [trap, setTrap] = useState("");
@@ -242,7 +277,7 @@ function ContactForm() {
     if (trap) { setSent(true); return; }
     setSending(true);
     const { publicClient } = await loadSupabase();
-    const { error } = await publicClient.from("contact_messages").insert({ name: name.slice(0, 80), email: email.slice(0, 120), kind: form.kind || null, message: message.slice(0, 1500) });
+    const { error } = await publicClient.from("contact_messages").insert({ name: name.slice(0, 80), email: email.slice(0, 120), kind: form.kind || null, message: message.slice(0, 1500), lang });
     setSending(false);
     if (error) return toast(error.message.includes("too_many") ? t.tooMany : t.error, true);
     setSent(true);

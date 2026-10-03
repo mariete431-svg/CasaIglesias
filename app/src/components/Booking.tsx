@@ -28,7 +28,8 @@ type MeetingType = typeof MEETING_TYPES[number];
 export function Booking({ compact = false }: { compact?: boolean }) {
   const reduced = useMotionPreference();
   const t = useT().booking;
-  const locale = LOCALES[useLang()];
+  const lang = useLang();
+  const locale = LOCALES[lang];
   const local = useLocalize();
   const fDay = (key: string) => formatDay(key, locale);
   const fTime = (iso: string) => formatTime(iso, locale);
@@ -125,6 +126,7 @@ export function Booking({ compact = false }: { compact?: boolean }) {
       p_topic: result.data.topic || null,
       p_starts_at: selectedSlot,
       p_type: meetingType,
+      p_lang: lang,
     });
     setSubmitting(false);
     if (error) {

@@ -360,6 +360,7 @@ export const es = {
     home: "Volver al inicio",
     newTab: " (se abre en una pestaña nueva)",
   },
+  unsub: { eyebrow: "BOLETÍN — CASA IGLESIAS", lines: ["Darse de", "baja."], text: "Pulsa el botón y dejarás de recibir el boletín de Casa Iglesias.", button: "Darme de baja", doing: "Un momento…", doneTitle: "Hecho.", done: "Ya no recibirás más el boletín. Gracias por haber estado ahí.", invalid: "Este enlace de baja no es correcto. Escribe a hola@casaiglesias.es y te doy de baja a mano.", error: "No se ha podido completar. Inténtalo de nuevo en un momento.", home: "Volver a la web" },
   notFound: {
     eyebrow: "ERROR 404 — PÁGINA NO ENCONTRADA",
     lines: ["Aquí no", "hay nada."],

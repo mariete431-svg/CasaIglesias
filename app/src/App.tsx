@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { CustomCursor, ScrollAtmosphere, useMotionPreference } from "@/components/EditorialEffects";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
@@ -14,6 +14,7 @@ const BuilderPage = lazy(() => import("@/pages/BuilderPage"));
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const PrivacyPage = lazy(() => import("@/pages/PrivacyPage"));
 const BriefPage = lazy(() => import("@/pages/BriefPage"));
+const UnsubscribePage = lazy(() => import("@/pages/UnsubscribePage"));
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const BlogPostPage = lazy(() => import("@/pages/BlogPostPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -64,12 +65,16 @@ export default function App() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/privacidad" element={<PrivacyPage />} />
           <Route path="/cuestionario" element={<BriefPage />} />
+          <Route path="/baja" element={<UnsubscribePage />} />
           {/* Las mismas páginas en los otros idiomas: /en/, /it/crear-cv… */}
           {LANGS.filter(l => l !== "es").map(l => <Route key={l} path={`/${l}`}>
             <Route index element={<Home />} />
             <Route path="crear-cv" element={<BuilderPage />} />
             <Route path="privacidad" element={<PrivacyPage />} />
             <Route path="cuestionario" element={<BriefPage />} />
+            <Route path="baja" element={<UnsubscribePage />} />
+            {/* El blog solo existe en español */}
+            <Route path="blog/*" element={<Navigate to="/blog" replace />} />
           </Route>)}
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />

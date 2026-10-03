@@ -360,6 +360,7 @@ export const he: Dict = {
     home: "חזרה לדף הבית",
     newTab: " (נפתח בלשונית חדשה)",
   },
+  unsub: { eyebrow: "ניוזלטר — CASA IGLESIAS", lines: ["ביטול", "הרשמה."], text: "לחצו על הכפתור ולא תקבלו יותר את הניוזלטר של Casa Iglesias.", button: "לבטל את ההרשמה", doing: "רגע…", doneTitle: "בוצע.", done: "לא תקבלו יותר את הניוזלטר. תודה שהייתם איתנו.", invalid: "קישור הביטול לא תקין. כתבו אל hola@casaiglesias.es ואסיר אתכם ידנית.", error: "הפעולה לא הושלמה. נסו שוב בעוד רגע.", home: "חזרה לאתר" },
   notFound: {
     eyebrow: "שגיאה 404 — הדף לא נמצא",
     lines: ["אין כאן", "כלום."],
