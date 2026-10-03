@@ -11,9 +11,8 @@
 // Es segura aunque sea pública: cada aviso se "reserva" con notified_at / reminded_at,
 // así que nunca se manda dos veces, y el boletín exige una sesión de administrador.
 //
-// Mientras no haya dominio propio, Resend solo deja escribir a Mario: los emails a
-// clientes (recordatorio, bienvenida, boletín) se activan solos al poner el secreto
-// RESEND_FROM, por ejemplo  "Casa Iglesias <hola@casaiglesias.es>".
+// Los emails a clientes (recordatorio, bienvenida, boletín) salen desde hola@casaiglesias.es.
+// Las respuestas van al email de Mario (reply_to). El secreto RESEND_FROM permite cambiar el remitente.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -24,8 +23,9 @@ const WEB = "https://casaiglesias.es/";
 const PANEL_URL = `${WEB}admin/`;
 const FN_URL = `${URL_SB}/functions/v1/avisos`;
 const TZ = "Atlantic/Canary";
-const FROM_MARIO = "Mi web <onboarding@resend.dev>";
-const FROM_CLIENTS = Deno.env.get("RESEND_FROM") ?? "";
+// Dominio casaiglesias.es verificado en Resend (3 oct 2026): los emails ya pueden llegar a los clientes
+const FROM_MARIO = "Web Casa Iglesias <avisos@casaiglesias.es>";
+const FROM_CLIENTS = Deno.env.get("RESEND_FROM") ?? "Casa Iglesias <hola@casaiglesias.es>";
 
 const INK = "#3d1119";
 const CREAM = "#fbf6e6";
