@@ -347,7 +347,7 @@ export const es = {
         ["Behold e Instagram:", "si la portada muestra mis últimas publicaciones de Instagram, las fotos se cargan desde sus servidores, que pueden ver tu dirección IP (Estados Unidos)."],
         ["GitHub Pages:", "aloja la web (Estados Unidos)."],
       ], after: ["Las letras, las fotos y el resto de archivos se sirven desde esta misma web: mientras navegas no se conecta con Google ni con otras empresas, salvo las fotos de Instagram indicadas arriba."] },
-      { h: "Cookies", p: ["Esta web no usa cookies de publicidad ni de analítica. Solo guarda en tu navegador lo necesario para que funcione: tu borrador de CV (con tu foto y tu logo, si los subes), el borrador del cuestionario y si ya viste la animación de entrada."] },
+      { h: "Cookies", p: ["Esta web no usa cookies de publicidad ni de analítica. Solo guarda en tu navegador lo necesario para que funcione: tu borrador de CV (con tu foto y tu logo, si los subes), el borrador del cuestionario y si ya viste la animación de entrada.", "Para saber cuántas personas visitan la web, contamos las visitas sin cookies: solo se guarda la página vista, el idioma, la web desde la que llegas (solo su nombre) y si usas móvil u ordenador. No guardamos tu IP; una huella cifrada de la conexión sirve para frenar abusos y se borra a los 30 días. Si tu navegador tiene activado «No rastrear», no se cuenta tu visita."] },
       { h: "Tus derechos", p: ["Puedes pedirme acceder a tus datos, corregirlos, borrarlos, limitar su uso u oponerte, escribiendo a {email}. Si crees que no los he tratado bien, puedes reclamar ante la {aepd}."] },
     ] as { h: string; p?: string[]; list?: [string, string][]; after?: string[] }[],
     aepd: "Agencia Española de Protección de Datos",

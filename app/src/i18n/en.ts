@@ -346,7 +346,7 @@ export const en: Dict = {
         ["Behold and Instagram:", "if the home page shows my latest Instagram posts, the photos are loaded from their servers, which can see your IP address (United States)."],
         ["GitHub Pages:", "hosts the website (United States)."],
       ], after: ["The fonts, photos and other files are served from this website itself: while you browse, it doesn't connect to Google or other companies, except for the Instagram photos mentioned above."] },
-      { h: "Cookies", p: ["This website doesn't use advertising or analytics cookies. It only stores in your browser what it needs to work: your CV draft (with your photo and logo, if you upload them), the questionnaire draft and whether you've already seen the intro animation."] },
+      { h: "Cookies", p: ["This website doesn't use advertising or analytics cookies. It only stores in your browser what it needs to work: your CV draft (with your photo and logo, if you upload them), the questionnaire draft and whether you've already seen the intro animation.", "To know how many people visit the website, we count visits without cookies: we only store the page viewed, the language, the website you came from (just its name) and whether you use a phone or a computer. We don't store your IP; an encrypted fingerprint of the connection is used to stop abuse and is deleted after 30 days. If your browser has «Do Not Track» turned on, your visit isn't counted."] },
       { h: "Your rights", p: ["You can ask me to access, correct or delete your data, limit its use or object to it by writing to {email}. If you think I haven't handled it properly, you can complain to the {aepd}."] },
     ],
     aepd: "Spanish Data Protection Agency (AEPD)",
