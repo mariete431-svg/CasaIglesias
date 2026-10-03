@@ -21,6 +21,13 @@ const bookingSchema = z.object({
 });
 type Field = "name" | "email" | "phone" | "topic" | "consent";
 type Form = { name: string; email: string; phone: string; topic: string; consent: boolean };
+// Tipo de reunión: así Mario llega preparado
+export const MEETING_TYPES = [
+  { id: "primera", label: "Primera reunión", hint: "Conocernos y ver qué necesitas" },
+  { id: "presupuesto", label: "Presupuesto", hint: "Ya sabes lo que quieres y buscas precio" },
+  { id: "seguimiento", label: "Seguimiento", hint: "Ya trabajamos juntos" },
+] as const;
+type MeetingType = typeof MEETING_TYPES[number]["id"];
 
 /** compact: versión reducida para mostrarla dentro del desplegable de la portada. */
 export function Booking({ compact = false }: { compact?: boolean }) {
@@ -37,6 +44,8 @@ export function Booking({ compact = false }: { compact?: boolean }) {
   const [slotsError, setSlotsError] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
   const [form, setForm] = useState<Form>({ name: "", email: "", phone: "", topic: "", consent: false });
+  const [meetingType, setMeetingType] = useState<MeetingType>("primera");
+  const typeLabel = MEETING_TYPES.find(t => t.id === meetingType)?.label ?? "Reunión";
   // Campo trampa: las personas no lo ven; los robots que rellenan todo, sí
   const [trap, setTrap] = useState("");
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
@@ -115,6 +124,7 @@ export function Booking({ compact = false }: { compact?: boolean }) {
       p_phone: result.data.phone || null,
       p_topic: result.data.topic || null,
       p_starts_at: selectedSlot,
+      p_type: meetingType,
     });
     setSubmitting(false);
     if (error) {
@@ -138,7 +148,7 @@ export function Booking({ compact = false }: { compact?: boolean }) {
 
   const reset = () => {
     setSelectedDay(""); setSelectedSlot(""); setConfirmedEmail(""); setErrors({}); setSubmitError("");
-    setForm({ name: "", email: "", phone: "", topic: "", consent: false }); setTrap("");
+    setForm({ name: "", email: "", phone: "", topic: "", consent: false }); setTrap(""); setMeetingType("primera");
     setMonthOffset(0); setRetryDays(value => value + 1); setStep(0);
   };
 
@@ -156,6 +166,7 @@ export function Booking({ compact = false }: { compact?: boolean }) {
         </div>
         <div className="summary-selection">
           <span className="eyebrow">TU SELECCIÓN</span>
+          <p>{typeLabel}</p>
           <p>{selectedDay ? formatDay(selectedDay) : "Elige un día para empezar"}</p>
           {selectedSlot && <p>{formatTime(selectedSlot)} · hora de Canarias</p>}
         </div>
@@ -189,6 +200,12 @@ export function Booking({ compact = false }: { compact?: boolean }) {
               <span className="eyebrow">PASO 03 / 04</span><h3>Tus datos.</h3>
               <p className="step-subtitle">Solo lo necesario para ponernos en contacto.</p>
               <form className="booking-form" onSubmit={submit} noValidate>
+                <fieldset className="meeting-types"><legend>Tipo de reunión</legend>
+                  {MEETING_TYPES.map(t => <label key={t.id} className={`meeting-type ${meetingType === t.id ? "is-selected" : ""}`}>
+                    <input type="radio" name="meeting-type" value={t.id} checked={meetingType === t.id} onChange={() => setMeetingType(t.id)} />
+                    <strong>{t.label}</strong><small>{t.hint}</small>
+                  </label>)}
+                </fieldset>
                 <div className="form-row"><label htmlFor="booking-name">Nombre <span aria-hidden="true">*</span></label><input id="booking-name" autoComplete="name" maxLength={LIMITS.name} required aria-required="true" value={form.name} onChange={e => setField("name", e.target.value)} aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-error" : undefined} placeholder="Tu nombre" />{errors.name && <small id="name-error" role="alert">{errors.name}</small>}</div>
                 <div className="form-row"><label htmlFor="booking-email">Email <span aria-hidden="true">*</span></label><input id="booking-email" type="email" autoComplete="email" maxLength={LIMITS.email} required aria-required="true" value={form.email} onChange={e => setField("email", e.target.value)} aria-invalid={!!errors.email} aria-describedby={errors.email ? "email-error" : undefined} placeholder="tu@email.com" />{errors.email && <small id="email-error" role="alert">{errors.email}</small>}</div>
                 <div className="form-row"><label htmlFor="booking-phone">Teléfono <span className="optional">Opcional</span></label><input id="booking-phone" type="tel" autoComplete="tel" maxLength={LIMITS.phone} value={form.phone} onChange={e => setField("phone", e.target.value)} aria-invalid={!!errors.phone} placeholder="+34" />{errors.phone && <small role="alert">{errors.phone}</small>}</div>
@@ -203,8 +220,8 @@ export function Booking({ compact = false }: { compact?: boolean }) {
             {step === 3 && <div className="confirmation">
               <motion.div className="confirmation-check" initial={reduced ? false : { opacity: 0, scale: .9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .55 }}><motion.svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><motion.path d="M5 12.5l4.3 4.2L19 7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" initial={reduced ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: .25, duration: .75, ease: "easeInOut" }} /></motion.svg></motion.div>
               <span className="eyebrow">PASO 04 / 04</span><h3>Nos vemos pronto.</h3>
-              <p>Reunión reservada. Nos vemos el {formatDay(selectedDay)} a las {formatTime(selectedSlot)} (hora de Canarias). Te escribiré a <strong>{confirmedEmail}</strong> para confirmarla.</p>
-              <div className="confirmation-actions"><Button variant="luxury" onClick={() => downloadCalendarEvent(selectedSlot)}><Download /> Añadir a mi calendario</Button><Button variant="outlineLuxury" onClick={reset}>Reservar otra <ArrowRight /></Button></div>
+              <p>{typeLabel} reservada. Nos vemos el {formatDay(selectedDay)} a las {formatTime(selectedSlot)} (hora de Canarias). Te escribiré a <strong>{confirmedEmail}</strong> para confirmarla.</p>
+              <div className="confirmation-actions"><Button variant="luxury" onClick={() => downloadCalendarEvent(selectedSlot, typeLabel)}><Download /> Añadir a mi calendario</Button><Button variant="outlineLuxury" onClick={reset}>Reservar otra <ArrowRight /></Button></div>
             </div>}
           </motion.div>
         </AnimatePresence>

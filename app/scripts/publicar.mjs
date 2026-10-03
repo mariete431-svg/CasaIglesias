@@ -39,6 +39,11 @@ const pages = {
     description: "Consejos prácticos de Casa Iglesias para que tu negocio se vea bien en internet y consiga más clientes: webs, reservas online, Google y marca.",
     index: true,
   },
+  cuestionario: {
+    title: "Cuestionario para empezar tu web — Casa Iglesias",
+    description: "Cuéntame tu negocio en diez minutos: qué haces, a quién te diriges y qué necesitas. Con tus respuestas preparo una propuesta a tu medida.",
+    index: false,
+  },
   admin: { title: "Panel privado — Casa Iglesias", description: "Acceso privado.", index: false },
 };
 
@@ -51,9 +56,10 @@ const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  // Fotos de opiniones (Supabase) y del Instagram (Behold)
+  `img-src 'self' data: blob: ${SUPABASE} https://behold.pictures https://*.behold.pictures https://*.cdninstagram.com https://*.fbcdn.net`,
   "font-src 'self'",
-  `connect-src 'self' ${SUPABASE} wss://uaojfcqpdngoqpjrmttx.supabase.co`,
+  `connect-src 'self' ${SUPABASE} wss://uaojfcqpdngoqpjrmttx.supabase.co https://feeds.behold.so`,
   "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",

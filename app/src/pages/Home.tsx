@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowDown, ArrowUpRight, CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { EditorialMarquee, Entrance, HeroDepth, HeroTitle, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Stamp, Tilt } from "@/components/EditorialEffects";
+import { AnimatePresence } from "framer-motion";
+import { EditorialMarquee, Entrance, HeroDepth, introPending, Magnetic, ProfileParallax, ProjectPreview, Reveal, Stamp, Tilt, TypeTitle } from "@/components/EditorialEffects";
+import { Contact, CvMagnet, Faq, HeroBackdrop, InstagramFeed, Newsletter, Process } from "@/components/HomeSections";
 import { usePageTitle } from "@/components/SiteChrome";
 import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
@@ -14,18 +16,29 @@ const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: 
 
 export const CV_PDF = asset("cv-mario-iglesias.pdf");
 
-const projects = [
-  { name: "Obra Clara", description: "Web para una empresa de reformas, con calculadora de presupuesto y antes y después (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/obra-clara/" },
-  { name: "Garaje Nueve", description: "Web para un taller, con seguimiento de la reparación por matrícula (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/garaje-nueve/" },
-  { name: "ZONA 4", description: "Web para un gimnasio (proyecto de práctica).", to: "https://mariete431-svg.github.io/zona4/" },
-  { name: "Casa Iglesias", description: "La marca y la web de mi propio estudio.", to: "#inicio" },
+// Tipos para los filtros: así cada cliente encuentra rápido lo que necesita
+type Kind = "web" | "reservas" | "marca";
+const KIND_FILTERS: { id: "todo" | Kind; label: string }[] = [
+  { id: "todo", label: "Todo" }, { id: "web", label: "Webs" }, { id: "reservas", label: "Reservas" }, { id: "marca", label: "Marca" },
+];
+const projects: { name: string; description: string; to: string; kinds: Kind[] }[] = [
+  { name: "Obra Clara", description: "Web para una empresa de reformas, con calculadora de presupuesto y antes y después (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/obra-clara/", kinds: ["web"] },
+  { name: "Garaje Nueve", description: "Web para un taller, con seguimiento de la reparación por matrícula (proyecto de práctica).", to: "https://mariete431-svg.github.io/portfolio/garaje-nueve/", kinds: ["web", "reservas"] },
+  { name: "ZONA 4", description: "Web para un gimnasio (proyecto de práctica).", to: "https://mariete431-svg.github.io/zona4/", kinds: ["web", "reservas"] },
+  { name: "Casa Iglesias", description: "La marca y la web de mi propio estudio.", to: "#inicio", kinds: ["web", "marca", "reservas"] },
 ];
 
+function KindFilter({ value, onChange, label }: { value: string; onChange: (v: "todo" | Kind) => void; label: string }) {
+  return <div className="filter-row kind-filter" role="group" aria-label={label}>
+    {KIND_FILTERS.map(f => <button key={f.id} type="button" className="chip" aria-pressed={value === f.id} onClick={() => onChange(f.id)}>{f.label}</button>)}
+  </div>;
+}
+
 /* ---------- Servicios y precios de Casa Iglesias ---------- */
-const packages = [
-  { name: "Esencial", price: 390, time: "1–2 semanas", items: ["Web de una página, adaptada al móvil", "Botón de WhatsApp y formulario de contacto", "Preparada para salir bien en Google", "Ficha de Google Business configurada"] },
-  { name: "Negocio", price: 790, time: "3 semanas", items: ["Hasta 5 páginas: inicio, servicios, sobre nosotros, galería o blog y contacto", "Ayuda con los textos", "Preparada para salir bien en Google", "2 rondas de cambios"] },
-  { name: "Reservas", price: 1290, time: "4 semanas", tag: "Mi especialidad", items: ["Todo lo del paquete Negocio", "Reservas de citas online con calendario", "Aviso por email en cada reserva", "2 rondas de cambios"] },
+const packages: (Pack & { kind: Kind })[] = [
+  { kind: "web", name: "Esencial", price: 390, time: "1–2 semanas", items: ["Web de una página, adaptada al móvil", "Botón de WhatsApp y formulario de contacto", "Preparada para salir bien en Google", "Ficha de Google Business configurada"] },
+  { kind: "web", name: "Negocio", price: 790, time: "3 semanas", items: ["Hasta 5 páginas: inicio, servicios, sobre nosotros, galería o blog y contacto", "Ayuda con los textos", "Preparada para salir bien en Google", "2 rondas de cambios"] },
+  { kind: "reservas", name: "Reservas", price: 1290, time: "4 semanas", tag: "Mi especialidad", items: ["Todo lo del paquete Negocio", "Reservas de citas online con calendario", "Aviso por email en cada reserva", "2 rondas de cambios"] },
 ];
 const brandPackages = [
   { name: "Marca Básica", price: 190, time: "1–2 semanas", items: ["Logo principal + versión icono", "Colores y letras de la marca", "Archivos listos para usar (PNG y SVG)", "Guía de marca de 1 página", "2 rondas de cambios"] },
@@ -49,12 +62,20 @@ function PriceCard({ pack, delay }: { pack: Pack; delay: number }) {
 }
 
 function Pricing() {
+  const [kind, setKind] = useState<"todo" | Kind>("todo");
+  const webs = packages.filter(p => kind === "todo" || p.kind === kind);
+  const showBrand = kind === "todo" || kind === "marca";
   return <section id="precios" className="pricing-section section-pad"><div className="section-wrap">
     <Reveal><div className="section-heading"><span className="eyebrow">02 / SERVICIOS Y PRECIOS</span><span className="section-rule" /></div>
-      <div className="intro-row"><h2>Webs y marca para<br /><em>negocios.</em></h2><p>Precios cerrados y sin sorpresas. Pagas la mitad al empezar y la otra mitad cuando tu web está lista.</p></div></Reveal>
-    <div className="pricing-grid">{packages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
-    <Reveal><div className="pricing-subhead"><h3>Identidad <em>visual.</em></h3><p>Para negocios que empiezan o que todavía no tienen marca: logo, colores y todo lo necesario para verse profesionales desde el primer día.</p></div></Reveal>
-    <div className="pricing-grid">{brandPackages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
+      <div className="intro-row"><h2>Webs y marca para<br /><em>negocios.</em></h2><p>Precios cerrados y sin sorpresas. Pagas la mitad al empezar y la otra mitad cuando tu web está lista.</p></div>
+      <KindFilter value={kind} onChange={setKind} label="Filtrar servicios por tipo" /></Reveal>
+    <AnimatePresence mode="popLayout" initial={false}>
+      {webs.length > 0 && <motion.div key={`webs-${kind}`} className="pricing-grid" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}>{webs.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</motion.div>}
+      {showBrand && <motion.div key="marca" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}>
+        <Reveal><div className="pricing-subhead" style={kind === "marca" ? { marginTop: 0 } : undefined}><h3>Identidad <em>visual.</em></h3><p>Para negocios que empiezan o que todavía no tienen marca: logo, colores y todo lo necesario para verse profesionales desde el primer día.</p></div></Reveal>
+        <div className="pricing-grid">{brandPackages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
+      </motion.div>}
+    </AnimatePresence>
     <Reveal><div className="pricing-more">
       <div><span className="eyebrow">MANTENIMIENTO</span><p><strong>29 € al mes.</strong> Alojamiento de la web, copias de seguridad y hasta 30 minutos de cambios al mes.</p></div>
       <div><span className="eyebrow">EXTRAS</span><p>{extras.map(([name, price]) => <span key={name}>{name} · <strong>{euros(price)}</strong></span>)}</p></div>
@@ -142,6 +163,22 @@ function StartHere() {
   </div></section>;
 }
 
+function Projects() {
+  const [kind, setKind] = useState<"todo" | Kind>("todo");
+  const visible = projects.filter(p => kind === "todo" || p.kinds.includes(kind));
+  return <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">05 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Trabajos hechos de principio a fin: diseño, marca y web.</p></div>
+    <KindFilter value={kind} onChange={setKind} label="Filtrar proyectos por tipo" /></Reveal>
+    <motion.div layout className="project-list"><AnimatePresence initial={false} mode="popLayout">{visible.map((project, i) => {
+      const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
+      return <motion.div key={project.name} layout initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: 24 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}><ProjectPreview name={project.name}>{project.to.startsWith("http")
+        ? <a className="project-row" href={project.to} target="_blank" rel="noopener noreferrer" aria-label={`${project.name}: ${project.description} (se abre en otra pestaña)`}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
+        : project.to.startsWith("#")
+          ? <a className="project-row" href={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
+          : <Link className="project-row" to={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></Link>}
+      </ProjectPreview></motion.div>;
+    })}</AnimatePresence></motion.div></div></section>;
+}
+
 export default function Home() {
   usePageTitle("Casa Iglesias — Estudio de diseño y desarrollo web");
   // Mientras está la foto de entrada, el titular espera para escribirse cuando la foto se va
@@ -151,8 +188,9 @@ export default function Home() {
     <Entrance onReveal={() => setHeroReady(true)} />
     <main id="inicio">
       <section className="hero section-wrap" aria-labelledby="hero-title">
+        <HeroBackdrop />
         <HeroDepth className="hero-content"><Reveal immediate><p className="eyebrow hero-eyebrow"><span className="eyebrow-line" /> ESTUDIO DE DISEÑO Y DESARROLLO WEB · TENERIFE <span className="status-pill"><i aria-hidden="true" />Disponible</span></p></Reveal>
-          <HeroTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.35} />
+          <TypeTitle lines={["Casa", "Iglesias."]} play={heroReady} delay={.45} />
           <motion.p className="hero-subtitle" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .75, duration: .8 }}>Webs e identidad visual para negocios, por Mario Iglesias.<br className="desktop-break" /> Detalle, discreción y trabajo bien hecho.</motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 12 }} animate={show} transition={{ delay: .9, duration: .8 }}><Magnetic><Button variant="luxury" size="lg" asChild><a href="#reservar" data-cursor="Reservar">Reservar una reunión <ArrowUpRight /></a></Button></Magnetic><Magnetic><Button variant="outlineLuxury" size="lg" asChild><a href="#precios" data-cursor="Ver">Ver precios <ArrowUpRight /></a></Button></Magnetic></motion.div>
         </HeroDepth>
@@ -164,9 +202,10 @@ export default function Home() {
 
       <Pricing />
 
+      <Process />
 
       <section id="estudio" className="profile-section section-pad"><div className="section-wrap">
-        <Reveal><div className="section-heading"><span className="eyebrow">03 / EL ESTUDIO</span><span className="section-rule" /></div></Reveal>
+        <Reveal><div className="section-heading"><span className="eyebrow">04 / EL ESTUDIO</span><span className="section-rule" /></div></Reveal>
         <div className="profile-grid"><div className="profile-quote"><ProfileParallax direction={-1}><Reveal><h2>Quién hay<br /><em>detrás.</em></h2><blockquote>“Webs claras, cuidadas y hechas para que tu negocio reciba más clientes.”</blockquote></Reveal></ProfileParallax></div>
           <div className="profile-details"><Reveal><p>Soy Mario Iglesias y Casa Iglesias es mi estudio. Diseño y hago webs para negocios, sobre todo del sur de Tenerife.</p><p>Trabajo con pocos clientes a la vez para cuidar cada detalle. Hablas siempre conmigo, de principio a fin, y te explico cada paso sin tecnicismos.</p></Reveal>
             <ProfileParallax><Reveal><Tilt max={8}><div className="portrait"><motion.img src={asset("foto.jpg")} alt="Retrato de Mario Iglesias, de Casa Iglesias" loading="lazy" initial={{ scale: 1.14 }} whileInView={{ scale: 1.03 }} viewport={{ once: true }} transition={{ duration: 2.2, ease: [.2, .7, .2, 1] }} /></div></Tilt></Reveal></ProfileParallax>
@@ -176,22 +215,20 @@ export default function Home() {
 
       <EditorialMarquee phrase="Diseño web ✦ Identidad visual ✦ Reservas online ✦ Tenerife ✦ Detalle ✦ " />
 
-      <section id="proyectos" className="projects-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">04 / PROYECTOS</span><span className="section-rule" /></div><div className="intro-row"><h2>Ideas hechas<br /><em>realidad.</em></h2><p>Trabajos hechos de principio a fin: diseño, marca y web.</p></div></Reveal><div className="project-list">{projects.map((project, i) => {
-        const inner = <><span className="project-number">0{i + 1}</span><strong>{project.name}</strong><span className="project-description">{project.description}</span></>;
-        return <Reveal key={project.name}><ProjectPreview name={project.name}>{!project.to
-          ? <div className="project-row project-inactive">{inner}<span className="project-dash">—</span></div>
-          : project.to.startsWith("http")
-            ? <a className="project-row" href={project.to} target="_blank" rel="noopener noreferrer" aria-label={`${project.name}: ${project.description} (se abre en otra pestaña)`}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
-          : project.to.startsWith("#")
-            ? <a className="project-row" href={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></a>
-            : <Link className="project-row" to={project.to}>{inner}<ArrowUpRight className="project-arrow" strokeWidth={1.25} /></Link>}
-        </ProjectPreview></Reveal>;
-      })}</div></div></section>
+      <Projects />
 
 
-      <Testimonials label="05 / OPINIONES" />
+      <CvMagnet />
 
-      <section id="contacto" className="contact-section section-pad"><div className="section-wrap"><Reveal><div className="section-heading"><span className="eyebrow">06 / CONTACTO</span><span className="section-rule" /></div><p className="contact-lead">PARA TODO LO DEMÁS</p><h2>Hablemos<span>.</span></h2><a className="contact-email" href="mailto:mariete431@icloud.com">mariete431@icloud.com <ArrowUpRight strokeWidth={1.2} /></a><div className="contact-links"><a href="https://www.instagram.com/casaiglesias.studio/" target="_blank" rel="noopener noreferrer">Instagram <ArrowUpRight size={16} /></a><a href="#reservar">Reservar una reunión <ArrowUpRight size={16} /></a></div></Reveal></div></section>
+      <Testimonials label="06 / OPINIONES" />
+
+      <Faq />
+
+      <InstagramFeed />
+
+      <Newsletter />
+
+      <Contact />
     </main>
   </>;
 }

@@ -130,7 +130,8 @@ function RecoveryCard({ onDone }: { onDone: () => void }) {
    Panel
    ========================================================= */
 
-type Booking = { id: string; name: string; email: string; phone: string | null; topic: string | null; starts_at: string; status: string; admin_note: string | null; created_at: string };
+type Booking = { id: string; name: string; email: string; phone: string | null; topic: string | null; starts_at: string; status: string; admin_note: string | null; created_at: string; meeting_type?: string; reminded_at?: string | null };
+const MEETING_LABELS: Record<string, string> = { primera: "Primera reunión", presupuesto: "Presupuesto", seguimiento: "Seguimiento" };
 const STATUSES = [
   { id: "pendiente", label: "Pendiente", color: "oklch(0.78 0.13 96)" },
   { id: "confirmada", label: "Confirmada", color: "oklch(0.55 0.09 150)" },
@@ -143,7 +144,8 @@ const monthKey = (d: Date) => new Intl.DateTimeFormat("en-CA", { timeZone: ZONE,
 const TABS = [
   { id: "citas", label: "Citas" }, { id: "tareas", label: "Tareas" },
   { id: "recordatorios", label: "Recordatorios" }, { id: "horario", label: "Horario" },
-  { id: "comentarios", label: "Comentarios" },
+  { id: "comentarios", label: "Comentarios" }, { id: "mensajes", label: "Mensajes" },
+  { id: "boletin", label: "Boletín" },
 ] as const;
 type Tab = typeof TABS[number]["id"];
 
@@ -167,6 +169,17 @@ function Dashboard({ email }: { email: string }) {
   }, []);
   useEffect(() => { loadPendingComments(); }, [loadPendingComments]);
 
+  // Mensajes y cuestionarios sin atender
+  const [pendingMessages, setPendingMessages] = useState(0);
+  const loadPendingMessages = useCallback(async () => {
+    const [a, b] = await Promise.all([
+      supabase.from("contact_messages").select("id", { count: "exact", head: true }).eq("done", false),
+      supabase.from("briefs").select("id", { count: "exact", head: true }).eq("done", false),
+    ]);
+    setPendingMessages((a.count ?? 0) + (b.count ?? 0));
+  }, []);
+  useEffect(() => { loadPendingMessages(); }, [loadPendingMessages]);
+
   const now = Date.now();
   const active = bookings.filter(b => b.status !== "cancelada");
   const pending = bookings.filter(b => b.status === "pendiente").length;
@@ -187,7 +200,7 @@ function Dashboard({ email }: { email: string }) {
 
     <LayoutGroup id="admin-tabs"><div className="tab-bar" role="tablist" aria-label="Secciones del panel" onKeyDown={onTabListKeyDown}>
       {TABS.map(t => <button key={t.id} id={`pestana-${t.id}`} role="tab" aria-selected={tab === t.id} aria-controls="panel-pestana" tabIndex={tab === t.id ? 0 : -1} onClick={() => setTab(t.id)}>
-        {t.label}{t.id === "citas" && pending > 0 && <span className="count-badge">{pending}</span>}{t.id === "comentarios" && pendingComments > 0 && <span className="count-badge">{pendingComments}</span>}
+        {t.label}{t.id === "citas" && pending > 0 && <span className="count-badge">{pending}</span>}{t.id === "comentarios" && pendingComments > 0 && <span className="count-badge">{pendingComments}</span>}{t.id === "mensajes" && pendingMessages > 0 && <span className="count-badge">{pendingMessages}</span>}
         {tab === t.id && <motion.span layoutId="admin-tab" className="tab-indicator" transition={{ type: "spring", stiffness: 400, damping: 36 }} />}
       </button>)}
     </div></LayoutGroup>
@@ -199,6 +212,8 @@ function Dashboard({ email }: { email: string }) {
         {tab === "recordatorios" && <RemindersTab />}
         {tab === "horario" && <ScheduleTab />}
         {tab === "comentarios" && <CommentsTab onChange={loadPendingComments} />}
+        {tab === "mensajes" && <MessagesTab onChange={loadPendingMessages} />}
+        {tab === "boletin" && <NewsletterTab />}
       </motion.div>
     </AnimatePresence>
   </div></section>;
@@ -257,6 +272,7 @@ function BookingCard({ b, onPatch, onRemove }: { b: Booking; onPatch: (b: Bookin
     <div className="booking-when"><strong>{fmtHour.format(date)}</strong><span>{capitalize(fmtWhen.format(date))}</span></div>
     <div className="booking-who">
       <strong>{b.name}</strong>
+      <span className="meeting-tag">{MEETING_LABELS[b.meeting_type ?? "primera"] ?? "Reunión"}{b.reminded_at ? " · recordatorio enviado" : ""}</span>
       <a href={`mailto:${b.email}`}>{b.email}</a>{b.phone && <a href={`tel:${b.phone}`}>{b.phone}</a>}
       {b.topic && <p>“{b.topic}”</p>}
       <form className="note-form" onSubmit={e => { e.preventDefault(); onPatch(b, { admin_note: note.trim() || null }, "Nota guardada."); }}>
@@ -275,7 +291,7 @@ function BookingCard({ b, onPatch, onRemove }: { b: Booking; onPatch: (b: Bookin
 }
 
 /* ---------- Comentarios: aprobar, ocultar o borrar ---------- */
-type AdminComment = { id: number; name: string; message: string; created_at: string; approved: boolean };
+type AdminComment = { id: number; name: string; message: string; created_at: string; approved: boolean; sector: string | null; photo_url: string | null };
 const fmtComment = new Intl.DateTimeFormat("es-ES", { timeZone: ZONE, day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
 function CommentsTab({ onChange }: { onChange: () => void }) {
@@ -285,7 +301,7 @@ function CommentsTab({ onChange }: { onChange: () => void }) {
   const [show, setShow] = useState<"pending" | "approved" | "all">("pending");
 
   useEffect(() => {
-    supabase.from("comments").select("id, name, message, created_at, approved").order("created_at", { ascending: false }).then(({ data, error }) => {
+    supabase.from("comments").select("id, name, message, created_at, approved, sector, photo_url").order("created_at", { ascending: false }).then(({ data, error }) => {
       setLoading(false);
       if (error) toast("No se han podido cargar los comentarios.", true); else setComments(data as AdminComment[]);
     });
@@ -299,8 +315,19 @@ function CommentsTab({ onChange }: { onChange: () => void }) {
     toast(approved ? "Comentario publicado." : "Comentario oculto.");
   };
 
+  const photoPath = (url: string) => decodeURIComponent(url.split("/object/public/opiniones/")[1] ?? "");
+  const removePhoto = async (c: AdminComment) => {
+    if (!c.photo_url || !confirm(`¿Quitar la foto de ${c.name}?`)) return;
+    await supabase.storage.from("opiniones").remove([photoPath(c.photo_url)]);
+    const { error } = await supabase.from("comments").update({ photo_url: null, photo_consent: false }).eq("id", c.id);
+    if (error) return toast("No se ha podido quitar la foto.", true);
+    setComments(list => list.map(x => x.id === c.id ? { ...x, photo_url: null } : x));
+    toast("Foto quitada.");
+  };
+
   const remove = async (c: AdminComment) => {
     if (!confirm(`¿Borrar el comentario de ${c.name}? No se puede deshacer.`)) return;
+    if (c.photo_url) await supabase.storage.from("opiniones").remove([photoPath(c.photo_url)]);
     const { error } = await supabase.from("comments").delete().eq("id", c.id);
     if (error) return toast("No se ha podido borrar.", true);
     setComments(list => list.filter(x => x.id !== c.id));
@@ -319,16 +346,162 @@ function CommentsTab({ onChange }: { onChange: () => void }) {
     {loading ? <p className="status-text">Cargando comentarios…</p>
       : visible.length === 0 ? <div className="empty-state"><strong>{show === "pending" ? "Nada por revisar." : "Sin comentarios."}</strong><p>{show === "pending" ? "Cuando alguien escriba, aparecerá aquí." : "No hay comentarios en este filtro."}</p></div>
         : <ul className="comment-list"><AnimatePresence initial={false}>{visible.map(c => <motion.li key={c.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: 30 }}>
-          <header><strong>{c.name}</strong><time dateTime={c.created_at}>{fmtComment.format(new Date(c.created_at)).toUpperCase()}</time></header>
+          <header>{c.photo_url && <img className="testimonial-photo" src={c.photo_url} alt="" width={44} height={44} />}<strong>{c.name}{c.sector && <small> · {c.sector}</small>}</strong><time dateTime={c.created_at}>{fmtComment.format(new Date(c.created_at)).toUpperCase()}</time></header>
           <p>{c.message}</p>
           <div className="filter-row" style={{ margin: "12px 0 0" }}>
             <span className="status-tag"><i style={{ background: c.approved ? STATUSES[1].color : STATUSES[0].color }} />{c.approved ? "Publicado" : "Por revisar"}</span>
             {c.approved
               ? <Button variant="outlineLuxury" onClick={() => setApproved(c, false)}><EyeOff /> Ocultar</Button>
               : <Button variant="luxury" onClick={() => setApproved(c, true)}><Eye /> Publicar</Button>}
+            {c.photo_url && <Button variant="text" onClick={() => removePhoto(c)}>Quitar foto</Button>}
             <button type="button" className="icon-button" aria-label={`Borrar el comentario de ${c.name}`} onClick={() => remove(c)}><Trash2 /></button>
           </div>
         </motion.li>)}</AnimatePresence></ul>}
+  </div>;
+}
+
+/* ---------- Mensajes del formulario y cuestionarios ---------- */
+type Message = { id: string; name: string; email: string; kind: string | null; message: string; done: boolean; created_at: string };
+type Brief = { id: string; name: string; email: string; business: string; answers: Record<string, string>; done: boolean; created_at: string };
+const BRIEF_LABELS: Record<string, string> = {
+  sector: "Sector", hace: "Qué hace", clientes: "Sus clientes", web: "Web o redes", servicio: "Necesita", objetivo: "Objetivo",
+  paginas: "Páginas", marca: "Logo y colores", estilo: "Estilo", ejemplos: "Webs que le gustan", textos: "Textos y fotos",
+  plazo: "Para cuándo", presupuesto: "Presupuesto", telefono: "Teléfono", otros: "Algo más",
+};
+
+function MessagesTab({ onChange }: { onChange: () => void }) {
+  const toast = useToast();
+  const [messages, setMessages] = useState<Message[] | null>(null);
+  const [briefs, setBriefs] = useState<Brief[]>([]);
+  const [show, setShow] = useState<"pending" | "all">("pending");
+  const [open, setOpen] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+      supabase.from("briefs").select("*").order("created_at", { ascending: false }),
+    ]).then(([m, b]) => {
+      if (m.error || b.error) toast("No se han podido cargar los mensajes.", true);
+      setMessages((m.data ?? []) as Message[]); setBriefs((b.data ?? []) as Brief[]);
+    });
+  }, [toast]);
+
+  const patch = async (table: "contact_messages" | "briefs", id: string, done: boolean) => {
+    const { error } = await supabase.from(table).update({ done }).eq("id", id);
+    if (error) return toast("No se ha podido guardar.", true);
+    if (table === "briefs") setBriefs(l => l.map(x => x.id === id ? { ...x, done } : x));
+    else setMessages(l => (l ?? []).map(x => x.id === id ? { ...x, done } : x));
+    onChange();
+  };
+  const remove = async (table: "contact_messages" | "briefs", id: string, who: string) => {
+    if (!confirm(`¿Borrar lo que envió ${who}? No se puede deshacer.`)) return;
+    const { error } = await supabase.from(table).delete().eq("id", id);
+    if (error) return toast("No se ha podido borrar.", true);
+    if (table === "briefs") setBriefs(l => l.filter(x => x.id !== id)); else setMessages(l => (l ?? []).filter(x => x.id !== id));
+    onChange();
+  };
+
+  if (!messages) return <p className="status-text">Cargando mensajes…</p>;
+  const items = [
+    ...messages.map(m => ({ kind: "mensaje" as const, id: m.id, done: m.done, created_at: m.created_at, data: m })),
+    ...briefs.map(b => ({ kind: "cuestionario" as const, id: b.id, done: b.done, created_at: b.created_at, data: b })),
+  ].sort((a, b) => b.created_at.localeCompare(a.created_at)).filter(i => show === "all" || !i.done);
+  const link = `${window.location.origin}${import.meta.env.BASE_URL}cuestionario/`;
+
+  return <div style={{ paddingTop: 30, maxWidth: 900 }}>
+    <div className="admin-share">
+      <p className="form-note">Para un cliente nuevo, mándale el cuestionario. Sus respuestas llegarán aquí y a tu email.</p>
+      <div className="filter-row">
+        <Button variant="outlineLuxury" onClick={() => navigator.clipboard.writeText(link).then(() => toast("Enlace copiado."))}>Copiar enlace del cuestionario</Button>
+        <Button variant="outlineLuxury" asChild><a href={`https://wa.me/?text=${encodeURIComponent(`¡Hola! Para preparar tu propuesta, ¿puedes rellenar este cuestionario? Son 10 minutos: ${link}`)}`} target="_blank" rel="noopener noreferrer">Mandar por WhatsApp</a></Button>
+        <Button variant="outlineLuxury" asChild><a href={`mailto:?subject=${encodeURIComponent("Cuestionario para empezar tu web")}&body=${encodeURIComponent(`¡Hola!\n\nPara preparar tu propuesta, ¿puedes rellenar este cuestionario? Son unos 10 minutos:\n${link}\n\nUn saludo,\nMario · Casa Iglesias`)}`}>Mandar por email</a></Button>
+      </div>
+    </div>
+    <div className="filter-row">
+      {([["pending", "Por atender"], ["all", "Todos"]] as const).map(([id, label]) => <button key={id} className="chip" aria-pressed={show === id} onClick={() => setShow(id)}>{label}</button>)}
+    </div>
+    {items.length === 0 ? <div className="empty-state"><strong>Nada por atender.</strong><p>Los mensajes del formulario de contacto y los cuestionarios aparecerán aquí.</p></div>
+      : <ul className="comment-list">{items.map(item => {
+        const table = item.kind === "mensaje" ? "contact_messages" : "briefs";
+        const who = item.data.name;
+        return <li key={item.id}>
+          <header><strong>{item.kind === "cuestionario" ? `📝 ${(item.data as Brief).business} · ${who}` : `✉️ ${who}`}</strong><time dateTime={item.created_at}>{fmtComment.format(new Date(item.created_at)).toUpperCase()}</time></header>
+          <p><a href={`mailto:${item.data.email}`}>{item.data.email}</a>{item.kind === "mensaje" && (item.data as Message).kind && <> · busca <strong>{(item.data as Message).kind}</strong></>}</p>
+          {item.kind === "mensaje" ? <p>{(item.data as Message).message}</p>
+            : <>
+              <Button variant="text" onClick={() => setOpen(open === item.id ? null : item.id)}>{open === item.id ? "Ocultar respuestas" : "Ver respuestas"} <ArrowRight /></Button>
+              {open === item.id && <dl className="brief-answers">{Object.entries((item.data as Brief).answers ?? {}).map(([k, v]) => <div key={k}><dt>{BRIEF_LABELS[k] ?? k}</dt><dd>{v}</dd></div>)}</dl>}
+            </>}
+          <div className="filter-row" style={{ margin: "12px 0 0" }}>
+            {item.done ? <Button variant="outlineLuxury" onClick={() => patch(table, item.id, false)}>Marcar por atender</Button>
+              : <Button variant="luxury" onClick={() => patch(table, item.id, true)}>Hecho ✓</Button>}
+            <Button variant="outlineLuxury" asChild><a href={`mailto:${item.data.email}?subject=${encodeURIComponent("Casa Iglesias")}`}>Responder</a></Button>
+            <button type="button" className="icon-button" aria-label={`Borrar lo que envió ${who}`} onClick={() => remove(table, item.id, who)}><Trash2 /></button>
+          </div>
+        </li>;
+      })}</ul>}
+  </div>;
+}
+
+/* ---------- Boletín: suscriptores y envío mensual ---------- */
+type Subscriber = { id: string; email: string; unsubscribed: boolean; created_at: string };
+const TIP_IDEAS = [
+  "Revisa que tu horario en Google esté bien (festivos incluidos).",
+  "Abre tu web en el móvil y prueba el botón de WhatsApp.",
+  "Cambia la foto principal de tu web por una de esta temporada.",
+  "Responde a las últimas reseñas de Google, también a las buenas.",
+  "Comprueba que tus precios de la web siguen siendo los de ahora.",
+  "Publica en tu ficha de Google una novedad o una oferta del mes.",
+];
+
+function NewsletterTab() {
+  const toast = useToast();
+  const [subs, setSubs] = useState<Subscriber[] | null>(null);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    supabase.from("subscribers").select("id, email, unsubscribed, created_at").order("created_at", { ascending: false }).then(({ data, error }) => {
+      if (error) toast("No se han podido cargar los suscriptores.", true);
+      setSubs((data ?? []) as Subscriber[]);
+    });
+  }, [toast]);
+
+  const active = (subs ?? []).filter(s => !s.unsubscribed);
+  const send = async () => {
+    if (!subject.trim() || !body.trim()) return toast("Escribe el asunto y el consejo.", true);
+    if (!confirm(`¿Mandar «${subject.trim()}» a ${active.length} ${active.length === 1 ? "persona" : "personas"}?`)) return;
+    setSending(true);
+    const { data, error } = await supabase.functions.invoke("avisos", { body: { tipo: "boletin", asunto: subject.trim(), texto: body.trim() } });
+    setSending(false);
+    if (error) {
+      const status = (error as { context?: Response }).context?.status;
+      if (status === 409) return toast("Para mandar el boletín a tus suscriptores hace falta tu dominio propio (ej. casaiglesias.es). De momento, copia los emails y mándalo desde tu correo en copia oculta (CCO).", true);
+      return toast("No se ha podido enviar el boletín.", true);
+    }
+    toast(`Boletín enviado a ${data?.sent ?? 0} personas.`);
+    setSubject(""); setBody("");
+  };
+
+  if (!subs) return <p className="status-text">Cargando suscriptores…</p>;
+  return <div style={{ paddingTop: 30, maxWidth: 900 }}>
+    <div className="admin-stats" style={{ marginTop: 0 }}>
+      <div><span className="eyebrow">SUSCRITOS</span><strong>{active.length}</strong></div>
+      <div><span className="eyebrow">DE BAJA</span><strong>{subs.length - active.length}</strong></div>
+    </div>
+    <div className="builder-group" style={{ borderTop: 0 }}>
+      <h3>Consejo del <em>mes</em></h3>
+      <p className="form-note">Una idea útil y corta para el mantenimiento de su web o su imagen. Nada de vender. Ideas: </p>
+      <div className="filter-row">{TIP_IDEAS.map(t => <button key={t} type="button" className="chip" onClick={() => { setSubject(t.replace(/\.$/, "")); }}>{t}</button>)}</div>
+      <div className="form-row"><label htmlFor="nl-subject">Asunto</label><input id="nl-subject" className="lux-input" maxLength={150} value={subject} onChange={e => setSubject(e.target.value)} placeholder="Ej: Revisa tu horario en Google antes de las fiestas" /></div>
+      <div className="form-row"><label htmlFor="nl-body">El consejo</label><textarea id="nl-body" className="lux-input" rows={8} maxLength={6000} value={body} onChange={e => setBody(e.target.value)} placeholder={"Hola,\n\nEste mes te propongo…\n\nUn saludo,\nMario"} /></div>
+      <div className="filter-row">
+        <Button variant="luxury" onClick={send} disabled={sending || !active.length}>{sending ? "Enviando…" : `Mandar a ${active.length}`} <ArrowRight /></Button>
+        <Button variant="outlineLuxury" onClick={() => navigator.clipboard.writeText(active.map(s => s.email).join(", ")).then(() => toast("Emails copiados. Pégalos en CCO (copia oculta)."))} disabled={!active.length}>Copiar emails</Button>
+      </div>
+    </div>
+    <ul className="comment-list">{subs.map(s => <li key={s.id}><header><strong>{s.email}</strong><time dateTime={s.created_at}>{fmtComment.format(new Date(s.created_at)).toUpperCase()}</time></header>{s.unsubscribed && <p className="form-note">Se dio de baja.</p>}</li>)}</ul>
   </div>;
 }
 
