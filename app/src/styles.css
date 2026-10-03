@@ -1318,3 +1318,9 @@ html[dir="rtl"] .insta-track { animation-name: insta-scroll-rtl; }
 .builder-group h2.builder-h { font-size: 34px; line-height: 1; margin: 0 0 4px; }
 .builder-group h2.builder-h .optional { font: 400 11px var(--font-sans); color: var(--muted-foreground); margin-left: 8px; letter-spacing: 0; }
 .photo-picker .thumb.logo-thumb { color: var(--ink); }
+
+/* Pie de la portada en móviles: los dos textos no se montan (el de la izquierda pasa a dos líneas) */
+.hero-bottom { gap: 18px; }
+.hero-bottom > span { min-width: 0; }
+.hero-bottom a { flex: none; }
+@media (max-width: 480px) { .hero-bottom > span { max-width: 52%; line-height: 1.5; } }
