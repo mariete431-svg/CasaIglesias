@@ -247,7 +247,8 @@ export function HeroTitle({ lines = ["Mario", "Iglesias."], id = "hero-title", d
 
 /** Titular que se escribe letra a letra, como a máquina, con un cursor que parpadea al final.
  *  Las letras ocupan su sitio desde el principio (invisibles), así el diseño no salta. */
-export function TypeTitle({ lines, id = "hero-title", delay = .3, play = true, speed = 95 }: { lines: string[]; id?: string; delay?: number; play?: boolean; speed?: number }) {
+/** extra: texto que no se ve pero leen Google y los lectores de pantalla (p. ej. «Diseño web en Tenerife»). */
+export function TypeTitle({ lines, id = "hero-title", delay = .3, play = true, speed = 95, extra }: { lines: string[]; id?: string; delay?: number; play?: boolean; speed?: number; extra?: string }) {
   const reduced = useMotionPreference();
   const total = lines.reduce((n, line) => n + Array.from(line).length, 0);
   const [typed, setTyped] = useState(0);
@@ -270,7 +271,8 @@ export function TypeTitle({ lines, id = "hero-title", delay = .3, play = true, s
 
   let index = 0;
   const done = typed >= total;
-  return <h1 id={id} className="type-title" aria-label={lines.join(" ")}>
+  return <h1 id={id} className="type-title" aria-label={extra ? `${lines.join(" ")} — ${extra}` : lines.join(" ")}>
+    {extra && <span className="sr-only">{lines.join(" ")} — {extra}</span>}
     {lines.map((line, lineIndex) => <span className="hero-title-line" key={line} aria-hidden="true"><span className={lineIndex ? "hero-line-indent" : ""}>
       {Array.from(line).map(character => {
         const i = index++;

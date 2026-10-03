@@ -3,8 +3,8 @@
 
 export const es = {
   meta: {
-    home: "Casa Iglesias — Estudio de diseño y desarrollo web",
-    builder: "Crea tu CV gratis — Casa Iglesias",
+    home: "Casa Iglesias — Diseño y desarrollo web en Tenerife",
+    builder: "Crea tu currículum gratis — Casa Iglesias",
     brief: "Cuestionario para empezar tu web — Casa Iglesias",
     privacy: "Privacidad y aviso legal — Casa Iglesias",
     notFound: "Página no encontrada — Casa Iglesias",
@@ -33,6 +33,7 @@ export const es = {
     projectFloat: "PROYECTO", explore: "EXPLORAR ↗",
   },
   hero: {
+    seoTitle: "Diseño y desarrollo web en Tenerife",
     eyebrow: "ESTUDIO DE DISEÑO Y DESARROLLO WEB · TENERIFE",
     available: "Disponible",
     subtitle1: "Webs e identidad visual para negocios, por Mario Iglesias.",
