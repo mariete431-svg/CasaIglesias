@@ -1,5 +1,0 @@
-<<<<<<<< HEAD:assets/NotFound-B0qTfNQ-.js
-import{D as e,H as t,O as n,W as r,t as i}from"./button-Bw9--t6v.js";import{_ as a,f as o,m as s}from"./index-Cm7o3MhG.js";var c=t();function l(){let t=n(),l=t.notFound,u=e();return s(t.meta.notFound),(0,c.jsx)(`main`,{children:(0,c.jsx)(o,{eyebrow:l.eyebrow,lines:l.lines,subtitle:l.subtitle,actions:(0,c.jsx)(i,{variant:`luxury`,size:`lg`,asChild:!0,children:(0,c.jsxs)(r,{to:u(`/`),children:[l.home,` `,(0,c.jsx)(a,{})]})}),bottom:`Mario Iglesias`})})}export{l as default};
-========
-import{D as e,H as t,O as n,W as r,t as i}from"./button-21DpZOrS.js";import{_ as a,f as o,m as s}from"./index-BfgBfmU6.js";var c=t();function l(){let t=n(),l=t.notFound,u=e();return s(t.meta.notFound),(0,c.jsx)(`main`,{children:(0,c.jsx)(o,{eyebrow:l.eyebrow,lines:l.lines,subtitle:l.subtitle,actions:(0,c.jsx)(i,{variant:`luxury`,size:`lg`,asChild:!0,children:(0,c.jsxs)(r,{to:u(`/`),children:[l.home,` `,(0,c.jsx)(a,{})]})}),bottom:`Mario Iglesias`})})}export{l as default};
->>>>>>>> origin/main:assets/NotFound-B9hI1fNq.js
