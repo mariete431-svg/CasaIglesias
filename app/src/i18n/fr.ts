@@ -260,6 +260,7 @@ export const fr: Dict = {
     noLogo: "PAS DE LOGO", yourLogo: "Votre logo", uploadLogo: "Ajouter un logo",
     logoError: "Impossible d'ouvrir ce logo. Essayez un PNG, JPG ou SVG.",
     colorGroup: "Couleur de votre marque", color: (c: string) => `Couleur ${c}`, otherColor: "Autre couleur",
+    styleTitle: "Le style", styleTitleEm: "de votre CV", optLayout: "Mise en page", optLayoutClassic: "Classique", optLayoutCentered: "Centrée", optLayoutSidebar: "Avec colonne latérale", optFont: "Typographie", optFontClassic: "Classique", optFontModern: "Moderne", optFontSerif: "Élégante", optSpacing: "Espacement", optSpacingCompact: "Compact", optSpacingNormal: "Normal", optSpacingAiry: "Aéré", optPhoto: "Forme de la photo", optPhotoSquare: "Carrée", optPhotoRound: "Ronde",
     profile: "Profil", summary: "Résumé", summaryPh: "2 ou 3 lignes sur vous, votre expérience et ce que vous cherchez.",
     education: "Formation", removeEdu: "Retirer la formation",
     degree: "Diplôme", degreePh: "Ex. : Licence en design",

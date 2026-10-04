@@ -5,7 +5,8 @@
 export type Frase = { texto: string; fecha?: string };
 
 export const frases: Frase[] = [
-  { texto: "Que te encuentren es el primer paso para que te elijan.", fecha: "2026-10-04" },
+  { texto: "Una buena primera impresión empieza por cómo te presentas.", fecha: "2026-10-04" },
+  { texto: "Que te encuentren es el primer paso para que te elijan." },
   { texto: "Hablar el idioma de tu cliente es la primera forma de cuidarlo." },
   { texto: "Un buen proceso tranquiliza más que una buena promesa." },
   { texto: "Un nombre propio es una promesa. Cúmplela en cada detalle." },

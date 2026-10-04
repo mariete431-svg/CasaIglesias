@@ -6,12 +6,26 @@ import { Reveal } from "@/components/EditorialEffects";
 import { PageHero, SectionHeading, usePageTitle } from "@/components/SiteChrome";
 import { newId, readStored, writeStored } from "@/lib/utils";
 import { useT } from "@/i18n";
+import { DEFAULT_STYLE, type CvStyle } from "@/lib/cvStyle";
 
 const PHOTO_KEY = "mi-cv-foto";
 const LOGO_KEY = "mi-cv-logo";
 const COLOR_KEY = "mi-cv-color";
 const COLORS = ["#3d1119", "#1f2a44", "#2f4a3a", "#8a5a2b", "#222222"];
+const STYLE_KEY = "mi-cv-estilo";
 const DRAFT_KEY = "mario-crear-cv";
+const STYLE_OPTIONS: { [K in keyof CvStyle]: CvStyle[K][] } = {
+  font: ["classic", "modern", "serif"],
+  layout: ["classic", "centered", "sidebar"],
+  spacing: ["compact", "normal", "airy"],
+  photoShape: ["square", "round"],
+};
+// Si lo guardado no es válido (o es de otra versión), se usa el estilo por defecto en esa opción
+function loadStyle(): CvStyle {
+  const saved = readStored<Partial<CvStyle>>(STYLE_KEY, {});
+  const pick = <K extends keyof CvStyle>(key: K): CvStyle[K] => (STYLE_OPTIONS[key] as string[]).includes(saved?.[key] as string) ? saved[key] as CvStyle[K] : DEFAULT_STYLE[key];
+  return { font: pick("font"), layout: pick("layout"), spacing: pick("spacing"), photoShape: pick("photoShape") };
+}
 type Education = { id: string; title: string; center: string; dates: string };
 type Job = { id: string; title: string; company: string; dates: string; desc: string };
 type Draft = {
@@ -42,6 +56,15 @@ function Field({ id, label, value, onChange, placeholder, type = "text", textare
   </div>;
 }
 
+function Choice({ label, value, options, names, onChange }: {
+  label: string; value: string; options: string[]; names: Record<string, string>; onChange: (v: string) => void;
+}) {
+  return <div className="choice-row"><span className="choice-label">{label}</span>
+    <div className="choice-group" role="group" aria-label={label}>
+      {options.map(o => <button key={o} type="button" className="choice-btn" aria-pressed={value === o} onClick={() => onChange(o)}>{names[o]}</button>)}
+    </div></div>;
+}
+
 export default function BuilderPage() {
   const tr = useT();
   const t = tr.builder;
@@ -57,6 +80,8 @@ export default function BuilderPage() {
   const [color, setColor] = useState<string>(() => readStored<string>(COLOR_KEY, COLORS[0]));
   useEffect(() => { writeStored(LOGO_KEY, logo); }, [logo]);
   useEffect(() => { writeStored(COLOR_KEY, color); }, [color]);
+  const [style, setStyle] = useState<CvStyle>(loadStyle);
+  useEffect(() => { writeStored(STYLE_KEY, style); }, [style]);
   const [making, setMaking] = useState(false);
 
   const pickLogo = (file?: File) => {
@@ -84,12 +109,13 @@ export default function BuilderPage() {
     setMaking(true);
     try {
       const { downloadCvPdf } = await import("@/lib/cvPdf");
-      downloadCvPdf(cv, { photo, logo, color, labels: { profile: t.pProfile, experience: t.pExperience, education: t.pEducation, skills: t.pSkills, langs: t.pLangs, name: t.phName, job: t.pJob, degree: t.pDegree, file: t.fileName } });
+      downloadCvPdf(cv, { photo, logo, color, style, labels: { profile: t.pProfile, experience: t.pExperience, education: t.pEducation, skills: t.pSkills, langs: t.pLangs, name: t.phName, job: t.pJob, degree: t.pDegree, file: t.fileName } });
     } catch {
       alert(t.pdfError);
     } finally { setMaking(false); }
   };
 
+  const setS = <K extends keyof CvStyle>(key: K) => (v: string) => setStyle(p => ({ ...p, [key]: v as CvStyle[K] }));
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setCv(prev => ({ ...prev, [key]: value }));
   const setEdu = (i: number, key: Exclude<keyof Education, "id">, value: string) => set("education", cv.education.map((e, j) => j === i ? { ...e, [key]: value } : e));
   const setJob = (i: number, key: Exclude<keyof Job, "id">, value: string) => set("jobs", cv.jobs.map((e, j) => j === i ? { ...e, [key]: value } : e));
@@ -124,7 +150,7 @@ export default function BuilderPage() {
 
   const reset = () => {
     if (!confirm(t.resetConfirm)) return;
-    setCv(empty); setPhoto(null); setLogo(null); setColor(COLORS[0]);
+    setCv(empty); setPhoto(null); setLogo(null); setColor(COLORS[0]); setStyle(DEFAULT_STYLE);
   };
 
   const contact = [cv.email, cv.phone, cv.location].filter(Boolean);
@@ -171,6 +197,14 @@ export default function BuilderPage() {
               {COLORS.map(c => <button key={c} type="button" className="color-dot" style={{ background: c }} aria-label={t.color(c)} aria-pressed={color === c} onClick={() => setColor(c)} />)}
               <label className="color-custom">{t.otherColor}<input type="color" value={color} onChange={e => setColor(e.target.value)} /></label>
             </div>
+          </div></Reveal>
+
+          <Reveal><div className="builder-group">
+            <h2 className="builder-h">{t.styleTitle} <em>{t.styleTitleEm}</em></h2>
+            <Choice label={t.optLayout} value={style.layout} options={STYLE_OPTIONS.layout} names={{ classic: t.optLayoutClassic, centered: t.optLayoutCentered, sidebar: t.optLayoutSidebar }} onChange={setS("layout")} />
+            <Choice label={t.optFont} value={style.font} options={STYLE_OPTIONS.font} names={{ classic: t.optFontClassic, modern: t.optFontModern, serif: t.optFontSerif }} onChange={setS("font")} />
+            <Choice label={t.optSpacing} value={style.spacing} options={STYLE_OPTIONS.spacing} names={{ compact: t.optSpacingCompact, normal: t.optSpacingNormal, airy: t.optSpacingAiry }} onChange={setS("spacing")} />
+            <Choice label={t.optPhoto} value={style.photoShape} options={STYLE_OPTIONS.photoShape} names={{ square: t.optPhotoSquare, round: t.optPhotoRound }} onChange={setS("photoShape")} />
           </div></Reveal>
 
           <Reveal><div className="builder-group">
@@ -221,25 +255,42 @@ export default function BuilderPage() {
 
         <div className="builder-preview-wrap">
           <span className="eyebrow" style={{ display: "block", marginBottom: 16 }}>{t.preview}</span>
-          <motion.article className="cv-paper" style={{ "--cv-accent": color } as React.CSSProperties} aria-label={t.previewLabel} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
-            <header className="cv-paper-head">
-              <div>
+          <motion.article className="cv-paper" data-font={style.font} data-layout={style.layout} data-space={style.spacing} data-photo={style.photoShape} style={{ "--cv-accent": color } as React.CSSProperties} aria-label={t.previewLabel} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
+            {(() => {
+              const profile = <div className="cv-paper-section"><h3 className="cv-h">{t.pProfile}</h3><p>{cv.summary || <span className="placeholder">{t.pSummary}</span>}</p></div>;
+              const jobs = <div className="cv-paper-section"><h3 className="cv-h">{t.pExperience}</h3>{cv.jobs.length
+                ? cv.jobs.map(j => <div className="cv-paper-item" key={j.id}><strong>{j.title || t.pJob}</strong><span>{[j.company, j.dates].filter(Boolean).join(" · ")}</span>{j.desc && <p>{j.desc}</p>}</div>)
+                : <p className="placeholder">{t.pNoJobs}</p>}</div>;
+              const edu = <div className="cv-paper-section"><h3 className="cv-h">{t.pEducation}</h3>{cv.education.length
+                ? cv.education.map(e => <div className="cv-paper-item" key={e.id}><strong>{e.title || t.pDegree}</strong><span>{[e.center, e.dates].filter(Boolean).join(" · ")}</span></div>)
+                : <p className="placeholder">{t.pNoEdu}</p>}</div>;
+              const skills = !!list(cv.skills).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pSkills}</h3><div className="cv-paper-chips">{list(cv.skills).map(x => <span key={x}>{x}</span>)}</div></div>;
+              const langs = !!list(cv.langs).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pLangs}</h3><div className="cv-paper-chips">{list(cv.langs).map(x => <span key={x}>{x}</span>)}</div></div>;
+              const title = <>
                 {logo && <img className="cv-paper-logo" src={logo} alt="" />}
                 <h2>{cv.name || <span className="placeholder">{t.phName}</span>}</h2>
                 <p>{cv.role || <span className="placeholder">{t.phRole}</span>}</p>
-                {!!contact.length && <div className="cv-paper-contact">{contact.map(c => <span key={c}>{c}</span>)}</div>}
-              </div>
-              {photo && <img src={photo} alt="" />}
-            </header>
-            <div className="cv-paper-section"><h3 className="cv-h">{t.pProfile}</h3><p>{cv.summary || <span className="placeholder">{t.pSummary}</span>}</p></div>
-            <div className="cv-paper-section"><h3 className="cv-h">{t.pExperience}</h3>{cv.jobs.length
-              ? cv.jobs.map(j => <div className="cv-paper-item" key={j.id}><strong>{j.title || t.pJob}</strong><span>{[j.company, j.dates].filter(Boolean).join(" · ")}</span>{j.desc && <p>{j.desc}</p>}</div>)
-              : <p className="placeholder">{t.pNoJobs}</p>}</div>
-            <div className="cv-paper-section"><h3 className="cv-h">{t.pEducation}</h3>{cv.education.length
-              ? cv.education.map(e => <div className="cv-paper-item" key={e.id}><strong>{e.title || t.pDegree}</strong><span>{[e.center, e.dates].filter(Boolean).join(" · ")}</span></div>)
-              : <p className="placeholder">{t.pNoEdu}</p>}</div>
-            {!!list(cv.skills).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pSkills}</h3><div className="cv-paper-chips">{list(cv.skills).map(s => <span key={s}>{s}</span>)}</div></div>}
-            {!!list(cv.langs).length && <div className="cv-paper-section"><h3 className="cv-h">{t.pLangs}</h3><div className="cv-paper-chips">{list(cv.langs).map(s => <span key={s}>{s}</span>)}</div></div>}
+              </>;
+              const contactRow = !!contact.length && <div className="cv-paper-contact">{contact.map(c => <span key={c}>{c}</span>)}</div>;
+              if (style.layout === "sidebar") return <>
+                <aside className="cv-paper-side">
+                  {photo && <img className="cv-paper-photo" src={photo} alt="" />}
+                  {!!contact.length && <div className="cv-paper-contact">{contact.map(c => <span key={c}>{c}</span>)}</div>}
+                  {skills}{langs}
+                </aside>
+                <div className="cv-paper-main">
+                  <header className="cv-paper-head"><div>{title}</div></header>
+                  {profile}{jobs}{edu}
+                </div>
+              </>;
+              return <>
+                <header className="cv-paper-head">
+                  <div>{title}{contactRow}</div>
+                  {photo && <img className="cv-paper-photo" src={photo} alt="" />}
+                </header>
+                {profile}{jobs}{edu}{skills}{langs}
+              </>;
+            })()}
           </motion.article>
         </div>
       </div>
