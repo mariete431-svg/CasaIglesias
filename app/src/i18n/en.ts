@@ -260,6 +260,7 @@ export const en: Dict = {
     noLogo: "NO LOGO", yourLogo: "Your logo", uploadLogo: "Upload logo",
     logoError: "That logo couldn't be opened. Try a PNG, JPG or SVG.",
     colorGroup: "Your brand colour", color: (c: string) => `Colour ${c}`, otherColor: "Other colour",
+    styleTitle: "Your CV", styleTitleEm: "style", optLayout: "Layout", optLayoutClassic: "Classic", optLayoutCentered: "Centred", optLayoutSidebar: "Sidebar", optFont: "Typography", optFontClassic: "Classic", optFontModern: "Modern", optFontSerif: "Elegant", optSpacing: "Spacing", optSpacingCompact: "Compact", optSpacingNormal: "Normal", optSpacingAiry: "Airy", optPhoto: "Photo shape", optPhotoSquare: "Square", optPhotoRound: "Round",
     profile: "Profile", summary: "Short summary", summaryPh: "2–3 lines about you, your experience and what you're looking for.",
     education: "Education", removeEdu: "Remove education",
     degree: "Degree / qualification", degreePh: "E.g. Degree in Design",

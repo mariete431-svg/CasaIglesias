@@ -261,6 +261,7 @@ export const es = {
     noLogo: "SIN LOGO", yourLogo: "Tu logo", uploadLogo: "Subir logo",
     logoError: "No se ha podido abrir ese logo. Prueba con un PNG, JPG o SVG.",
     colorGroup: "Color de tu marca", color: (c: string) => `Color ${c}`, otherColor: "Otro color",
+    styleTitle: "Estilo", styleTitleEm: "de tu CV", optLayout: "Diseño de la hoja", optLayoutClassic: "Clásico", optLayoutCentered: "Centrado", optLayoutSidebar: "Con barra lateral", optFont: "Tipografía", optFontClassic: "Clásica", optFontModern: "Moderna", optFontSerif: "Elegante", optSpacing: "Espaciado", optSpacingCompact: "Compacto", optSpacingNormal: "Normal", optSpacingAiry: "Amplio", optPhoto: "Forma de la foto", optPhotoSquare: "Cuadrada", optPhotoRound: "Redonda",
     profile: "Perfil", summary: "Resumen breve", summaryPh: "2-3 líneas sobre ti, tu experiencia y lo que buscas.",
     education: "Formación", removeEdu: "Quitar formación",
     degree: "Título / titulación", degreePh: "Ej: Grado en Diseño",
