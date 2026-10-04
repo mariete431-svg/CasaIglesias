@@ -261,6 +261,7 @@ export const he: Dict = {
     noLogo: "אין לוגו", yourLogo: "הלוגו שלכם", uploadLogo: "העלאת לוגו",
     logoError: "לא הצלחנו לפתוח את הלוגו. נסו PNG, JPG או SVG.",
     colorGroup: "צבע המותג שלכם", color: (c: string) => `צבע ${c}`, otherColor: "צבע אחר",
+    styleTitle: "סגנון", styleTitleEm: "קורות החיים", optLayout: "פריסה", optLayoutClassic: "קלאסית", optLayoutCentered: "ממורכזת", optLayoutSidebar: "עם עמודה צדדית", optFont: "גופן", optFontClassic: "קלאסי", optFontModern: "מודרני", optFontSerif: "אלגנטי", optSpacing: "מרווחים", optSpacingCompact: "צפוף", optSpacingNormal: "רגיל", optSpacingAiry: "מרווח", optPhoto: "צורת התמונה", optPhotoSquare: "מרובעת", optPhotoRound: "עגולה",
     profile: "פרופיל", summary: "תקציר קצר", summaryPh: "2–3 שורות עליכם, על הניסיון שלכם ועל מה שאתם מחפשים.",
     education: "השכלה", removeEdu: "הסרת השכלה",
     degree: "תואר / הסמכה", degreePh: "לדוגמה: תואר ראשון בעיצוב",
