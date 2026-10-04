@@ -26,6 +26,23 @@ const esc = (value: unknown) =>
 
 const oneLine = (value: unknown) => String(value ?? "").replace(/[\r\n]+/g, " ").trim();
 
+// Marco de marca de todos los correos: banner arriba, logo y datos abajo (imágenes en casaiglesias.es/email/)
+const IMG = "https://casaiglesias.es/email/";
+const BRAND_LINK = `style="color:${BUTTER};text-decoration:none"`;
+function frame(inner: string, lang = "es") {
+  return `
+  <div dir="${lang === "he" ? "rtl" : "ltr"}" lang="${lang}" style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:24px 12px">
+    <div style="max-width:600px;margin:0 auto;background:${CREAM};border-radius:16px;overflow:hidden">
+      <a href="https://casaiglesias.es/" style="display:block;text-decoration:none"><img src="${IMG}banner.png" width="600" alt="Casa Iglesias · Estudio de diseño y desarrollo web" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a>
+      <div style="padding:30px 32px">${inner}</div>
+      <a href="https://casaiglesias.es/" style="display:block;text-decoration:none"><img src="${IMG}pie.png" width="600" alt="Casa Iglesias" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a>
+      <div style="background:${INK};padding:2px 24px 24px;text-align:center;color:#d9c9b8;font-size:12px;line-height:1.7">
+        <a href="https://casaiglesias.es/" ${BRAND_LINK}>casaiglesias.es</a> · <a href="mailto:hola@casaiglesias.es" ${BRAND_LINK}>hola@casaiglesias.es</a> · <a href="https://www.instagram.com/casaiglesias.studio/" ${BRAND_LINK}>@casaiglesias.studio</a> · <a href="https://casaiglesias.es/privacidad/" ${BRAND_LINK}>Privacidad</a>
+      </div>
+    </div>
+  </div>`;
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -87,9 +104,7 @@ Deno.serve(async (req) => {
   const row = (label: string, value: string) =>
     `<tr><td style="padding:6px 16px 6px 0;color:${MUTED};vertical-align:top">${label}</td><td style="padding:6px 0;color:${INK}">${value}</td></tr>`;
 
-  const html = `
-  <div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:32px 16px">
-    <div style="max-width:520px;margin:0 auto;background:${CREAM};border-radius:20px;padding:32px">
+  const html = frame(`
       <p style="margin:0 0 8px"><span style="display:inline-block;background:${BUTTER};color:${INK};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:999px">Nueva cita</span></p>
       <h1 style="margin:14px 0 4px;color:${INK};font-family:Georgia,serif;font-weight:400;font-size:30px">${esc(booking.name)}</h1>
       <p style="margin:0 0 24px;color:${INK};font-size:18px"><strong>${esc(day)} · ${esc(time)}</strong> <span style="color:${MUTED}">(hora de Canarias)</span></p>
@@ -103,9 +118,7 @@ Deno.serve(async (req) => {
       <p style="margin:28px 0 0">
         <a href="${PANEL_URL}" style="display:inline-block;background:${INK};color:${BUTTER};text-decoration:none;padding:12px 22px;border-radius:999px">Abrir mi panel</a>
       </p>
-      <p style="margin:20px 0 0;color:${MUTED};font-size:13px">Si respondes a este email, le escribirás directamente a ${esc(booking.name)}.</p>
-    </div>
-  </div>`;
+      <p style="margin:20px 0 0;color:${MUTED};font-size:13px">Si respondes a este email, le escribirás directamente a ${esc(booking.name)}.</p>`);
 
   const text = [
     `Nueva cita: ${booking.name}`,

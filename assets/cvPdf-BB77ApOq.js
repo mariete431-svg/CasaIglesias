@@ -1,1 +1,0 @@
-import{n as e}from"./BuilderPage-C-iHFZhI.js";export{e as downloadCvPdf};

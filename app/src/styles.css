@@ -1099,7 +1099,7 @@ html.lenis { scroll-behavior: auto !important; }
 .faq-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(30px, 6vw, 100px); }
 .faq-intro h2 { font-size: clamp(56px, 7vw, 104px); line-height: .9; margin: 0 0 26px; }
 .faq-intro p { color: var(--muted-foreground); line-height: 1.7; max-width: 340px; }
-.faq-ask { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 13px; border-bottom: 1px solid var(--accent); padding-bottom: 4px; }
+.faq-ask { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; min-height: 44px; font-size: 13px; border-bottom: 1px solid var(--accent); padding-bottom: 4px; }
 .faq-item { border-bottom: 1px solid var(--border); }
 .faq-item:first-child { border-top: 1px solid var(--border); }
 .faq-item summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 0; cursor: pointer; font: 400 clamp(21px, 2vw, 27px)/1.2 var(--font-display); }

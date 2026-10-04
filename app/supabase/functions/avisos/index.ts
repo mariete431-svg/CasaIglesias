@@ -145,16 +145,29 @@ const fmtTime = (d: Date) =>
 const row = (label: string, value: string) =>
   `<tr><td style="padding:6px 16px 6px 0;color:${MUTED};vertical-align:top">${esc(label)}</td><td style="padding:6px 0;color:${INK}">${value}</td></tr>`;
 
-function layout(pill: string, title: string, body: string, footer = "", lang: L = "es") {
+// Marco de marca de todos los correos: banner arriba, logo y datos abajo (imágenes en casaiglesias.es/email/)
+const IMG = "https://casaiglesias.es/email/";
+const BRAND_LINK = `style="color:${BUTTER};text-decoration:none"`;
+function frame(inner: string, lang = "es") {
   return `
-  <div dir="${lang === "he" ? "rtl" : "ltr"}" lang="${lang}" style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:32px 16px">
-    <div style="max-width:540px;margin:0 auto;background:${CREAM};border-radius:20px;padding:32px">
+  <div dir="${lang === "he" ? "rtl" : "ltr"}" lang="${lang}" style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:${INK};padding:24px 12px">
+    <div style="max-width:600px;margin:0 auto;background:${CREAM};border-radius:16px;overflow:hidden">
+      <a href="https://casaiglesias.es/" style="display:block;text-decoration:none"><img src="${IMG}banner.png" width="600" alt="Casa Iglesias · Estudio de diseño y desarrollo web" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a>
+      <div style="padding:30px 32px">${inner}</div>
+      <a href="https://casaiglesias.es/" style="display:block;text-decoration:none"><img src="${IMG}pie.png" width="600" alt="Casa Iglesias" style="display:block;width:100%;max-width:600px;height:auto;border:0"></a>
+      <div style="background:${INK};padding:2px 24px 24px;text-align:center;color:#d9c9b8;font-size:12px;line-height:1.7">
+        <a href="https://casaiglesias.es/" ${BRAND_LINK}>casaiglesias.es</a> · <a href="mailto:hola@casaiglesias.es" ${BRAND_LINK}>hola@casaiglesias.es</a> · <a href="https://www.instagram.com/casaiglesias.studio/" ${BRAND_LINK}>@casaiglesias.studio</a> · <a href="https://casaiglesias.es/privacidad/" ${BRAND_LINK}>Privacidad</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function layout(pill: string, title: string, body: string, footer = "", lang: L = "es") {
+  return frame(`
       <p style="margin:0 0 8px"><span style="display:inline-block;background:${BUTTER};color:${INK};font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:999px">${esc(pill)}</span></p>
       <h1 style="margin:14px 0 18px;color:${INK};font-family:Georgia,serif;font-weight:400;font-size:28px;line-height:1.2">${esc(title)}</h1>
       ${body}
-      ${footer ? `<p style="margin:24px 0 0;color:${MUTED};font-size:13px;line-height:1.5">${footer}</p>` : ""}
-    </div>
-  </div>`;
+      ${footer ? `<p style="margin:24px 0 0;color:${MUTED};font-size:13px;line-height:1.5">${footer}</p>` : ""}`, lang);
 }
 const button = (href: string, label: string) =>
   `<p style="margin:26px 0 0"><a href="${href}" style="display:inline-block;background:${INK};color:${BUTTER};text-decoration:none;padding:12px 22px;border-radius:999px">${esc(label)}</a></p>`;
