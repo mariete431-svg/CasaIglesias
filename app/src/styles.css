@@ -1362,3 +1362,29 @@ html[dir="rtl"] .insta-track { animation-name: insta-scroll-rtl; }
 .cv-paper-side .cv-paper-chips span { padding: 0; border: 0; }
 .cv-paper-main { padding: 9% 7% 7%; min-width: 0; }
 .cv-paper-main .cv-paper-head { padding-bottom: 4%; }
+
+/* =========================================================
+   ARREGLOS DEL MÓVIL: opiniones y zonas táctiles
+   ========================================================= */
+/* Las opiniones nunca se salen de la pantalla: las columnas y la tarjeta pueden encogerse */
+.testimonials-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+.testimonials-grid > * { min-width: 0; }
+.testimonial { min-width: 0; max-width: 100%; }
+.testimonial-nav { flex-wrap: wrap; row-gap: 6px; }
+.testimonial-dots { min-width: 0; }
+@media (max-width: 900px) { .testimonials-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) {
+  .testimonial { padding: 28px 22px 22px; }
+  /* Fila 1: número y pausa. Fila 2: los puntos, que bajan de línea si son muchos */
+  .testimonial-dots { order: 3; flex: 1 1 100%; flex-wrap: wrap; justify-content: center; }
+  .testimonial-dots button { width: 30px; height: 36px; }
+}
+/* Botones y etiquetas de al menos 44 px para el dedo */
+@media (max-width: 900px), (pointer: coarse) {
+  .chip, #pagina a.inline-flex:not(.icon-button), #pagina button.inline-flex:not(.icon-button) { min-height: 44px; }
+}
+/* Todas las opiniones apiladas y ocultas: la tarjeta mide siempre lo que la más larga */
+.testimonial-body { display: grid; align-content: start; }
+.testimonial-body > * { grid-area: 1 / 1; min-width: 0; }
+.testimonial-sizer { display: grid; visibility: hidden; pointer-events: none; }
+.testimonial-sizer > div { grid-area: 1 / 1; }
