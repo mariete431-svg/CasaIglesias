@@ -161,6 +161,11 @@ export function Testimonials({ label }: { label: string }) {
         <span className="testimonial-mark" aria-hidden="true">“</span>
         {/* Mientras cambian solas no se anuncian, para no interrumpir al lector de pantalla */}
         <div className="testimonial-body" aria-live={playing ? "off" : "polite"}>
+          {/* Reserva el alto de la opinión más larga, para que la tarjeta no salte al cambiar de una a otra */}
+          <div className="testimonial-sizer" aria-hidden="true">{comments!.map(c => <div key={c.id}>
+            <blockquote>{c.message}</blockquote>
+            <figcaption>{c.photo_url && <span className="testimonial-photo" />}<span className="testimonial-who"><strong>{c.name}</strong><span>{c.sector ? `${c.sector} · ` : ""}{dateFmt.format(new Date(c.created_at))}</span></span></figcaption>
+          </div>)}</div>
           <AnimatePresence mode="wait">
             {current && <motion.div key={current.id} initial={reduced ? { opacity: 0 } : { opacity: 0, y: 28, rotateX: -24 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -18, rotateX: 18 }} transition={{ type: "spring", bounce: 0, duration: .75, opacity: { duration: .45 } }} style={{ transformPerspective: 900, transformOrigin: "50% 50%" }}>
               <blockquote>{current.message}</blockquote>
