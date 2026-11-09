@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { marked } from "marked";
+import DOMPurify from "dompurify";
 import { Reveal, useMotionPreference } from "@/components/EditorialEffects";
 import { usePageTitle } from "@/components/SiteChrome";
 import { formatPostDate, isoDay, posts } from "@/lib/blog";
@@ -12,7 +13,7 @@ const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 /** Convierte el texto del artículo en HTML. Los enlaces internos (/cv, /blog/…) llevan la base de la web. */
 function toHtml(body: string) {
-  const html = marked.parse(body, { async: false, gfm: true }) as string;
+  const html = DOMPurify.sanitize(marked.parse(body, { async: false, gfm: true }) as string);
   return html.replace(/href="\/(?!\/)/g, `href="${BASE}/`);
 }
 
