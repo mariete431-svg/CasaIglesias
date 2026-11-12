@@ -103,6 +103,7 @@ export const it: Dict = {
     filter: "Filtra i progetti per tipo",
     newTab: "si apre in una nuova scheda",
     items: {
+      brizna: "Il mio primo cliente: sito con video, saponi su misura, appuntamenti e recensioni, più l'identità del brand per un negozio di saponi artigianali.",
       obra: "Sito per un'impresa di ristrutturazioni, con calcolatore di preventivi e prima e dopo (progetto di prova).",
       garaje: "Sito per un'officina, con stato della riparazione per targa (progetto di prova).",
       zona: "Sito per una palestra (progetto di prova).",
