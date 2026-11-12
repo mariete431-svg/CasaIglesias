@@ -104,6 +104,7 @@ export const es = {
     filter: "Filtrar proyectos por tipo",
     newTab: "se abre en otra pestaña",
     items: {
+      brizna: "Mi primer cliente: web con vídeo, jabón a tu gusto, citas y reseñas, e identidad de marca para una tienda de jabones artesanales.",
       obra: "Web para una empresa de reformas, con calculadora de presupuesto y antes y después (proyecto de práctica).",
       garaje: "Web para un taller, con seguimiento de la reparación por matrícula (proyecto de práctica).",
       zona: "Web para un gimnasio (proyecto de práctica).",

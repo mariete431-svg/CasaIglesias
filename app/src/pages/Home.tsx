@@ -20,7 +20,8 @@ export const CV_PDF = asset("cv-mario-iglesias.pdf");
 // Tipos para los filtros: así cada cliente encuentra rápido lo que necesita
 type Kind = "web" | "reservas" | "marca";
 const KIND_FILTERS = [["todo", "all"], ["web", "web"], ["reservas", "bookings"], ["marca", "brand"]] as const;
-const projects: { name: string; key: "obra" | "garaje" | "zona" | "casa"; to: string; kinds: Kind[] }[] = [
+const projects: { name: string; key: "brizna" | "obra" | "garaje" | "zona" | "casa"; to: string; kinds: Kind[] }[] = [
+  { name: "Brizna", key: "brizna", to: "https://brizna.shop/", kinds: ["web", "marca"] },
   { name: "Obra Clara", key: "obra", to: "https://mariete431-svg.github.io/portfolio/obra-clara/", kinds: ["web"] },
   { name: "Garaje Nueve", key: "garaje", to: "https://mariete431-svg.github.io/portfolio/garaje-nueve/", kinds: ["web", "reservas"] },
   { name: "ZONA 4", key: "zona", to: "https://mariete431-svg.github.io/zona4/", kinds: ["web", "reservas"] },

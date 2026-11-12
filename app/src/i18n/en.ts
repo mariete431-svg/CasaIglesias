@@ -103,6 +103,7 @@ export const en: Dict = {
     filter: "Filter projects by type",
     newTab: "opens in a new tab",
     items: {
+      brizna: "My first client: a website with video, a build-your-own-soap tool, appointments and reviews, plus the brand identity for a handmade soap shop.",
       obra: "Website for a renovation company, with a quote calculator and before-and-after photos (practice project).",
       garaje: "Website for a car repair shop, with repair tracking by number plate (practice project).",
       zona: "Website for a gym (practice project).",

@@ -103,6 +103,7 @@ export const fr: Dict = {
     filter: "Filtrer les projets par type",
     newTab: "s'ouvre dans un nouvel onglet",
     items: {
+      brizna: "Mon premier client : site avec vidéo, savon sur mesure, rendez-vous et avis, et l'identité de marque d'une boutique de savons artisanaux.",
       obra: "Site pour une entreprise de rénovation, avec simulateur de devis et avant/après (projet d'entraînement).",
       garaje: "Site pour un garage, avec suivi de la réparation par plaque d'immatriculation (projet d'entraînement).",
       zona: "Site pour une salle de sport (projet d'entraînement).",

@@ -103,6 +103,7 @@ export const de: Dict = {
     filter: "Projekte nach Art filtern",
     newTab: "öffnet in einem neuen Tab",
     items: {
+      brizna: "Mein erster Kunde: Website mit Video, Seife nach Wunsch, Terminen und Bewertungen sowie die Markenidentität für einen Laden für handgemachte Seifen.",
       obra: "Website für einen Renovierungsbetrieb, mit Kostenrechner und Vorher-nachher-Fotos (Übungsprojekt).",
       garaje: "Website für eine Autowerkstatt, mit Reparaturstatus nach Kennzeichen (Übungsprojekt).",
       zona: "Website für ein Fitnessstudio (Übungsprojekt).",
