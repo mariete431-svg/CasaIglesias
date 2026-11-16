@@ -39,7 +39,7 @@ export default function App() {
   // Idioma y dirección del texto (el hebreo va de derecha a izquierda)
   useEffect(() => { applyHtmlLang(langFromPath(location.pathname)); }, [location.pathname]);
 
-  // Contador de visitas propio (sin cookies): solo página, idioma, procedencia y tipo de pantalla
+  // Contador de visitas propio (sin publicidad ni terceros): ver lib/visitas.ts
   useEffect(() => { countVisit(location.pathname, langFromPath(location.pathname)); }, [location.pathname]);
 
   // Primera carga con #seccion en la dirección

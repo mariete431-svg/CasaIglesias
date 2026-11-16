@@ -5,7 +5,8 @@
 export type Frase = { texto: string; fecha?: string };
 
 export const frases: Frase[] = [
-  { texto: "Una marca pequeña también puede decir algo grande: empieza por contar quién eres.", fecha: "2026-11-12" },
+  { texto: "Conocer a quien te visita es el primer paso para atenderle mejor.", fecha: "2026-11-16" },
+  { texto: "Una marca pequeña también puede decir algo grande: empieza por contar quién eres." },
   { texto: "Una web cómoda en el móvil se nota en cada detalle, no en un solo gesto." },
   { texto: "Una buena primera impresión empieza por cómo te presentas." },
   { texto: "Que te encuentren es el primer paso para que te elijan." },
