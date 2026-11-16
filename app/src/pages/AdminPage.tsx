@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { markOwnDevice } from "@/lib/visitas";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ArrowRight, Eye, EyeOff, LogOut, Trash2, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
@@ -36,6 +37,7 @@ export default function AdminPage() {
     setSession(s);
     if (!s) return setGate("login");
     const { data, error } = await supabase.rpc("is_admin");
+    if (!error && data === true) markOwnDevice(); // este aparato es de Mario: sus visitas se apuntan aparte
     setGate(!error && data === true ? "ok" : "denied");
   }, []);
 
