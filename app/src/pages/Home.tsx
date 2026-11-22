@@ -11,7 +11,8 @@ import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
 import { capitalize, dayKey } from "@/lib/appointments";
 import { LOCALES, useLang, useLocalize, useT } from "@/i18n";
-import { BRAND_PRICES, EXTRA_PRICES, PACK_PRICES, PROJECTS as projects, euros, type Kind } from "@/content/portada";
+import { BRAND_PLANS, BRAND_PRICES, EXTRA_PRICES, PACK_PRICES, PROJECTS as projects, WEB_PLANS, euros, type Kind, type PlanId } from "@/content/portada";
+import { QuoteWizard, type QuotePlan } from "@/components/QuoteWizard";
 
 // El calendario de reservas solo se descarga al abrir su desplegable
 const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: m.Booking })));
@@ -30,8 +31,8 @@ function KindFilter({ value, onChange, label }: { value: string; onChange: (v: "
 
 /* ---------- Servicios y precios de Casa Iglesias ---------- */
 
-type Pack = { name: string; price: number; time: string; tag?: string; items: string[] };
-function PriceCard({ pack, delay }: { pack: Pack; delay: number }) {
+type Pack = { id: PlanId; name: string; price: number; time: string; tag?: string; items: string[] };
+function PriceCard({ pack, delay, onQuote }: { pack: Pack; delay: number; onQuote: (plan: QuotePlan) => void }) {
   const t = useT();
   return <Reveal delay={delay}><article className={`price-card ${pack.tag ? "is-featured" : ""}`}>
     {pack.tag && <span className="price-tag">{pack.tag}</span>}
@@ -39,14 +40,15 @@ function PriceCard({ pack, delay }: { pack: Pack; delay: number }) {
     <p className="price-amount">{euros(pack.price)}<small> {t.pricing.tax}</small></p>
     <p className="price-time">{t.pricing.delivery} {pack.time}</p>
     <ul>{pack.items.map(item => <li key={item}>{item}</li>)}</ul>
-    <Button variant={pack.tag ? "luxury" : "outlineLuxury"} size="lg" asChild><a href="#reservar" data-cursor={t.cursor.book}>{t.pricing.quote} <ArrowUpRight /></a></Button>
+    <Button type="button" variant={pack.tag ? "luxury" : "outlineLuxury"} size="lg" data-cursor={t.cursor.open} onClick={() => onQuote({ id: pack.id, name: pack.name, price: pack.price })}>{t.pricing.quote} <ArrowUpRight /></Button>
   </article></Reveal>;
 }
 
 function Pricing() {
   const t = useT().pricing;
-  const packages = PACK_PRICES.map((p, i) => ({ ...p, ...t.packages[i]! }));
-  const brandPackages = BRAND_PRICES.map((price, i) => ({ price, ...t.brandPackages[i]! }));
+  const packages = PACK_PRICES.map((p, i) => ({ ...p, id: WEB_PLANS[i]!, ...t.packages[i]! }));
+  const brandPackages = BRAND_PRICES.map((price, i) => ({ price, id: BRAND_PLANS[i]!, ...t.brandPackages[i]! }));
+  const [quote, setQuote] = useState<QuotePlan | null>(null);
   const [kind, setKind] = useState<"todo" | Kind>("todo");
   const webs = packages.filter(p => kind === "todo" || p.kind === kind);
   const showBrand = kind === "todo" || kind === "marca";
@@ -55,10 +57,10 @@ function Pricing() {
       <div className="intro-row"><h2>{t.title1}<br /><em>{t.titleEm}</em></h2><p>{t.intro}</p></div>
       <KindFilter value={kind} onChange={setKind} label={t.filter} /></Reveal>
     <AnimatePresence mode="popLayout" initial={false}>
-      {webs.length > 0 && <motion.div key={`webs-${kind}`} className="pricing-grid" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}>{webs.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</motion.div>}
+      {webs.length > 0 && <motion.div key={`webs-${kind}`} className="pricing-grid" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}>{webs.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} onQuote={setQuote} />)}</motion.div>}
       {showBrand && <motion.div key="marca" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: .4, ease: [.22, 1, .36, 1] }}>
         <Reveal><div className="pricing-subhead" style={kind === "marca" ? { marginTop: 0 } : undefined}><h3>{t.brandTitle} <em>{t.brandTitleEm}</em></h3><p>{t.brandIntro}</p></div></Reveal>
-        <div className="pricing-grid">{brandPackages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} />)}</div>
+        <div className="pricing-grid">{brandPackages.map((pack, i) => <PriceCard key={pack.name} pack={pack} delay={i * .06} onQuote={setQuote} />)}</div>
       </motion.div>}
     </AnimatePresence>
     <Reveal><div className="pricing-more">
@@ -66,6 +68,7 @@ function Pricing() {
       <div><span className="eyebrow">{t.extrasLabel}</span><p>{t.extras.map((name, i) => <span key={name}>{name} · <strong>{euros(EXTRA_PRICES[i]!)}</strong></span>)}</p></div>
       <div><span className="eyebrow">{t.launchLabel}</span><p><strong>{t.launchStrong}</strong>{t.launch}</p></div>
     </div></Reveal>
+    <AnimatePresence>{quote && <QuoteWizard key={quote.id} plan={quote} onClose={() => setQuote(null)} />}</AnimatePresence>
   </div></section>;
 }
 
