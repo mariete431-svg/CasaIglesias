@@ -11,6 +11,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { asset, loadSupabase } from "@/lib/asset";
 import { capitalize, dayKey } from "@/lib/appointments";
 import { LOCALES, useLang, useLocalize, useT } from "@/i18n";
+import { BRAND_PRICES, EXTRA_PRICES, PACK_PRICES, PROJECTS as projects, euros, type Kind } from "@/content/portada";
 
 // El calendario de reservas solo se descarga al abrir su desplegable
 const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: m.Booking })));
@@ -18,15 +19,7 @@ const Booking = lazy(() => import("@/components/Booking").then(m => ({ default: 
 export const CV_PDF = asset("cv-mario-iglesias.pdf");
 
 // Tipos para los filtros: así cada cliente encuentra rápido lo que necesita
-type Kind = "web" | "reservas" | "marca";
 const KIND_FILTERS = [["todo", "all"], ["web", "web"], ["reservas", "bookings"], ["marca", "brand"]] as const;
-const projects: { name: string; key: "brizna" | "obra" | "garaje" | "zona" | "casa"; to: string; kinds: Kind[] }[] = [
-  { name: "Brizna", key: "brizna", to: "https://brizna.shop/", kinds: ["web", "marca"] },
-  { name: "Obra Clara", key: "obra", to: "https://mariete431-svg.github.io/portfolio/obra-clara/", kinds: ["web"] },
-  { name: "Garaje Nueve", key: "garaje", to: "https://mariete431-svg.github.io/portfolio/garaje-nueve/", kinds: ["web", "reservas"] },
-  { name: "ZONA 4", key: "zona", to: "https://mariete431-svg.github.io/zona4/", kinds: ["web", "reservas"] },
-  { name: "Casa Iglesias", key: "casa", to: "#inicio", kinds: ["web", "marca", "reservas"] },
-];
 
 function KindFilter({ value, onChange, label }: { value: string; onChange: (v: "todo" | Kind) => void; label: string }) {
   const t = useT().kinds;
@@ -36,12 +29,6 @@ function KindFilter({ value, onChange, label }: { value: string; onChange: (v: "
 }
 
 /* ---------- Servicios y precios de Casa Iglesias ---------- */
-// Precios (los textos de cada paquete están en el diccionario de cada idioma, en el mismo orden)
-const PACK_PRICES: { kind: Kind; price: number }[] = [{ kind: "web", price: 390 }, { kind: "web", price: 790 }, { kind: "reservas", price: 1290 }];
-const BRAND_PRICES = [190, 390, 990];
-const EXTRA_PRICES = [90, 190, 60];
-// Miles con punto también en 4 cifras (1.290 €), como en el panel y los presupuestos
-const euros = (n: number) => `${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €`;
 
 type Pack = { name: string; price: number; time: string; tag?: string; items: string[] };
 function PriceCard({ pack, delay }: { pack: Pack; delay: number }) {
