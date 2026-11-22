@@ -23,7 +23,7 @@ const SITE = `https://casaiglesias.es${BASE}`;
 const pages = {
   "": {
     title: "Casa Iglesias — Diseño y desarrollo web en Tenerife",
-    description: "Casa Iglesias, estudio de diseño y desarrollo web de Mario Iglesias en Adeje, Tenerife. Webs cuidadas para negocios. Mira sus proyectos y reserva una reunión.",
+    description: "Casa Iglesias, estudio de diseño y desarrollo web de Mario Iglesias en Santa Cruz de Tenerife. Webs cuidadas para negocios. Mira sus proyectos y reserva una reunión.",
     index: true,
   },
   cv: {
@@ -91,12 +91,12 @@ const personJson = JSON.stringify({
       url: SITE,
       image: `${SITE}og-imagen.jpg`,
       email: "mailto:hola@casaiglesias.es",
-      address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" },
+      address: { "@type": "PostalAddress", addressLocality: "Santa Cruz de Tenerife", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" },
       knowsLanguage: ["es", "en"],
       sameAs: ["https://www.instagram.com/casaiglesias.studio/"],
     },
     { "@type": "WebSite", "@id": `${SITE}#web`, url: SITE, name: "Casa Iglesias", alternateName: "Casa Iglesias · Estudio de diseño y desarrollo web", inLanguage: "es", publisher: { "@id": `${SITE}#estudio` } },
-    { "@type": "ProfessionalService", "@id": `${SITE}#estudio`, name: "Casa Iglesias", description: "Estudio de diseño y desarrollo web", url: SITE, logo: `${SITE}apple-touch-icon.png`, image: `${SITE}og-imagen.jpg`, founder: { "@id": `${SITE}#mario` }, sameAs: ["https://www.instagram.com/casaiglesias.studio/"], areaServed: "Tenerife", address: { "@type": "PostalAddress", addressLocality: "Adeje", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" } },
+    { "@type": "ProfessionalService", "@id": `${SITE}#estudio`, name: "Casa Iglesias", description: "Estudio de diseño y desarrollo web", url: SITE, logo: `${SITE}apple-touch-icon.png`, image: `${SITE}og-imagen.jpg`, founder: { "@id": `${SITE}#mario` }, sameAs: ["https://www.instagram.com/casaiglesias.studio/"], areaServed: "Tenerife", address: { "@type": "PostalAddress", addressLocality: "Santa Cruz de Tenerife", addressRegion: "Santa Cruz de Tenerife", addressCountry: "ES" } },
   ],
 });
 
@@ -125,7 +125,7 @@ const cvToolJson = (lang, title, description) => JSON.stringify({
 // React lo sustituye por la página completa en cuanto carga.
 const links = [["", "Inicio"], ["#precios", "Precios"], ["blog/", "Blog"], ["#reservar", "Reservar una reunión"], ["privacidad/", "Privacidad"]];
 const fallback = (title, description, lang = "es") => `<div class="seo-fallback">
-      <p>ADEJE, TENERIFE</p>
+      <p>SANTA CRUZ DE TENERIFE</p>
       <h1>${escape(title.startsWith("Casa Iglesias —") ? title : title.split(" — ")[0])}</h1>
       <p>${escape(description)}</p>
       <nav aria-label="Páginas">${links.map(([href, label], i) => {
@@ -238,7 +238,7 @@ const OG_LOCALE = { es: "es_ES", en: "en_GB", it: "it_IT", de: "de_DE", fr: "fr_
 const LANG_PAGES = {
   en: {
     baja: { title: "Unsubscribe from the newsletter — Casa Iglesias", description: "Unsubscribe from the newsletter." },
-    "": { title: "Casa Iglesias — Web design studio in Tenerife", description: "Mario Iglesias's web design studio in Adeje, Tenerife: carefully crafted websites, online booking and branding for businesses. Book a free call." },
+    "": { title: "Casa Iglesias — Web design studio in Tenerife", description: "Mario Iglesias's web design studio in Santa Cruz de Tenerife: carefully crafted websites, online booking and branding for businesses. Book a free call." },
     "crear-cv": { title: "Create your CV for free — Casa Iglesias", description: "Free tool to create your CV live, with your logo and colour, and download it as a PDF. No sign-up and your data never leaves your browser." },
     privacidad: { title: "Privacy and legal notice — Casa Iglesias", description: "What data the Casa Iglesias website stores, what it is used for and how to ask for it to be deleted." },
     cuestionario: { title: "Questionnaire to start your website — Casa Iglesias", description: "Tell me about your business in ten minutes and I'll prepare a tailor-made proposal." },
@@ -246,7 +246,7 @@ const LANG_PAGES = {
   },
   it: {
     baja: { title: "Annulla l'iscrizione alla newsletter — Casa Iglesias", description: "Annulla l'iscrizione alla newsletter." },
-    "": { title: "Casa Iglesias — Web design a Tenerife", description: "Lo studio di web design di Mario Iglesias ad Adeje, Tenerife: siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
+    "": { title: "Casa Iglesias — Web design a Tenerife", description: "Lo studio di web design di Mario Iglesias a Santa Cruz de Tenerife: siti curati, prenotazioni online e brand per attività. Prenota una call gratuita." },
     "crear-cv": { title: "Crea il tuo CV gratis — Casa Iglesias", description: "Strumento gratuito per creare il tuo CV in diretta, con logo e colore, e scaricarlo in PDF. Senza registrazione: i tuoi dati restano nel tuo browser." },
     privacidad: { title: "Privacy e note legali — Casa Iglesias", description: "Quali dati conserva il sito di Casa Iglesias, a cosa servono e come chiederne la cancellazione." },
     cuestionario: { title: "Questionario per iniziare il tuo sito — Casa Iglesias", description: "Raccontami la tua attività in dieci minuti e preparo una proposta su misura." },
@@ -254,7 +254,7 @@ const LANG_PAGES = {
   },
   de: {
     baja: { title: "Vom Newsletter abmelden — Casa Iglesias", description: "Vom Newsletter abmelden." },
-    "": { title: "Casa Iglesias — Webdesign auf Teneriffa", description: "Das Webdesign-Studio von Mario Iglesias in Adeje, Teneriffa: sorgfältige Websites, Online-Buchungen und Branding für Unternehmen." },
+    "": { title: "Casa Iglesias — Webdesign auf Teneriffa", description: "Das Webdesign-Studio von Mario Iglesias in Santa Cruz de Tenerife: sorgfältige Websites, Online-Buchungen und Branding für Unternehmen." },
     "crear-cv": { title: "Erstelle deinen Lebenslauf kostenlos — Casa Iglesias", description: "Kostenloses Tool, um deinen Lebenslauf live mit Logo und Farbe zu erstellen und als PDF herunterzuladen. Ohne Anmeldung, deine Daten bleiben im Browser." },
     privacidad: { title: "Datenschutz und Impressum — Casa Iglesias", description: "Welche Daten die Website von Casa Iglesias speichert, wofür sie genutzt werden und wie du ihre Löschung verlangst." },
     cuestionario: { title: "Fragebogen für deine neue Website — Casa Iglesias", description: "Erzähl mir in zehn Minuten von deinem Unternehmen und ich bereite ein maßgeschneidertes Angebot vor." },
@@ -262,7 +262,7 @@ const LANG_PAGES = {
   },
   fr: {
     baja: { title: "Se désinscrire de la newsletter — Casa Iglesias", description: "Se désinscrire de la newsletter." },
-    "": { title: "Casa Iglesias — Création de sites web à Tenerife", description: "Le studio de création web de Mario Iglesias à Adeje, Tenerife : sites soignés, réservation en ligne et identité visuelle pour les entreprises." },
+    "": { title: "Casa Iglesias — Création de sites web à Tenerife", description: "Le studio de création web de Mario Iglesias à Santa Cruz de Tenerife : sites soignés, réservation en ligne et identité visuelle pour les entreprises." },
     "crear-cv": { title: "Créez votre CV gratuitement — Casa Iglesias", description: "Outil gratuit pour créer votre CV en direct, avec votre logo et votre couleur, et le télécharger en PDF. Sans inscription ni envoi de données." },
     privacidad: { title: "Confidentialité et mentions légales — Casa Iglesias", description: "Quelles données le site de Casa Iglesias conserve, à quoi elles servent et comment demander leur suppression." },
     cuestionario: { title: "Questionnaire pour lancer votre site — Casa Iglesias", description: "Parlez-moi de votre entreprise en dix minutes et je prépare une proposition sur mesure." },
@@ -270,7 +270,7 @@ const LANG_PAGES = {
   },
   he: {
     baja: { title: "ביטול הרשמה לניוזלטר — Casa Iglesias", description: "ביטול הרשמה לניוזלטר." },
-    "": { title: "Casa Iglesias — סטודיו לעיצוב ופיתוח אתרים בטנריפה", description: "Casa Iglesias הוא הסטודיו לעיצוב ופיתוח אתרים של מריו איגלסיאס באדחה, טנריפה. אתרים מוקפדים, הזמנות אונליין ומיתוג לעסקים. קבעו שיחה חינם." },
+    "": { title: "Casa Iglesias — סטודיו לעיצוב ופיתוח אתרים בטנריפה", description: "Casa Iglesias הוא הסטודיו לעיצוב ופיתוח אתרים של מריו איגלסיאס בסנטה קרוס דה טנריפה. אתרים מוקפדים, הזמנות אונליין ומיתוג לעסקים. קבעו שיחה חינם." },
     "crear-cv": { title: "יצירת קורות חיים בחינם — Casa Iglesias", description: "כלי חינמי ליצירת קורות חיים בזמן אמת, עם לוגו וצבע, והורדה כ-PDF. בלי הרשמה, והמידע נשאר בדפדפן שלכם." },
     privacidad: { title: "פרטיות ומידע משפטי — Casa Iglesias", description: "איזה מידע האתר של Casa Iglesias שומר, למה הוא משמש ואיך מבקשים למחוק אותו." },
     cuestionario: { title: "שאלון להתחלת האתר שלכם — Casa Iglesias", description: "ספרו לי על העסק בעשר דקות ואכין הצעה מותאמת אישית." },

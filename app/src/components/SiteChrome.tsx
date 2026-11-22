@@ -130,7 +130,7 @@ export function SiteHeader() {
       </motion.div>
       {navigation.map((item, i) => <motion.div key={item.label} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .12 + i * .05, duration: .45 }}><NavItem to={item.to} onClick={() => setMenuOpen(false)}><span>0{i + 1}</span>{item.label}<ArrowUpRight /></NavItem></motion.div>)}
       <LanguageSwitcher compact />
-      <p>Adeje, Tenerife — 2026</p>
+      <p>Santa Cruz de Tenerife — 2026</p>
     </motion.nav>}
   </>;
 }

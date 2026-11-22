@@ -72,7 +72,7 @@ export default function CvPage() {
       <Reveal><div className="facts">
         <div><span>DISPONIBILIDAD GEOGRÁFICA</span><strong>España</strong></div>
         <div><span>DISPONIBILIDAD HORARIA</span><strong>Total</strong></div>
-        <div><span>UBICACIÓN</span><strong>Adeje, Santa Cruz de Tenerife</strong></div>
+        <div><span>UBICACIÓN</span><strong>Santa Cruz de Tenerife</strong></div>
       </div></Reveal>
     </div></section>
 
