@@ -961,6 +961,16 @@ html.lenis { scroll-behavior: auto !important; }
 @media print { .post-back, .post-nav, .post-signature a { display: none !important; } .post-body blockquote { border: 1px solid #ccc; } }
 /* Artículos dentro del HTML (para buscadores): tamaño de lectura mientras carga la web */
 .seo-fallback.is-article { max-width: 760px; }
+/* Página completa sin JavaScript (portada, CV, privacidad): se lee bien antes de que cargue la animada */
+.seo-fallback.is-full section { margin-top: 96px; }
+.seo-fallback.is-full h2 { font: 400 clamp(40px, 6vw, 72px)/1 var(--font-display); letter-spacing: -.02em; margin: 16px 0 24px; }
+.seo-fallback.is-full h2 em { display: inline; margin: 0; padding: 0; }
+.seo-fallback.is-full h3 { font: 400 28px/1.15 var(--font-display); margin: 1.6em 0 .4em; }
+.seo-fallback.is-full h4 { font: 600 15px/1.4 var(--font-sans); margin: 1.6em 0 .2em; color: var(--foreground); }
+.seo-fallback.is-full section > p:first-child { margin: 0; }
+.seo-fallback.is-full ul, .seo-fallback.is-full ol { max-width: 640px; padding-inline-start: 1.2em; font-size: 15px; line-height: 1.7; color: var(--muted-foreground); }
+.seo-fallback.is-full li { margin: .3em 0; }
+.seo-fallback.is-full blockquote { font: italic 400 28px/1.3 var(--font-display); margin: 0 0 24px; max-width: 760px; }
 .seo-fallback.is-article h1 { font-size: clamp(40px, 6vw, 80px); line-height: 1; }
 .seo-fallback.is-article h2 { font: 400 32px/1.1 var(--font-display); margin: 1.6em 0 .4em; }
 .seo-fallback.is-article blockquote { margin: 1.4em 0; padding: 16px 20px; border-left: 3px solid var(--accent); }

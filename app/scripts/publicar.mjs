@@ -5,6 +5,13 @@ import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, write
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
+import { es } from "../src/i18n/es.ts";
+import { en } from "../src/i18n/en.ts";
+import { it } from "../src/i18n/it.ts";
+import { de } from "../src/i18n/de.ts";
+import { fr } from "../src/i18n/fr.ts";
+import { he } from "../src/i18n/he.ts";
+import { BRAND_PRICES, EXTRA_PRICES, PACK_PRICES, PROJECTS, euros } from "../src/content/portada.ts";
 
 const app = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dist = join(app, "dist");
@@ -128,6 +135,97 @@ const fallback = (title, description, lang = "es") => `<div class="seo-fallback"
       }).join(" · ")}</nav>
       <p><a href="mailto:hola@casaiglesias.es">hola@casaiglesias.es</a></p>
     </div>`;
+
+// ---------- Texto completo de cada página dentro del HTML ----------
+// Bing, ChatGPT, Perplexity y otros buscadores casi no ejecutan JavaScript: si el HTML viene vacío,
+// para ellos la web está vacía. Por eso la portada, el creador de CV y la privacidad llevan aquí
+// todo su texto (sacado de los mismos diccionarios que usa la web). React lo cambia por la página
+// animada en cuanto carga, así que quien navega normal no nota nada.
+const DICTS = { es, en, it, de, fr, he };
+const EMAIL = "hola@casaiglesias.es";
+const emailLink = `<a href="mailto:${EMAIL}">${EMAIL}</a>`;
+const list = (items) => `<ul>${items.map(i => `<li>${i}</li>`).join("")}</ul>`;
+const heading = (tag, t) => `<${tag}>${escape(t.title1)} <em>${escape(t.titleEm)}</em></${tag}>`;
+const priceBlock = (packs, prices, t) => packs.map((pack, i) => `
+      <h4>${escape(pack.name)} · ${euros(prices[i])} ${escape(t.tax)}${pack.tag ? ` · ${escape(pack.tag)}` : ""}</h4>
+      <p>${escape(t.delivery)} ${escape(pack.time)}</p>${list(pack.items.map(escape))}`).join("");
+
+function homeContent(lang) {
+  const t = DICTS[lang];
+  const pre = lang === "es" ? "" : `${lang}/`;
+  const p = t.pricing;
+  return `<div class="seo-fallback is-full" id="inicio">
+      <p>${escape(t.hero.eyebrow)}</p>
+      <h1>${escape(t.hero.seoTitle)}</h1>
+      <p>${escape(t.hero.subtitle1)} ${escape(t.hero.subtitle2)}</p>
+      <p><a href="#contacto">${escape(t.hero.book)}</a> · <a href="#precios">${escape(t.hero.prices)}</a></p>
+      <section id="precios">
+        <p>${escape(p.label)}</p>${heading("h2", p)}
+        <p>${escape(p.intro)}</p>${priceBlock(p.packages, PACK_PRICES.map(x => x.price), p)}
+        <h3>${escape(p.brandTitle)} <em>${escape(p.brandTitleEm)}</em></h3>
+        <p>${escape(p.brandIntro)}</p>${priceBlock(p.brandPackages, BRAND_PRICES, p)}
+        <p><strong>${escape(p.maintenanceLabel)}</strong> · ${escape(p.maintenancePrice)} ${escape(p.maintenance)}</p>
+        <p><strong>${escape(p.extrasLabel)}</strong> · ${p.extras.map((name, i) => `${escape(name)}: ${euros(EXTRA_PRICES[i])}`).join(" · ")}</p>
+        <p><strong>${escape(p.launchLabel)}</strong> · ${escape(p.launchStrong)}${escape(p.launch)}</p>
+      </section>
+      <section id="proceso">
+        <p>${escape(t.process.label)}</p>${heading("h2", t.process)}
+        <p>${escape(t.process.intro)}</p>
+        <ol>${t.process.steps.map(s => `<li><strong>${escape(s.title)}</strong> (${escape(s.time)}): ${escape(s.text)}</li>`).join("")}</ol>
+      </section>
+      <section id="estudio">
+        <p>${escape(t.studio.label)}</p>${heading("h2", t.studio)}
+        <blockquote>${escape(t.studio.quote)}</blockquote>
+        <p>${escape(t.studio.p1)}</p>
+        <p>${escape(t.studio.p2)}</p>${list(t.studio.facts.map(([k, v]) => `<strong>${escape(k)}</strong>: ${escape(v)}`))}
+      </section>
+      <section id="proyectos">
+        <p>${escape(t.projects.label)}</p>${heading("h2", t.projects)}
+        <p>${escape(t.projects.intro)}</p>${list(PROJECTS.map(pr => `<a href="${pr.to.startsWith("#") ? `${BASE}${pre}` : pr.to}">${escape(pr.name)}</a>: ${escape(t.projects.items[pr.key])}`))}
+      </section>
+      <section id="crear-cv">
+        <p>${escape(t.cv.pill)}</p>${heading("h2", t.cv)}
+        <p>${escape(t.cv.text)}</p>${list(t.cv.points.map(escape))}
+        <p><a href="${BASE}${pre}crear-cv/">${escape(t.cv.cta)}</a></p>
+      </section>
+      <section id="preguntas">
+        <p>${escape(t.faq.label)}</p>${heading("h2", t.faq)}
+        ${t.faq.items.map(f => `<h3>${escape(f.q)}</h3>\n        <p>${escape(f.a)}</p>`).join("\n        ")}
+      </section>
+      <section id="contacto">
+        <p>${escape(t.contact.label)}</p>
+        <h2>${escape(t.contact.title)}</h2>
+        <p>${escape(t.start.title1)} ${escape(t.start.titleEm)}: ${escape(t.start.meta)}. ${emailLink}</p>
+        <p><a href="${BASE}${pre}cuestionario/">${escape(t.contact.brief)}</a> · <a href="https://www.instagram.com/casaiglesias.studio/">Instagram</a></p>
+        <p>${escape(t.chrome.footer)} · <a href="${BASE}${pre}privacidad/">${escape(t.chrome.privacy)}</a> · <a href="${BASE}blog/">Blog</a></p>
+      </section>
+    </div>`;
+}
+
+function builderContent(lang) {
+  const t = DICTS[lang];
+  return `<div class="seo-fallback is-full">
+      <p>${escape(t.builder.eyebrow)}</p>
+      <h1>${t.builder.lines.map(escape).join(" ")}</h1>
+      <p>${escape(t.builder.subtitle)}</p>${list(t.cv.points.map(escape))}
+      <p><a href="${BASE}${lang === "es" ? "" : `${lang}/`}">Casa Iglesias</a> · ${emailLink}</p>
+    </div>`;
+}
+
+function privacyContent(lang) {
+  const t = DICTS[lang].privacy;
+  const fill = (text) => escape(text).replaceAll("{email}", emailLink).replaceAll("{aepd}", `<a href="https://www.aepd.es/">${escape(t.aepd)}</a>`);
+  return `<div class="seo-fallback is-full">
+      <p>${escape(t.eyebrow)}</p>
+      <h1>${t.lines.map(escape).join(" ")}</h1>
+      <p>${escape(t.subtitle)}</p>${t.translationNote ? `\n      <p>${escape(t.translationNote)}</p>` : ""}
+      <h2>${escape(t.label1)}</h2>
+      ${t.sections.map(sec => `<h3>${escape(sec.h)}</h3>${(sec.p ?? []).map(x => `<p>${fill(x)}</p>`).join("")}${sec.list ? list(sec.list.map(([b, x]) => `<strong>${escape(b)}</strong> ${fill(x)}`)) : ""}${(sec.after ?? []).map(x => `<p>${fill(x)}</p>`).join("")}`).join("\n      ")}
+      <h2>${escape(t.label2)}</h2>
+      ${t.legal.map(x => `<p>${fill(x)}</p>`).join("\n      ")}
+    </div>`;
+}
+const contentFor = (route, lang) => route === "" ? homeContent(lang) : route === "crear-cv" ? builderContent(lang) : route === "privacidad" ? privacyContent(lang) : undefined;
 const template = readFileSync(join(dist, "index.html"), "utf8");
 
 const rssLink = `\n    <link rel="alternate" type="application/rss+xml" title="Blog de Casa Iglesias" href="${SITE}blog/feed.xml" />`;
@@ -214,14 +312,14 @@ function pageHtml(route, { title, description, index, jsonLd, content, ogType },
 for (const [route, meta] of Object.entries(pages)) {
   const folder = route ? join(dist, route) : dist;
   mkdirSync(folder, { recursive: true });
-  writeFileSync(join(folder, "index.html"), pageHtml(route, meta));
+  writeFileSync(join(folder, "index.html"), pageHtml(route, { ...meta, content: contentFor(route, "es") }));
 }
 // Las mismas páginas en los otros idiomas
 for (const lang of Object.keys(LANG_PAGES)) {
   for (const route of LOCALIZED) {
     const folder = join(dist, lang, route);
     mkdirSync(folder, { recursive: true });
-    writeFileSync(join(folder, "index.html"), pageHtml(route, { ...pages[route], ...LANG_PAGES[lang][route] }, lang));
+    writeFileSync(join(folder, "index.html"), pageHtml(route, { ...pages[route], ...LANG_PAGES[lang][route], content: contentFor(route, lang) }, lang));
   }
 }
 
