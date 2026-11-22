@@ -1,0 +1,33 @@
+# Avisa a Bing (y a los buscadores que usan IndexNow) cada vez que se publica la web.
+# Espera a que GitHub Pages termine de publicar y manda todas las páginas del sitemap.
+name: Avisar a Bing (IndexNow)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Esperar a que la web publicada tenga la clave
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS "https://casaiglesias.es/2c5ece2fd6b29c104378df3e079dff0d.txt?ci=$RANDOM" | grep -q "2c5ece2fd6b29c104378df3e079dff0d"; then echo "Web publicada"; exit 0; fi
+            echo "Esperando a GitHub Pages ($i)…"; sleep 20
+          done
+          echo "La clave no aparece en la web publicada"; exit 1
+      - name: Mandar las páginas a IndexNow
+        run: |
+          sleep 60
+          python3 - > cuerpo.json <<'PY'
+          import json, re
+          urls = re.findall(r"<loc>([^<]+)</loc>", open("sitemap.xml").read())
+          print(json.dumps({"host": "casaiglesias.es", "key": "2c5ece2fd6b29c104378df3e079dff0d", "keyLocation": "https://casaiglesias.es/2c5ece2fd6b29c104378df3e079dff0d.txt", "urlList": urls}))
+          PY
+          echo "Páginas: $(python3 -c 'import json;print(len(json.load(open("cuerpo.json"))["urlList"]))')"
+          STATUS=$(curl -sS -o respuesta.txt -w '%{http_code}' -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json; charset=utf-8" --data-binary @cuerpo.json)
+          echo "Respuesta de IndexNow: $STATUS"; cat respuesta.txt || true
+          case "$STATUS" in 200|202) echo "Aviso enviado";; *) exit 1;; esac
