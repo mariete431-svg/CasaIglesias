@@ -154,11 +154,24 @@ function homeContent(lang) {
   const t = DICTS[lang];
   const pre = lang === "es" ? "" : `${lang}/`;
   const p = t.pricing;
+  // La foto del inicio va ya en el HTML: así se ve en cuanto llega la página, sin esperar a la parte animada
+  // (es lo más grande de la pantalla, y Google mide la velocidad por ella)
   return `<div class="seo-fallback is-full" id="inicio">
-      <p>${escape(t.hero.eyebrow)}</p>
-      <h1>${escape(t.hero.seoTitle)}</h1>
-      <p>${escape(t.hero.subtitle1)} ${escape(t.hero.subtitle2)}</p>
-      <p><a href="#contacto">${escape(t.hero.book)}</a> · <a href="#precios">${escape(t.hero.prices)}</a></p>
+      <div class="fallback-hero">
+        <div class="hero-backdrop" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 700px)" srcset="${BASE}estudio-movil.webp" type="image/webp" />
+            <source media="(max-width: 700px)" srcset="${BASE}estudio-movil.jpg" />
+            <source srcset="${BASE}estudio.webp" type="image/webp" />
+            <img src="${BASE}estudio.jpg" alt="" fetchpriority="high" decoding="async" />
+          </picture>
+          <span class="hero-backdrop-shade"></span>
+        </div>
+        <p>${escape(t.hero.eyebrow)}</p>
+        <h1>${escape(t.hero.seoTitle)}</h1>
+        <p>${escape(t.hero.subtitle1)} ${escape(t.hero.subtitle2)}</p>
+        <p><a href="#contacto">${escape(t.hero.book)}</a> · <a href="#precios">${escape(t.hero.prices)}</a></p>
+      </div>
       <section id="precios">
         <p>${escape(p.label)}</p>${heading("h2", p)}
         <p>${escape(p.intro)}</p>${priceBlock(p.packages, PACK_PRICES.map(x => x.price), p)}
