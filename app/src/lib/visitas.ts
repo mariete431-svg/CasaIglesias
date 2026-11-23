@@ -1,4 +1,3 @@
-import { publicClient } from "./supabase";
 
 /** Cuenta una visita a una página para las estadísticas propias de la web (sin publicidad ni terceros).
  *  Guarda la página, el idioma de la versión vista y el del navegador, la web de la que viene (solo el dominio),
@@ -111,10 +110,13 @@ export function countVisit(rawPath: string, lang: string) {
       src,
       own: ls.get(K_YO) === "1",
     };
+    // La conexión con la base de datos se descarga cuando el navegador está libre, para no frenar la portada.
     // Si la versión detallada falla, se cuenta al menos la visita sencilla de siempre
-    void publicClient.from("page_views").insert(more).then(
+    const send = () => void import("./supabase").then(({ publicClient }) => publicClient.from("page_views").insert(more).then(
       r => { if (r.error) void publicClient.from("page_views").insert(base).then(() => undefined, () => undefined); },
       () => undefined,
-    );
+    ), () => undefined);
+    if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(send, { timeout: 4000 });
+    else window.setTimeout(send, 2500);
   } catch { /* contar visitas nunca debe romper la web */ }
 }

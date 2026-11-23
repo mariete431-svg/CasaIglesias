@@ -963,6 +963,8 @@ html.lenis { scroll-behavior: auto !important; }
 .seo-fallback.is-article { max-width: 760px; }
 /* Página completa sin JavaScript (portada, CV, privacidad): se lee bien antes de que cargue la animada */
 .seo-fallback.is-full section { margin-top: 96px; }
+/* La foto del inicio, ya en el HTML (mismo tamaño que la de la página animada, para que no «salte») */
+.seo-fallback .fallback-hero { position: relative; isolation: isolate; min-height: 100svh; margin-top: calc(-1 * clamp(150px, 22vh, 230px)); padding-top: clamp(150px, 22vh, 230px); }
 .seo-fallback.is-full h2 { font: 400 clamp(40px, 6vw, 72px)/1 var(--font-display); letter-spacing: -.02em; margin: 16px 0 24px; }
 .seo-fallback.is-full h2 em { display: inline; margin: 0; padding: 0; }
 .seo-fallback.is-full h3 { font: 400 28px/1.15 var(--font-display); margin: 1.6em 0 .4em; }
